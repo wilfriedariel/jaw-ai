@@ -1,0 +1,1117 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JAW AI. AI systems that keep running after we leave.</title>
+<meta name="description" content="JAW AI builds forecasting, automation, and internal assistants for Singapore companies that run on spreadsheets and email. Seventeen offerings, five ways to buy them, and the system keeps running after we leave.">
+<meta name="theme-color" content="#15120e">
+<meta property="og:title" content="JAW AI. AI systems that keep running after we leave.">
+<meta property="og:description" content="JAW AI builds forecasting, automation, and internal assistants for Singapore companies that run on spreadsheets and email. Seventeen offerings, five ways to buy them, and the system keeps running after we leave.">
+<meta property="og:type" content="website">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&family=Newsreader:opsz,wght@6..72,400..600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&family=Newsreader:opsz,wght@6..72,400..600&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
+<style>/* JAW AI. The contract is DESIGN_JAW.md; every value here traces to a line in it.
+   Two grounds: a warm chamber for the object, plaster paper for the document. One hue, the
+   specimen key, at two values. A literal colour used in a component instead of a token is a bug. */
+
+:root {
+  /* --- CORE. Three values carry the whole system, the way Dropbox's Blue, Coconut and
+     Graphite do: one warm off-white to read on, one warm near-black, and the specimen's room. */
+  --coconut: #f6f3ec;
+  --graphite: #191614;
+  --key: #f0b23f;            /* the specimen key. The brain draws with it, so it never changes */
+  --key-ink: #17120a;
+  /* the amber is a lit object, not a fill: a control painted with it is graded from this pair.
+     Both stops are measured against --key-ink in qa/jaw/contrast_check.mjs. */
+  --key-lit: #ffc862;
+  --key-deep: #d99a2c;
+
+  /* --- GROUNDS. Every ground on the page is the paper, the ink, the room, or the specimen;
+     nothing is imported (DESIGN_TASTE_2026-09-08.md). Sky and lilac were deleted 2026-09-08
+     as hues that belonged to nobody, and with them a `#ff6a4d` typed straight into .g-coral:
+     a literal the contrast gate reads :root and therefore never measured. Measured on the way
+     out, the jade accent on that coral was 3.00:1, under AA. */
+  --butter: #ffd84d;         /* the specimen at paper value */
+  --mist: #cfdcd4;           /* the room at paper value */
+  --jade: #0c5a48;
+
+  /* --- the chamber: deep jade, not black. The specimen is warm bone against it. */
+  --chamber: #0e2b24;          /* the edge of the room, and the token the contrast gate reads */
+  --chamber-bright: #1f8a68;   /* the lamp behind the specimen; CSF: "ijo nya juga cerah" */
+  --chamber-2: #143b31;
+  --chamber-3: #1d5044;
+  --on-chamber: #f6f3ec;
+  --on-chamber-2: #b3c7bd;
+  --on-chamber-3: #9db4a8;
+  --scrim: rgba(14, 43, 36, 0.74);
+  /* the brief plate: ONE flat surface inside the room, raised by a rim light rather than by a
+     drop shadow, because a black shadow on a near-black ground is invisible and only makes mud
+     at the edge. The 206deg three-stop ramp it used to carry spanned twelve points of L* at 52%
+     saturation, which at panel scale reads as plastic, not as light. */
+  --plate-face: #14322b;                     /* the surface; 12.5:1 under --on-chamber */
+  --plate-rim: rgba(246, 243, 236, 0.16);    /* the edge the lamp is on */
+  --plate-seam: rgba(0, 0, 0, 0.55);         /* the edge it is not */
+  --brief-rule: rgba(246, 243, 236, 0.20);
+  --brief-well: #08201a;
+
+  /* --- the reading ground and its ink */
+  --paper: var(--coconut);
+  --paper-2: #efece3;
+  --card: #fffdf8;
+  --ink: var(--graphite);
+  --ink-2: #56504a;
+  --ink-3: #6d665e;
+  --rule: #d8d3c8;
+  --rule-soft: #e7e3d9;
+  --wash: rgba(25, 22, 20, 0.05);
+  --key-paper: var(--jade);  /* 7.37:1 on coconut, 5.90 on butter, 5.12 on sky, 4.70 on lilac */
+
+  /* the brain reads these three; they are chamber values because it only ever draws on chamber */
+  --ground: var(--chamber);
+  --tissue-node: #fbf6ea;
+  --tissue-line: #c2b9a2;
+
+  /* --- type. Archivo carries a width axis: display is set expanded, at 112. */
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --text: "Newsreader", Georgia, "Times New Roman", serif;
+  --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --r-xs: 7px;
+  --r-sm: 13px;
+  --r-md: 20px;
+  --r-lg: 34px;
+  --r-pill: 999px;
+
+  --lift-1: 0 1px 2px rgba(22, 21, 15, 0.05), 0 10px 26px -10px rgba(22, 21, 15, 0.18);
+  --lift-2: 0 2px 6px rgba(22, 21, 15, 0.06), 0 26px 54px -20px rgba(22, 21, 15, 0.34);
+  --lift-chamber: 0 -26px 70px -26px rgba(0, 0, 0, 0.78);
+  --lift-card: 0 30px 70px -30px rgba(0, 0, 0, 0.92);
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --micro: 170ms;
+  --reveal: 780ms;
+
+  --margin: 22px;
+  --bar: 60px;
+  --act-y: 84px;
+  --gutter: 40px;
+
+  --fs-h1: clamp(40px, 11.2vw, 58px);
+  --fs-h2: clamp(29px, 7.4vw, 38px);
+  --fs-h3: 21px;
+  --fs-lede: clamp(20px, 5.2vw, 23px);
+  --fs-text: 18px;
+  --fs-small: 16px;
+  --fs-sub: 21px;            /* the step that was missing between the lede and the body */
+  --fs-name: 15px;           /* where the tracked capitals used to be */
+  --fs-label: 11px;
+}
+
+@media (min-width: 1000px) {
+  :root {
+    --margin: 56px;
+    --bar: 78px;
+    --act-y: 152px;
+    --gutter: 80px;
+    --fs-h1: clamp(58px, 5.9vw, 92px);
+    --fs-h2: clamp(34px, 3.5vw, 54px);
+    --fs-h3: 23px;
+    --fs-lede: clamp(22px, 1.7vw, 31px);
+    --fs-text: 19px;
+    --fs-small: 17px;
+    --fs-sub: 26px;
+    --fs-name: 15px;
+    --fs-label: 11px;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+/* momentum scrolling. The references both run it, and it is most of the difference between a
+   page that reads as a document and one that reads as a product. Lenis drives the real scroll
+   position, so the fixed chamber and the scroll-driven timelines keep working. */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: clip; }
+body {
+  margin: 0; background: var(--chamber); color: var(--on-chamber);
+  font: 400 var(--fs-text)/1.62 var(--text);
+  font-optical-sizing: auto; text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--key); outline-offset: 3px; border-radius: 1px; }
+::selection { background: var(--key); color: var(--key-ink); }
+
+/* one display setting, used everywhere the display face appears */
+.h1, .h2, .h3, .band-name, .plate-name, .row-name, .keep-name, .stop-name, .wordmark, .card-name {
+  font-family: var(--display);
+  font-variation-settings: "wdth" 112;
+  font-weight: 600;
+  letter-spacing: -0.024em;
+}
+.label {
+  font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500;
+  font-size: var(--fs-name); letter-spacing: -0.004em;
+}
+.num { font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: var(--fs-label); letter-spacing: 0.08em; font-variant-numeric: tabular-nums; }
+.mono { font-family: var(--mono); font-size: 12px; letter-spacing: 0.01em; }
+
+.skip { position: absolute; left: -9999px; top: 8px; z-index: 60; background: var(--key); color: var(--key-ink); padding: 10px 14px; font-family: var(--sans); }
+.skip:focus { left: 8px; }
+
+/* ---------------------------------------------------------------- the chamber */
+.brain-layer {
+  position: absolute; inset: 0 0 auto; height: 54svh; z-index: 0; overflow: hidden;
+  /* graded, not flat: bright jade where the lamp falls on the specimen, deep jade at the edges.
+     The canvas clears to transparent, so this is the ground the tissue is lit against. */
+  background:
+    radial-gradient(ellipse 58% 62% at 63% 46%, var(--chamber-bright) 0%, #166a50 30%, #10483a 62%, transparent 100%),
+    linear-gradient(160deg, #123a2f 0%, var(--chamber) 55%, #08221b 100%);
+}
+.brain-layer canvas, .brain-layer .poster { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.brain-layer canvas { cursor: grab; touch-action: pan-y; }
+.brain-layer canvas:active { cursor: grabbing; }
+.poster { object-fit: cover; opacity: 1; transition: opacity 900ms var(--ease); }
+.brain-layer[data-rung="full"] .poster, .brain-layer[data-rung="reduced"] .poster { opacity: 0; }
+.brain-layer[data-rung="probing"] canvas { visibility: hidden; }
+.brain-layer[data-rung="poster"] canvas, .brain-layer[data-rung="poster"] .labels { display: none; }
+@media (min-width: 1000px) {
+  .brain-layer { position: fixed; inset: 0; height: 100svh; }
+  /* the object sits right of centre: the headline is never read through it */
+  .brain-layer canvas, .brain-layer .poster, .brain-layer .labels { left: 22%; width: 78%; }
+}
+
+.labels { position: absolute; inset: 0; pointer-events: none; }
+.hub {
+  position: absolute; left: 0; top: 0; display: flex; align-items: flex-start; gap: 9px;
+  pointer-events: auto; will-change: transform; font-family: var(--sans);
+  font-variation-settings: "wdth" 104; font-weight: 500; font-size: 12px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--on-chamber); text-decoration: none; background: none;
+  border: 0; padding: 3px 8px 3px 0; margin-top: -15px; white-space: nowrap; cursor: pointer;
+  opacity: calc(0.66 + 0.34 * var(--lit, 0)); transition: opacity var(--micro) var(--ease);
+}
+.hub .name { background: var(--scrim); padding: 4px 11px 3px; border-radius: var(--r-pill); line-height: 1.3; box-shadow: inset 0 0 0 1px rgba(243, 238, 227, 0.09); backdrop-filter: blur(3px); }
+.hub:hover .name, .hub:focus-visible .name { box-shadow: inset 0 0 0 1px rgba(243, 238, 227, 0.28); }
+.hub[data-active="1"] .name { background: var(--key); color: var(--key-ink); box-shadow: none; }
+.hub[data-side="l"] { flex-direction: row-reverse; padding: 3px 0 3px 8px; }
+.hub[data-side="l"] .dot { transform: translateX(4px); }
+.hub[data-facing="0"] { opacity: 0; pointer-events: none; }
+body[data-act="contact"] .hub:not([data-active="1"]) { opacity: 0; pointer-events: none; }
+.dot { width: 7px; height: 7px; margin-top: 5px; border-radius: 50%; border: 1px solid var(--on-chamber); transform: translateX(-4px); flex: none; }
+.hub[data-active="1"] .dot { border-color: var(--key); background: var(--key); }
+
+.hud { position: absolute; display: flex; flex-direction: column; gap: 3px; pointer-events: none; color: var(--on-chamber); opacity: 0.82; line-height: 1.6; font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em; }
+.hud-top { top: calc(var(--bar) + 12px); right: var(--margin); text-align: right; }
+.hud-corner { top: calc(var(--bar) + 12px + 5.2em); right: var(--margin); text-align: right; }
+@media (max-width: 999px) {
+  .hud-corner { display: none; }
+  .hud-top { top: auto; bottom: 10px; left: var(--margin); right: auto; text-align: left; }
+  .hud-top span:nth-child(n+2) { display: none; }
+  .hub { opacity: 0; pointer-events: none; }
+  .hub[data-active="1"] { opacity: 1; pointer-events: auto; }
+}
+
+/* the specimen card: the one element on the page with a shadow, because it floats over glass */
+.card {
+  position: absolute; right: var(--margin); bottom: 74px; width: min(374px, calc(100% - 2 * var(--margin)));
+  background: var(--chamber-2); padding: 24px 26px 22px; z-index: 3; border-radius: 6px;
+  box-shadow: inset 0 1px 0 var(--plate-rim), inset 0 0 0 1px var(--chamber-3), 0 1px 0 var(--plate-seam);
+}
+.card[hidden] { display: none; }
+.card-group { margin: 0 0 10px; color: var(--key); }
+.card-name { margin: 0; font-size: 27px; line-height: 1.04; }
+.card-line { margin: 7px 0 14px; color: var(--on-chamber-2); font-size: 16px; font-style: italic; }
+.card-blurb { margin: 0; font-size: 16px; line-height: 1.6; color: var(--on-chamber-2); }
+.card-foot { margin: 18px 0 0; display: flex; justify-content: space-between; align-items: center; font-family: var(--sans); font-variation-settings: "wdth" 104; font-size: var(--fs-name); letter-spacing: -0.004em; }
+.card-foot a { color: var(--key); text-decoration: none; border-bottom: 1px solid var(--key); padding-bottom: 3px; }
+.card-close { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--on-chamber-3); background: none; border: 0; padding: 0; cursor: pointer; }
+@media (max-width: 999px) { .card { left: var(--margin); right: var(--margin); width: auto; bottom: 12px; } }
+
+/* ---------------------------------------------------------------- the bar */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--bar); z-index: 40;
+  display: flex; align-items: center; gap: 26px; padding: 0 var(--margin);
+  color: var(--on-chamber);
+  background: linear-gradient(var(--chamber) 38%, rgba(21, 18, 14, 0));
+  transition: background var(--micro) linear, color var(--micro) linear, box-shadow var(--micro) linear;
+}
+body[data-ground="paper"] .topbar {
+  color: var(--graphite); background: transparent;
+  backdrop-filter: blur(20px) saturate(1.5); -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  box-shadow: 0 1px 0 rgba(25, 22, 20, 0.09);
+}
+body[data-ground="dark"] .topbar {
+  color: var(--coconut); background: transparent;
+  backdrop-filter: blur(20px) saturate(1.5); -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  box-shadow: 0 1px 0 rgba(246, 243, 236, 0.12);
+}
+body[data-ground="paper"] .topnav a { color: var(--ink-2); }
+body[data-ground="dark"] .topnav a { color: var(--on-chamber-2); }
+body[data-ground="dark"] .wordmark-dot { background: var(--key); }
+.wordmark { display: inline-flex; align-items: center; gap: 10px; font-size: 17px; letter-spacing: -0.01em; text-decoration: none; font-variation-settings: "wdth" 108; font-weight: 700; }
+.wordmark-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--key); flex: none; }
+body[data-ground="paper"] .wordmark-dot { background: var(--key-paper); }
+.topnav { margin-left: auto; }
+.topnav ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+.topnav a { font-family: var(--sans); font-variation-settings: "wdth" 100; font-size: 14px; letter-spacing: -0.004em; color: var(--on-chamber-2); text-decoration: none; transition: color var(--micro) var(--ease); }
+body[data-ground="paper"] .topnav a { color: var(--ink-2); }
+.topnav a:hover { color: var(--key); }
+@media (max-width: 999px) { .topnav { display: none; } .btn-top { margin-left: auto; } }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; border-radius: var(--r-pill);
+  font-family: var(--sans); font-variation-settings: "wdth" 100; font-weight: 600;
+  font-size: 14px; letter-spacing: -0.006em; text-decoration: none;
+  padding: 12px 22px; border: 1px solid transparent; cursor: pointer; border-radius: 4px;
+  transition: background var(--micro) var(--ease), color var(--micro) var(--ease),
+              border-color var(--micro) var(--ease), box-shadow var(--micro) var(--ease);
+}
+.btn-primary { background: var(--key); color: var(--key-ink); border-color: var(--key-deep); }
+.btn-primary:hover { background: var(--key-lit); border-color: var(--key); }
+body[data-ground="paper"] .btn-primary { background: var(--ink); color: var(--paper); border-color: transparent; }
+body[data-ground="paper"] .btn-primary:hover { background: var(--key-paper); color: #fff; }
+
+/* The bar asks in words, not in amber. One filled amber object exists on this page and it is
+   the one that sends the brief: asking twice, once before the argument has been made, costs
+   more than it earns on a considered purchase (DESIGN_TASTE_2026-09-08.md, section 6). */
+.btn-top {
+  padding: 4px 0 3px; border: 0; border-radius: 0; background: none; font-size: 14px;
+  color: inherit; box-shadow: inset 0 -1.5px 0 0 var(--key);
+}
+.btn-top:hover { background: none; color: var(--key); }
+body[data-ground="paper"] .btn-top { background: none; color: inherit; box-shadow: inset 0 -1.5px 0 0 var(--key-paper); }
+body[data-ground="paper"] .btn-top:hover { background: none; color: var(--key-paper); }
+@media (max-width: 560px) { .btn-top { font-size: 13.5px; } }
+
+/* ---------------------------------------------------------------- act I, the hero */
+.hero {
+  position: relative; z-index: 1; min-height: 100svh;
+  padding: calc(54svh + 30px) var(--margin) 40px;
+  display: grid; grid-template-rows: auto 1fr auto; gap: 28px;
+}
+.hero-head { max-width: 100%; }
+.h1 { margin: 0; font-size: var(--fs-h1); line-height: 0.94; letter-spacing: -0.038em; text-wrap: balance; }
+.h1-line { display: block; overflow: hidden; padding-block: 0.12em; margin-block: -0.12em; }
+.h1-inner { display: block; transform: translateY(106%); animation: rise 1000ms var(--ease) forwards; animation-delay: calc(var(--i) * 105ms + 200ms); }
+@keyframes rise { to { transform: translateY(0); } }
+.hero-lede {
+  margin: 26px 0 0; max-width: 34ch; color: var(--on-chamber-2);
+  font-size: var(--fs-lede); line-height: 1.42; font-optical-sizing: auto;
+  opacity: 0; animation: fade 900ms var(--ease) 700ms forwards;
+}
+@keyframes fade { to { opacity: 1; } }
+.hero-foot { display: grid; gap: 22px; }
+.hero-foot > * { min-width: 0; }   /* the select's intrinsic width is its longest option; without this the hero overflows a phone */
+.ask, .scroll-cue { opacity: 0; animation: fade 900ms var(--ease) 900ms forwards; }
+
+.ask { margin: 0; max-width: min(470px, 100%); }
+.ask-label { display: block; font-family: var(--display); font-variation-settings: "wdth" 110; font-weight: 600; font-size: 17px; letter-spacing: -0.014em; margin-bottom: 11px; }
+.ask-field { display: flex; }
+.ask-field select {
+  flex: 1 1 0; width: 100%; min-width: 0; font: 400 17px/1.4 var(--text); color: var(--on-chamber);
+  background: var(--chamber-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 6l5 5 5-5' fill='none' stroke='%23f0b23f' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 18px center / 14px;
+  border: 1px solid var(--chamber-3); border-right: 0;
+  padding: 15px 44px 15px 22px; appearance: none; -webkit-appearance: none; cursor: pointer;
+  border-radius: 4px 0 0 4px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ask-field select:invalid, .ask-field select option[value=""] { color: var(--on-chamber-3); }
+.ask-field select option { color: var(--ink); background: var(--paper); }
+.ask-go { font-family: var(--sans); font-variation-settings: "wdth" 106; font-size: 14px; letter-spacing: -0.004em; color: var(--on-chamber); background: none; border: 1px solid var(--chamber-3); padding: 0 24px; border-radius: 0 4px 4px 0; cursor: pointer; transition: background var(--micro) var(--ease), color var(--micro) var(--ease); }
+.ask-go:hover { background: var(--key); color: var(--key-ink); border-color: var(--key); }
+.ask-result { margin: 12px 0 0; min-height: 2.8em; font-size: 15px; line-height: 1.5; color: var(--on-chamber-3); }
+.ask-result .hit { color: var(--key); font-family: var(--display); font-variation-settings: "wdth" 110; font-weight: 600; letter-spacing: -0.015em; }
+
+.scroll-cue { display: none; }
+@media (min-width: 1000px) {
+  .hero { padding: calc(var(--bar) + 9vh) var(--margin) 46px; pointer-events: none; }
+  .hero a, .hero select, .hero button, .hero form { pointer-events: auto; }
+  .hero::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background:
+      linear-gradient(96deg, var(--chamber) 0%, rgba(21,18,14,0.9) 22%, rgba(21,18,14,0.24) 40%, rgba(21,18,14,0) 55%),
+      linear-gradient(0deg, var(--chamber) 0%, rgba(21,18,14,0.52) 12%, rgba(21,18,14,0) 28%);
+  }
+  .hero-head { grid-row: 1; max-width: min(58vw, 780px); }
+  .hero-foot { grid-row: 3; grid-template-columns: minmax(0, 470px) 1fr; align-items: end; gap: 40px; }
+  .scroll-cue {
+    display: inline-flex; align-items: center; gap: 14px; justify-self: end; align-self: end;
+    font-family: var(--sans); font-variation-settings: "wdth" 104; font-size: 11px;
+    letter-spacing: 0.01em; color: var(--on-chamber-3); text-decoration: none;
+  }
+  .scroll-rule { width: 74px; height: 1px; background: var(--chamber-3); position: relative; overflow: hidden; }
+  .scroll-rule::after { content: ""; position: absolute; inset: 0; width: 28px; background: var(--key); animation: travel 2800ms var(--ease-quart) infinite; }
+  @keyframes travel { 0% { transform: translateX(-32px); } 62%, 100% { transform: translateX(80px); } }
+}
+
+/* ---------------------------------------------------------------- the paper sheet */
+.sheet {
+  position: relative; z-index: 2; background: transparent; color: var(--ink);
+}
+/* the cuts, ported from the deck (scrollcraft/builds/jaw-cutlist): every cut paints its own
+   ground, so the sheet is transparent and the one unpainted cut lets the hero's brain back */
+.cut { min-height: 56svh; display: grid; align-items: center; padding: clamp(2rem, 6vh, 5rem) var(--margin); color: var(--graphite); position: relative; }
+.cut__in { display: grid; gap: 14px; max-width: 1240px; width: 100%; margin-inline: auto; }
+.sheet > .cut:first-child { border-radius: var(--r-lg) var(--r-lg) 0 0; box-shadow: var(--lift-chamber); min-height: 64svh; }
+.g-butter { background: var(--butter); } .g-mist { background: var(--mist); }
+.g-coconut { background: var(--coconut); }
+.g-graphite { background: var(--graphite); color: var(--coconut); }
+.cut__h { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: clamp(30px, 4.2vw, 58px); line-height: 1.0; letter-spacing: -0.03em; text-wrap: balance; max-width: 22ch; }
+.cut__p { margin: 0; font-family: var(--text); font-size: var(--fs-lede); line-height: 1.4; max-width: 40ch; color: var(--ink-2); }
+.g-graphite .cut__p { color: #b8b1a7; }
+.cut__p--wide { max-width: 56ch; font-size: var(--fs-text); line-height: 1.55; }
+.cut__tag { margin: 0; font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: var(--fs-name); letter-spacing: -0.004em; padding-top: 10px; border-top: 2px solid currentColor; justify-self: start; }
+.cut--week .cut__h { font-family: var(--text); font-variation-settings: normal; font-weight: 400; font-size: clamp(26px, 3.4vw, 46px); letter-spacing: -0.01em; max-width: 26ch; }
+@media (min-width: 900px) { .cut--week:nth-of-type(odd) .cut__in { justify-items: end; text-align: right; } .cut--week:nth-of-type(odd) .cut__tag { justify-self: end; } }
+.cut--pair { min-height: 50svh; }
+.cut--pair .cut__in { gap: 40px; }
+@media (min-width: 800px) { .cut--pair .cut__in { grid-template-columns: 1fr 1fr; } }
+.pair__one { display: grid; gap: 6px; padding-top: 14px; border-top: 2px solid currentColor; }
+.pair__more { margin-top: 8px; }
+.pair__more summary { cursor: pointer; list-style: none; font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: var(--fs-name); letter-spacing: -0.004em; padding: 8px 0; }
+.pair__more summary::-webkit-details-marker { display: none; }
+.pair__more summary::before { content: "+ "; }
+.pair__more[open] summary::before { content: "\2013 "; }
+.pair__gline { margin: 6px 0 8px; font-family: var(--sans); font-size: 12px; letter-spacing: 0.04em; color: var(--ink-2); }
+.g-graphite .pair__gline { color: #b8b1a7; }
+.pair__blurb { margin: 0; font-family: var(--text); font-size: 16px; line-height: 1.6; max-width: 52ch; color: var(--ink-2); }
+/* three plates, three angles: a print tipped in at the same angle three times is a template */
+.cut.cut--plate[data-jaw-focus="regulated-finance"] .plate { --tilt: -0.45deg; }   /* outranks the nth-of-type rule */
+.cut--silence { min-height: 100svh; background: transparent; }
+.cut--plate { min-height: 68svh; }
+.cut--plate .cut__in { gap: 32px; align-items: center; }
+@media (min-width: 900px) { .cut--plate .cut__in { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); } .cut--plate:nth-of-type(even) .plate { order: 2; } }
+.plate { margin: 0; border-radius: 3px; overflow: clip; background: var(--chamber); box-shadow: -10px 16px 34px -18px rgba(22, 21, 15, 0.42); transform: rotate(var(--tilt, -0.8deg)); }
+.cut--plate:nth-of-type(even) .plate { --tilt: 0.7deg; }
+.plate img { width: 100%; height: auto; display: block; }
+/* The landing page's tipped-in print and the service page's two-column plate section are both
+   called .plate, and the service page's `@media (min-width: 1000px) .plate { display: grid;
+   grid-template-columns: 340px ... }` was winning on the landing page: the only images on the
+   page were being laid into a 340px column inside a 633px figure, with 293px of dead chamber
+   beside them. Measured 2026-09-08: img 340x255 in a 633x255 figure. figure.plate outranks the
+   bare class, inside the media query as well as outside it. */
+figure.plate { display: block; margin: 0; }
+figure.plate img { width: 100%; height: auto; }
+.plate__txt { display: grid; gap: 14px; }
+.facts { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 18px; }
+.facts li { display: grid; gap: 4px; border-top: 2px solid currentColor; padding-top: 12px; }
+.facts strong { font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: 20px; letter-spacing: -0.02em; }
+.facts span { font-family: var(--text); font-size: 16px; line-height: 1.5; color: var(--ink-2); }
+.g-graphite .facts span { color: #b8b1a7; }
+.facts--four span { font-family: var(--sans); font-size: var(--fs-name); letter-spacing: -0.004em; color: var(--ink-2); }
+.g-graphite .facts--four span { color: #b8b1a7; }
+@media (min-width: 800px) { .facts { grid-template-columns: repeat(3, 1fr); } .facts--four { grid-template-columns: repeat(4, 1fr); } }
+.cut--measure { min-height: 80svh; }
+
+/* ---------------------------------------------------------------- the paste-up
+   The fourteen fast cuts, the seven weeks and the seven offering pairs, stop scrolling past one
+   another and become the poster's paste-up: one pinned act with a sticky full-viewport stage,
+   every panel absolutely positioned in the same box, and the ARRIVING panel translated up from
+   below so it lands over the one before it, which holds still underneath. Read out of
+   scrollcraft/builds/jaw-poster/page.css:81-86 and page.ts:188-205, not out of a description.
+   Opacity is not travel, so nothing here fades.
+
+   The default is the stack in normal flow. The pin is gated on html.js, which an inline script
+   in the head sets, and on prefers-reduced-motion: a reader with JavaScript off, a crawler, and
+   a reader who has asked for less motion all get the same fourteen sections one after another. */
+/* the stage carries the sheet's own rounded lip, so the seam with the chamber above it survives
+   the panels painting their grounds over the act */
+.pasteup__stage { position: relative; overflow: hidden; border-radius: inherit; }
+.pasteup__at { position: absolute; left: 0; top: calc(var(--at, 0.5) * 100%); width: 0; height: 0; pointer-events: none; }
+.cut--act { display: block; padding: 0; min-height: 0; }
+.sheet > .cut--act:first-child { min-height: 0; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* the act is as long as the stack it holds: one viewport of stage plus half a viewport of
+     scroll per panel, so fourteen panels cost about what the fourteen cuts cost before */
+  html.js .cut--act { height: calc((var(--panels) * 50 + 100) * 1svh); }
+  html.js .cut--act .pasteup__at { top: calc(var(--at, 0.5) * (100% - 100lvh)); }
+  /* the lip belongs to the seam, not to the pin: once the stage is stuck at the top of the
+     viewport a 34px radius is two dark curls in the top corners with the chamber behind them,
+     which reads as a bug. --seam is written by the raf loop and is 1 only while the act's top
+     edge is still on the screen. */
+  html.js .pasteup__stage {
+    position: sticky; top: 0; height: 100lvh; overflow: hidden;
+    border-radius: calc(var(--seam, 1) * var(--r-lg)) calc(var(--seam, 1) * var(--r-lg)) 0 0;
+  }
+  html.js .pasteup__stage > .cut { position: absolute; inset: 0; min-height: 0; visibility: hidden; --p: 0; --w: 1; }
+  /* a phone's chrome eats the difference between the large and the small viewport. The stage is
+     the large one, so no ground is ever missing under it; the content is centred inside the
+     small one, so no line is ever behind the chrome. */
+  html.js .pasteup__stage > .cut { padding-bottom: calc(clamp(2rem, 6vh, 5rem) + 100lvh - 100svh); }
+  /* a pinned panel is a fixed box, so a disclosure the reader opens can be taller than the
+     screen: measured at 390x844, one pair with both open is 1124px of content inside 743px of
+     room, and at 360x640 every pair overflows with a single one open. That panel, and only that
+     panel, scrolls itself. landing/main.ts adds the class when it measures the overflow, and
+     data-lenis-prevent with it, so the momentum layer hands the wheel to the box. */
+  html.js .pasteup__stage > .cut.is-tall { align-items: start; overflow-y: auto; }
+  html.js .pasteup__stage > .cut.is-prev { visibility: visible; z-index: 1; transform: translateY(0); }
+  html.js .pasteup__stage > .cut.is-on { visibility: visible; z-index: 2; transform: translateY(calc((1 - var(--w)) * 100%)); }
+  /* the rise timeline is meaningless inside a pinned stage, where all fourteen panels share one
+     view progress and would fire at once. The arriving panel's own content scales as it lands. */
+  html.js .pasteup__stage .cut__in { animation: none; opacity: 1; }
+  html.js .pasteup__stage > .cut.is-on > .cut__in { transform: scale(calc(0.94 + 0.06 * var(--p))); transform-origin: 0 50%; }
+}
+.sheet > .act:first-child { padding-top: calc(var(--act-y) + 20px); border-radius: var(--r-lg) var(--r-lg) 0 0; }
+.sheet > .act:last-child { padding-bottom: calc(var(--act-y) + 20px); border-radius: 0 0 var(--r-lg) var(--r-lg); }
+/* the tooth of the paper. Flat #e2e3dc reads as a swatch; a little grain reads as stock. One
+   tiled SVG, no image request, and it sits under nothing that has to stay crisp. */
+.sheet::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: 0.055;
+  border-radius: inherit;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.sheet > * { position: relative; z-index: 1; }
+
+.act { padding-block: var(--act-y); }
+.act + .act { border-top: 1px solid var(--rule-soft); }
+/* --- act grounds. The colour change is the separator, so the hairline between acts goes. */
+.act + .act { border-top: 0; }
+.act-butter { background: var(--butter); }
+.act-sky { background: var(--sky); }
+.act-lilac { background: var(--lilac); }
+.act-graphite { background: var(--graphite); }
+.act-colour {
+  --ink-3: var(--ink-2);          /* the lightest ink does not clear 4.5:1 on a saturated ground */
+  --rule: rgba(25, 22, 20, 0.24);
+  --rule-soft: rgba(25, 22, 20, 0.14);
+  --wash: rgba(25, 22, 20, 0.07);
+  --card: rgba(255, 253, 248, 0.72);
+}
+.act-graphite {
+  color: var(--coconut);
+  --ink: var(--coconut);
+  --ink-2: #b8b1a7;
+  --ink-3: #b8b1a7;
+  --key-paper: var(--key);
+  --rule: rgba(246, 243, 236, 0.24);
+  --rule-soft: rgba(246, 243, 236, 0.13);
+  --wash: rgba(246, 243, 236, 0.07);
+  --card: #241f1c;
+}
+.act-deep { background: var(--paper-2); }
+.grid { max-width: 1320px; margin-inline: auto; padding-inline: var(--margin); }
+@media (min-width: 1000px) {
+  .grid-split { display: grid; grid-template-columns: 320px minmax(0, 1fr); column-gap: var(--gutter); }
+  .act-head { position: sticky; top: calc(var(--bar) + 44px); align-self: start; }
+}
+/* a heading in a 320px column has to be set smaller than one that owns the page width, or it
+   breaks into six lines and reads as a mistake */
+.act-head .h2 { font-size: clamp(28px, 5.8vw, 34px); }
+@media (min-width: 1000px) { .act-head .h2 { font-size: clamp(30px, 2.7vw, 41px); } }
+
+/* the intro anatomy: the heading owns the wide column, the label and note sit at its foot */
+.act-intro { display: grid; gap: 26px; }
+.act-intro .h2 { max-width: 15ch; }
+.act-intro .label { color: var(--ink-3); margin: 0 0 14px; }
+.act-intro .act-note { margin: 0; }
+@media (min-width: 1000px) {
+  .act-intro { grid-template-columns: minmax(0, 1fr) 330px; column-gap: var(--gutter); align-items: end; }
+  .act-intro .h2 { font-size: clamp(40px, 4.6vw, 68px); }
+}
+.act-head .label { display: block; color: var(--ink-3); margin: 0 0 16px; }
+.h2 { margin: 0; font-size: var(--fs-h2); line-height: 1.02; letter-spacing: -0.03em; text-wrap: balance; }
+.act-note { margin: 20px 0 0; color: var(--ink-2); font-size: var(--fs-small); line-height: 1.55; max-width: 34ch; }
+.act-body { min-width: 0; }
+
+/* --- act II: the week. Seven lines, set at reading-out-loud size. */
+.weeks { list-style: none; margin: 0; padding: 0; }
+.week { position: relative; padding: 26px 0; display: grid; gap: 12px; }
+.week::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: var(--rule); transform-origin: left center;
+}
+.week:first-child { border-top: 1px solid var(--ink); padding-top: 26px; }
+.week-text { margin: 0; font-size: clamp(19px, 4.6vw, 22px); line-height: 1.4; letter-spacing: -0.008em; max-width: 40ch; }
+.week-answer { justify-self: start; padding: 6px 12px; margin: -6px -12px; border-radius: var(--r-pill); transition: background var(--micro) var(--ease); display: inline-flex; align-items: baseline; gap: 10px; font-family: var(--sans); font-variation-settings: "wdth" 106; font-weight: 500; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--key-paper); text-decoration: none; }
+.week-answer:hover { background: var(--wash); }
+.week-answer .arrow { transition: transform var(--micro) var(--ease); }
+.week-answer:hover .arrow { transform: translateX(5px); }
+@media (min-width: 1000px) {
+  .week { grid-template-columns: minmax(0, 1fr) 250px; align-items: baseline; gap: 32px; padding: 30px 0; }
+  .week-text { font-size: clamp(22px, 1.65vw, 28px); }
+  .week-answer { justify-self: end; text-align: right; }
+}
+
+/* --- act III: the offer. Five bands, sticky band heads, rows that open. */
+.bands { margin-top: 76px; }
+.band + .band { margin-top: 54px; padding-top: 40px; border-top: 1px solid var(--rule); }
+.band-name { margin: 0; font-size: 27px; }
+.band-line { margin: 9px 0 0; color: var(--ink-2); font-size: var(--fs-small); line-height: 1.5; max-width: 32ch; }
+.band-rows { margin-top: 22px; }
+.row + .row { border-top: 1px solid var(--rule-soft); }
+.row-head {
+  display: grid; grid-template-columns: 30px minmax(0, 1fr) 20px; gap: 4px 16px; align-items: baseline;
+  padding: 19px 16px; margin: 0 -16px; cursor: pointer; list-style: none;
+  border-radius: var(--r-sm); transition: background var(--micro) var(--ease);
+}
+.row-head:hover { background: var(--wash); }
+.row-head::-webkit-details-marker { display: none; }
+.row-n { color: var(--ink-3); }
+.row-name { font-size: var(--fs-h3); }
+.row-line { grid-column: 2; color: var(--ink-2); font-size: var(--fs-small); font-style: italic; }
+.row-mark { grid-column: 3; grid-row: 1; justify-self: end; align-self: center; width: 12px; height: 12px; position: relative; }
+.row-mark::before, .row-mark::after { content: ""; position: absolute; background: var(--ink-3); transition: transform var(--micro) var(--ease), background var(--micro) var(--ease); }
+.row-mark::before { inset: 5.5px 0; height: 1px; }
+.row-mark::after { inset: 0 5.5px; width: 1px; }
+.row[open] .row-mark::after { transform: scaleY(0); }
+.row[open] .row-mark::before, .row:hover .row-mark::before { background: var(--key-paper); }
+.row:hover .row-name, .row[open] .row-name { color: var(--key-paper); }
+.row-body { overflow: hidden; }
+.row-inner { padding: 2px 16px 28px 46px; }
+.row-blurb { margin: 0; max-width: 60ch; color: var(--ink-2); line-height: 1.62; }
+.row-status { margin: 14px 0 0; color: var(--key-paper); }
+@media (min-width: 1000px) {
+  .band { display: grid; grid-template-columns: 300px minmax(0, 1fr); column-gap: var(--gutter); }
+  .band-head { position: sticky; top: calc(var(--bar) + 44px); align-self: start; }
+  .band-rows { margin-top: 0; }
+  .band + .band { margin-top: 56px; padding-top: 44px; }
+  .row-head { grid-template-columns: 42px minmax(240px, 320px) minmax(0, 1fr) 22px; padding: 22px 18px; margin: 0 -18px; }
+  .row-line { grid-column: 3; }
+  .row-mark { grid-column: 4; }
+}
+
+/* --- act IV: who this is for. One statement, then three columns. */
+.statement { margin: 0; font-size: var(--fs-lede); line-height: 1.44; max-width: 30ch; letter-spacing: -0.012em; }
+.statement-wide { max-width: 46ch; }
+.holds { margin-top: 60px; display: grid; gap: 38px; }
+.hold { border-top: 1px solid var(--ink); padding-top: 20px; }
+.hold-name { font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: var(--fs-h3); letter-spacing: -0.022em; margin: 0; }
+.hold-line { margin: 10px 0 0; color: var(--ink-2); font-size: var(--fs-small); line-height: 1.58; }
+@media (min-width: 1000px) { .holds { grid-template-columns: repeat(3, 1fr); gap: 44px; } }
+
+/* --- act V: the plates. A real render of the object, tipped into the paper. */
+.plate { margin-top: 76px; }
+.plate + .plate { margin-top: 84px; padding-top: 64px; border-top: 1px solid var(--rule); }
+/* A print tipped into a book sits at an angle and casts a shadow. Three divs at 0 degrees on a
+   perfect grid is the thing that reads as rigid; these carry their own tilt, set per plate. */
+.plate-fig {
+  margin: 0 0 26px; background: var(--card); padding: 12px 12px 0; border-radius: var(--r-md);
+  box-shadow: var(--lift-2); transform: rotate(var(--tilt, 0deg));
+  transition: transform 420ms var(--ease), box-shadow 420ms var(--ease);
+}
+.plate:nth-child(2) .plate-fig { --tilt: -1.1deg; }
+.plate:nth-child(3) .plate-fig { --tilt: 0.85deg; }
+.plate:nth-child(4) .plate-fig { --tilt: -0.6deg; }
+.plate-fig:hover { transform: rotate(0deg) translateY(-4px); box-shadow: 0 4px 10px rgba(22,21,15,0.07), 0 36px 66px -22px rgba(22,21,15,0.4); }
+.plate-fig img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: calc(var(--r-md) - 8px); background: var(--chamber); }
+.plate-cap { margin: 0; padding: 11px 4px 12px; color: var(--ink-3); font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.02em; line-height: 1.5; }
+.plate-name { margin: 0; font-size: clamp(28px, 6.4vw, 40px); line-height: 1.02; }
+.plate-line { margin: 12px 0 0; color: var(--ink-2); font-size: var(--fs-small); font-style: italic; max-width: 30ch; }
+.plate-blurb { margin: 22px 0 0; color: var(--ink-2); line-height: 1.62; max-width: 58ch; }
+.jobs { list-style: none; margin: 30px 0 0; padding: 0; border-top: 1px solid var(--ink); }
+.job { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 3px 14px; padding: 15px 0; border-bottom: 1px solid var(--rule-soft); }
+.job-n { color: var(--ink-3); }
+.job-text { font-size: var(--fs-small); line-height: 1.5; }
+.job-service { grid-column: 2; color: var(--key-paper); }
+@media (min-width: 1000px) {
+  .plate { display: grid; grid-template-columns: 340px minmax(0, 1fr); column-gap: var(--gutter); row-gap: 0; }
+  .plate-head { grid-column: 1; }
+  .plate-fig { grid-column: 1; margin: 26px 0 0; }
+  .plate-body { grid-column: 2; grid-row: 1 / span 2; }
+  .plate-blurb { margin-top: 0; }
+  .job { grid-template-columns: 36px minmax(0, 1fr) 186px; align-items: baseline; }
+  .job-service { grid-column: 3; text-align: right; }
+}
+
+/* --- act VI: the path. One rule, four stops. */
+.stops { list-style: none; margin: 0; padding: 0; display: grid; }
+.stop { position: relative; padding: 26px 0 26px 26px; border-left: 1px solid var(--rule); }
+.stop-dot { position: absolute; left: -4.5px; top: 32px; width: 8px; height: 8px; border-radius: 50%; background: var(--paper); border: 1px solid var(--ink-3); }
+.stop:first-child .stop-dot { background: var(--key-paper); border-color: var(--key-paper); }
+.stop-n { display: block; color: var(--ink-3); margin-bottom: 10px; }
+.stop-name { margin: 0; font-size: var(--fs-h3); }
+.stop-body { margin: 10px 0 0; color: var(--ink-2); font-size: var(--fs-small); line-height: 1.58; }
+.stop-fact { margin: 14px 0 0; color: var(--key-paper); }
+@media (min-width: 1000px) {
+  .stops { grid-template-columns: repeat(4, 1fr); }
+  .stop { padding: 34px 34px 0 0; border-left: 0; border-top: 1px solid var(--ink); }
+  .stop-dot { left: 0; top: -4.5px; }
+  .stop-body { max-width: 30ch; }
+}
+
+/* --- act VII: the measure. One statement on the deeper paper. */
+.measure { max-width: 1000px; margin-inline: auto; padding-inline: var(--margin); }
+.measure .h2 { font-size: clamp(34px, 8.2vw, 68px); max-width: 13ch; letter-spacing: -0.034em; }
+.measure-body { margin: 34px 0 0; font-size: var(--fs-lede); line-height: 1.46; max-width: 44ch; letter-spacing: -0.01em; }
+.measure .holds { margin-top: 70px; }
+
+/* ---------------------------------------------------------------- act VIII: the close */
+.close { position: relative; z-index: 2; padding-block: clamp(90px, 19vh, 200px); background: var(--chamber); color: var(--on-chamber); }
+@media (min-width: 1000px) {
+  .close { background: transparent; }
+  .close::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background:
+      linear-gradient(var(--chamber) 0%, rgba(9,28,23,0.6) 15%, rgba(9,28,23,0) 32%),
+      linear-gradient(90deg, rgba(9,28,23,0.93) 0%, rgba(9,28,23,0.88) 42%, rgba(11,33,27,0.56) 70%, rgba(11,33,27,0.40) 100%);
+  }
+}
+.close-wrap { max-width: 1320px; margin-inline: auto; padding-inline: var(--margin); }
+.close .h2 { font-size: clamp(32px, 6.4vw, 62px); max-width: 18ch; }
+.close-sub { margin: 24px 0 0; color: var(--on-chamber-2); font-size: var(--fs-lede); line-height: 1.44; max-width: 44ch; }
+.brief { margin: 46px 0 0; max-width: 740px; }
+
+/* The plate. One raised surface, graded from the side the lamp is on, with the lift the token
+   set already carries and an inner highlight along its top edge, so it sits IN the chamber
+   instead of being pasted onto it. Four identical dark rectangles on a grid was the tell. */
+.brief-plate {
+  position: relative; isolation: isolate;
+  border-radius: 6px; padding: clamp(22px, 5vw, 38px) clamp(20px, 4.6vw, 36px) clamp(24px, 5vw, 34px);
+  background: var(--plate-face);
+  border: 0;
+  /* elevation with no blur: a lit edge along the top, a seam under the bottom. On a near-black
+     ground a blurred drop shadow is invisible and only makes mud around the edge. */
+  box-shadow: inset 0 1px 0 var(--plate-rim), inset 0 -1px 0 var(--plate-seam), 0 1px 0 var(--plate-seam);
+}
+/* the lamp falling across the plate's top-right shoulder: the same light that is behind the
+   specimen, not a decorative glow invented for the form */
+.brief-plate::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(120% 150% at 108% -22%, rgba(31, 138, 104, 0.13) 0%, rgba(31, 138, 104, 0.05) 38%, rgba(31, 138, 104, 0) 68%);
+}
+
+/* the three short answers: ruled lines with their names set in the rule, the way a printed
+   form is ruled. No fill, no border, no radius: they are lines, not boxes. */
+.brief-lines { display: grid; margin-top: clamp(18px, 3.4vw, 26px); }
+.brief-line { display: grid; grid-template-columns: minmax(0, 8.4rem) 1fr; align-items: baseline; gap: 10px; padding: 22px 2px 8px; border-bottom: 1px solid var(--brief-rule); transition: border-color var(--micro) var(--ease), box-shadow var(--micro) var(--ease); }
+.brief-line:first-child { padding-top: 14px; }
+.brief-line:focus-within { border-bottom-color: var(--key); box-shadow: inset 0 -2px 0 0 var(--key); }
+.brief-line-name { font-family: var(--sans); font-variation-settings: "wdth" 100; font-weight: 500; font-size: 14px; letter-spacing: -0.004em; color: var(--on-chamber-2); }
+.brief-line input { width: 100%; min-width: 0; font: 400 17px/1.5 var(--text); color: var(--on-chamber); background: none; border: 0; padding: 0; caret-color: var(--key); }
+.brief-line input:focus { outline: none; }
+
+/* the one thing on the page that is a field. It is recessed where the plate is raised, so the
+   hierarchy is carried by the light rather than by a bigger box. */
+.brief-well {
+  display: block; margin-top: 0;
+  border-radius: 4px; padding: 15px 18px 16px; background: var(--brief-well);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.42), inset 0 0 0 1px rgba(246, 243, 236, 0.07);
+  transition: box-shadow var(--micro) var(--ease);
+}
+.brief-well:focus-within { box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.42), inset 0 0 0 2px var(--key); }
+.brief-well-name { display: block; font-family: var(--sans); font-variation-settings: "wdth" 100; font-weight: 500; font-size: 14px; letter-spacing: -0.004em; color: var(--on-chamber-2); }
+.brief-well input { width: 100%; margin-top: 7px; font: 400 clamp(19px, 2.2vw, 22px)/1.4 var(--text); color: var(--on-chamber); background: none; border: 0; padding: 0; caret-color: var(--key); }
+.brief-well input:focus { outline: none; }
+
+/* one ask. The mail link is a line of text under it, not a second pill. */
+.brief-foot { margin-top: clamp(24px, 4.4vw, 32px); display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; }
+.brief-alt { font-family: var(--sans); font-variation-settings: "wdth" 100; font-size: 14px; letter-spacing: -0.004em; color: var(--on-chamber-2); text-decoration: none; border-bottom: 1px solid var(--brief-rule); padding-bottom: 2px; transition: color var(--micro) var(--ease), border-color var(--micro) var(--ease); }
+.brief-alt:hover { color: var(--on-chamber); border-bottom-color: var(--key); }
+.brief-note { margin: 20px 0 0; color: var(--on-chamber-3); font-size: 14px; line-height: 1.6; max-width: 50ch; }
+
+@media (max-width: 460px) { .brief-line { grid-template-columns: 1fr; gap: 0; padding: 18px 2px 7px; } .brief-line input { font-size: 18px; } }
+
+/* ---------------------------------------------------------------- the colophon */
+.colophon { position: relative; z-index: 2; background: var(--chamber); color: var(--on-chamber); border-top: 1px solid var(--chamber-3); padding-block: 62px 46px; }
+.colophon-wrap { max-width: 1320px; margin-inline: auto; padding-inline: var(--margin); display: grid; gap: 28px; }
+.colophon-line { margin: 14px 0 0; color: var(--on-chamber-2); font-size: var(--fs-small); max-width: 38ch; }
+.colophon-nav { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 22px; }
+.colophon-nav a { font-family: var(--sans); font-variation-settings: "wdth" 100; font-size: 14px; letter-spacing: -0.004em; color: var(--on-chamber-2); text-decoration: none; }
+.colophon-nav a:hover { color: var(--key); }
+.colophon p.mono { margin: 0; color: var(--on-chamber-3); max-width: 60ch; line-height: 1.7; }
+@media (min-width: 1000px) {
+  .colophon-wrap { grid-template-columns: 1fr 1fr; column-gap: var(--gutter); row-gap: 36px; }
+  .colophon-nav { justify-content: flex-end; align-items: flex-start; }
+  .colophon-copy { grid-column: 1 / -1; padding-top: 24px; border-top: 1px solid var(--chamber-3); }
+}
+
+/* ---------------------------------------------------------------- motion
+   Native scroll-driven animation where the browser has it; an IntersectionObserver adds
+   .reveal only where it does not. With neither, everything is simply visible. */
+.rise { }
+@supports (animation-timeline: view()) {
+  .rise { animation: rise-in linear both; animation-timeline: view(); animation-range: entry 4% cover 22%; }
+  @keyframes rise-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  /* each rule draws itself as its own line arrives; the stagger is the geometry, not a delay */
+  .week::after { animation: draw linear both; animation-timeline: view(); animation-range: entry 12% cover 28%; }
+  @keyframes draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  /* the hero parks as the plate slides over it */
+  .hero-head, .hero-foot { animation: hero-park linear both; animation-timeline: view(); animation-range: exit 0% exit 92%; }
+  @keyframes hero-park { to { transform: translateY(-9%); opacity: 0.06; } }
+  /* the close lifts its own scrim, so the object comes back up as the form arrives */
+  @media (min-width: 1000px) {
+    .close::before { animation: uncover linear both; animation-timeline: view(); animation-range: entry 0% entry 100%; }
+    @keyframes uncover { from { opacity: 1; } to { opacity: 0.82; } }
+  }
+}
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity var(--reveal) var(--ease), transform var(--reveal) var(--ease); }
+.reveal[data-in="1"] { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 1ms !important; animation-delay: 0ms !important; transition-duration: 1ms !important; }
+  .h1-inner { transform: none; }
+  .hero-lede, .hero-foot { opacity: 1; }
+  .rise, .reveal { opacity: 1; transform: none; animation: none; }
+}
+</style>
+</head>
+<body data-act="hero" data-ground="chamber">
+<script>document.documentElement.classList.add("js")</script>
+<a class="skip" href="#main">Skip to the content</a>
+
+<div class="brain-layer" id="brain" data-rung="probing">
+  <img class="poster" src="./brain/poster-800.webp" srcset="./brain/poster-640.webp 640w, ./brain/poster-800.webp 800w, ./brain/poster-1600.webp 1600w" sizes="(max-width: 999px) 100vw, 78vw" alt="A human cortex drawn as points and lines, with the 17 JAW AI offerings marked on it" width="1600" height="1000" fetchpriority="high">
+  <canvas aria-hidden="true"></canvas>
+  <div class="labels"></div>
+  <div class="hud hud-top"></div>
+  <div class="hud hud-corner"></div>
+  <aside class="card" hidden aria-live="polite"></aside>
+</div>
+<header class="topbar">
+  <a class="wordmark" href="#hero"><span class="wordmark-dot" aria-hidden="true"></span>JAW AI</a>
+  <nav class="topnav" aria-label="Sections"><ul><li><a href="#offer">The offer</a></li><li><a href="#practices">Practices</a></li><li><a href="#how">How we work</a></li></ul></nav>
+  <a class="btn btn-primary btn-top" href="#contact">Book a 20-minute scope call</a>
+</header>
+<main id="main">
+
+<section class="hero" id="hero">
+  <div class="hero-head">
+    <h1 class="h1"><span class="h1-line"><span class="h1-inner" style="--i:0">AI systems</span></span><span class="h1-line"><span class="h1-inner" style="--i:1">that keep running</span></span><span class="h1-line"><span class="h1-inner" style="--i:2">after we leave.</span></span></h1>
+    <p class="hero-lede">Forecasts, reconciliations, and an assistant that answers from your own files. For Singapore companies whose numbers live in Excel and whose decisions live in an inbox. Every offering is a name on the brain. Drag it.</p>
+  </div>
+  <div class="hero-foot">
+    <form class="ask" id="ask" autocomplete="off">
+      <label class="ask-label" for="ask-select">So what's the problem?</label>
+      <div class="ask-field">
+        <select id="ask-select" name="problem">
+          <option value="" selected>Pick the line that sounds like your week</option>
+          <option value="forecasting">Every forecast in the company lives in a spreadsheet. It's ready on Thursday. The decision was Monday.</option>
+          <option value="automation">Two people spend the first three hours of every day moving numbers between two systems you already own.</option>
+          <option value="company-brain">The answer is in a document from 2021, and the person who knows which one has left.</option>
+          <option value="ai-optimisation">You bought an AI pilot last year. It demos beautifully. Nobody on the floor uses it.</option>
+          <option value="it-transformation">The system nobody dares touch is the one the whole business runs on. The vendor who built it is gone.</option>
+          <option value="ai-talent">The plan needs three senior engineers. The budget carries one.</option>
+          <option value="ai-governance">The regulator asked for the evidence, and your team spent three weeks assembling what should already have existed.</option>
+        </select>
+        <button type="submit" class="ask-go">Open</button>
+      </div>
+      <p class="ask-result" aria-live="polite">Drag it. Move the pointer to steer it. Click a name to read it.</p>
+    </form>
+    <a class="scroll-cue" href="#situations"><span>Scroll</span><span class="scroll-rule" aria-hidden="true"></span></a>
+  </div>
+</section>
+  <div class="sheet">
+  <section class="cut cut--act" id="situations" data-pasteup-act style="--panels:14">
+    <div class="pasteup__at" id="offer" style="--at:0.5000" aria-hidden="true"></div>
+    <div class="pasteup__stage" data-pasteup>
+      <section class="cut cut--week g-coconut is-on" data-pasteup-panel="week-forecasting" data-jaw-focus="forecasting">
+        <div class="cut__in rise">
+      <p class="cut__h">Every forecast in the company lives in a spreadsheet. It's ready on Thursday. The decision was Monday.</p>
+      <p class="cut__tag">Forecasting</p>
+        </div>
+      </section>
+      <section class="cut cut--week g-mist" data-pasteup-panel="week-automation" data-jaw-focus="automation">
+        <div class="cut__in rise">
+      <p class="cut__h">Two people spend the first three hours of every day moving numbers between two systems you already own.</p>
+      <p class="cut__tag">Automation</p>
+        </div>
+      </section>
+      <section class="cut cut--week g-butter" data-pasteup-panel="week-company-brain" data-jaw-focus="company-brain">
+        <div class="cut__in rise">
+      <p class="cut__h">The answer is in a document from 2021, and the person who knows which one has left.</p>
+      <p class="cut__tag">Company Brain</p>
+        </div>
+      </section>
+      <section class="cut cut--week g-coconut" data-pasteup-panel="week-ai-optimisation" data-jaw-focus="ai-optimisation">
+        <div class="cut__in rise">
+      <p class="cut__h">You bought an AI pilot last year. It demos beautifully. Nobody on the floor uses it.</p>
+      <p class="cut__tag">AI Optimisation</p>
+        </div>
+      </section>
+      <section class="cut cut--week g-graphite" data-pasteup-panel="week-it-transformation" data-jaw-focus="it-transformation">
+        <div class="cut__in rise">
+      <p class="cut__h">The system nobody dares touch is the one the whole business runs on. The vendor who built it is gone.</p>
+      <p class="cut__tag">IT Transformation</p>
+        </div>
+      </section>
+      <section class="cut cut--week g-mist" data-pasteup-panel="week-ai-talent" data-jaw-focus="ai-talent">
+        <div class="cut__in rise">
+      <p class="cut__h">The plan needs three senior engineers. The budget carries one.</p>
+      <p class="cut__tag">Top AI Talent</p>
+        </div>
+      </section>
+      <section class="cut cut--week g-coconut" data-pasteup-panel="week-ai-governance" data-jaw-focus="ai-governance">
+        <div class="cut__in rise">
+      <p class="cut__h">The regulator asked for the evidence, and your team spent three weeks assembling what should already have existed.</p>
+      <p class="cut__tag">AI Governance</p>
+        </div>
+      </section>
+      <section class="cut cut--pair g-mist" data-pasteup-panel="offer-ai-consultancy" data-jaw-focus="ai-consultancy">
+        <div class="cut__in rise">
+      <div class="pair__one" data-jaw-focus="ai-consultancy">
+        <p class="cut__tag">Advise</p>
+        <h2 class="cut__h">AI Consultancy</h2>
+        <p class="cut__p">A two-week plan for where AI pays off first</p>
+        <details class="pair__more">
+          <summary>Read</summary>
+          <p class="pair__gline">Advise: Where AI and IT spend pays off, and whether what you have is worth keeping</p>
+          <p class="pair__blurb">Two weeks that end with a ranked list of where AI pays off in your business, and what each item costs to build and to run. We interview the people who do the work, read the data you already have, and write one page per candidate: the workflow it changes, the data it needs, the price. Where an off-the-shelf tool is good enough, the list says so and names it. You keep the document whether or not you build anything with us.</p>
+        </details>
+      </div>
+      <div class="pair__one" data-jaw-focus="forecasting">
+        <p class="cut__tag">Build</p>
+        <h2 class="cut__h">Forecasting</h2>
+        <p class="cut__p">Demand, occupancy, and cash forecasts you can act on</p>
+        <details class="pair__more">
+          <summary>Read</summary>
+          <p class="pair__gline">Build: Systems that run on a schedule inside your own accounts</p>
+          <p class="pair__blurb">Occupancy, covers, demand, cash: most teams forecast these in a spreadsheet by feel, and the spreadsheet is usually not wrong, just late. We build a model on your own history, backtest it walk-forward against what your team actually forecast on the same dates, and run it in parallel before anyone relies on it. It lands every morning where the team already looks, with an interval on every number. The 13-week cash forecast from a Xero ledger, every figure drilling to its source rows, is the first of these we productised.</p>
+        </details>
+      </div>
+        </div>
+      </section>
+      <section class="cut cut--pair g-butter" data-pasteup-panel="offer-ai-talent" data-jaw-focus="ai-talent">
+        <div class="cut__in rise">
+      <div class="pair__one" data-jaw-focus="ai-talent">
+        <p class="cut__tag">Run</p>
+        <h2 class="cut__h">Top AI Talent</h2>
+        <p class="cut__p">Senior engineers and analysts at a competitive price, managed from Singapore</p>
+        <details class="pair__more">
+          <summary>Read</summary>
+          <p class="pair__gline">Run: Monthly capacity: our people in your tools, our pager on your systems</p>
+          <p class="pair__blurb">When the plan needs more hands than a project gives you, we supply them. Senior AI engineers, software engineers, data analysts, and back-office operators, hired and managed by us, working inside your tools and your hours, at a price a mid-market budget can carry. You get named people, not a bench: a Singapore lead who is accountable, a two-week trial on real work before any commitment, and the same runbook discipline as our builds. Scale from one person to a team, monthly, and stop when the work stops.</p>
+        </details>
+      </div>
+      <div class="pair__one" data-jaw-focus="model-validation">
+        <p class="cut__tag">Regulate</p>
+        <h2 class="cut__h">Model Validation</h2>
+        <p class="cut__p">Your model rebuilt and diffed; a named validator signs the report</p>
+        <details class="pair__more">
+          <summary>Read</summary>
+          <p class="pair__gline">Regulate: For CROs and Heads of Compliance under MAS. A named person signs</p>
+          <p class="pair__blurb">Independent checking of the models a financial institution already runs: credit, pricing, capital, forecasting, and the AI ones. We rebuild the model ourselves and compare our outputs against yours, review the documentation against a standard test battery, and issue a signed validation report with a remediation plan. Every finding points at evidence, a test result or a document line, so a reviewer can check it without trusting us. A named validator signs, with the credentials the regulator will ask about. Sold per model, to the Head of Model Risk or the CRO.</p>
+        </details>
+      </div>
+        </div>
+      </section>
+      <section class="cut cut--pair g-coconut" data-pasteup-panel="offer-automation" data-jaw-focus="automation">
+        <div class="cut__in rise">
+      <div class="pair__one" data-jaw-focus="automation">
+        <p class="cut__tag">Build</p>
+        <h2 class="cut__h">Automation</h2>
+        <p class="cut__p">Repeated manual work, moved into software</p>
+        <details class="pair__more">
+          <summary>Read</summary>
+          <p class="pair__gline">Build: Systems that run on a schedule inside your own accounts</p>
+          <p class="pair__blurb">The work that eats a team's week is usually the same twenty tasks: copying between systems, chasing approvals, building the same report, triaging the same inbox. We shadow the team for two days and count the hours rather than ask for them. Then we take the three tasks with the most hours and the least judgement, and move them into software that runs in your own cloud account. Anything that touches money or a customer still waits for a person to approve.</p>
+        </details>
+      </div>
+      <div class="pair__one" data-jaw-focus="business-development">
+        <p class="cut__tag">Grow</p>
+        <h2 class="cut__h">Business Development</h2>
+        <p class="cut__p">Pipeline, partnerships, and the systems that keep them moving</p>
+        <details class="pair__more">
+          <summary>Read</summary>
+          <p class="pair__gline">Grow: The commercial side: pipeline and introductions, on retainer</p>
+          <p class="pair__blurb">Growth usually stalls for a boring reason: leads sit in an inbox, follow-ups depend on one person's memory, and nobody can say which channel actually pays. Business development is the commercial side of what we build. A pipeline your team can see. Outreach and follow-up on a schedule, with a named person approving every send. Partner and channel introductions from our own network in Singapore and the region. And a monthly number that says what each channel returned. We work on retainer, and the pipeline is yours.</p>
+        </details>
+      </div>
+        </div>
+      </section>
+      <section class="cut cut--pair g-graphite" data-pasteup-panel="offer-company-brain" data-jaw-focus="company-brain">
+        <div class="cut__in rise">
+      <div class="pair__one" data-jaw-focus="company-brain">
+        <p class="cut__tag">Build</p>
+        <h2 class="cut__h">Company Brain</h2>
+        <p class="cut__p">Your documents, answered by one internal assistant</p>
+        <details class="pair__more">
+          <summary>Read</summary>
+          <p class="pair__gline">Build: Systems that run on a schedule inside your own accounts</p>
+          <p class="pair__blurb">The answer to most internal questions exists in a document someone wrote years ago, and the person who knows where it is has left or is on leave. A company brain is one assistant inside your own systems that answers from your documents, respects who may see what, and shows its source every time. Accuracy is measured on a question set your team writes, before rollout and every month after. It reads your wiki; it does not replace it.</p>
+        </details>
+      </div>
+      <div class="pair__one" data-jaw-focus="compliance-ops">
+        <p class="cut__tag">Regulate</p>
+        <h2 class="cut__h">Compliance Operations</h2>
+        <p class="cut__p">The compliance calendar, the filings, and the evidence, for MAS-licensed firms</p>
+        <details class="pair__more">
+          <summary>Read</summary>
+          <p class="pair__gline">Regulate: For CROs and Heads of Compliance under MAS. A named person signs</p>
+          <p class="pair__blurb">An outsourced compliance function for payment institutions and digital-asset firms that hold a MAS licence. We hold the compliance calendar and file on time. We write and maintain the manuals, and keep the evidence behind every obligation. When MAS publishes, we tell you what it means for your licence specifically. We read each publication once and know which of our clients it binds; everyone else reads it again, by hand, for every client. Your own MLRO stays the accountable officer; a named compliance lead of ours signs the work. Sold by introduction while the practice is small.</p><p class="cut__tag">Pilot. The first engagement funds the build.</p>
+        </details>
+      </div>
+        </div>
+      </section>
+      <section class="cut cut--pair g-mist" data-pasteup-panel="offer-it-transformation" data-jaw-focus="it-transformation">
+        <div class="cut__in rise">
+      <div class="pair__one" data-jaw-focus="it-transformation">
+        <p class="cut__tag">Advise</p>
+        <h2 class="cut__h">IT Transformation</h2>
+        <p class="cut__p">From spreadsheets and legacy systems to a stack your team can run</p>
+        <details class="pair__more">
+          <summary>Read</summary>
+          <p class="pair__gline">Advise: Where AI and IT spend pays off, and whether what you have is worth keeping</p>
+          <p class="pair__blurb">Most mid-market companies run on a legacy system nobody dares touch, a dozen spreadsheets, and three SaaS tools that do not talk to each other. IT transformation is the plan and the migration: which systems stay, which go, what replaces them, and in what order, so the business keeps running while it changes. We map the data first, move one process at a time, and leave every system documented, integrated, and owned by your own people rather than by us.</p>
+        </details>
+      </div>
+      <div class="pair__one" data-jaw-focus="ai-governance">
+        <p class="cut__tag">Regulate</p>
+        <h2 class="cut__h">AI Governance</h2>
+        <p class="cut__p">Your AI controls evidenced continuously, not once a year</p>
+        <details class="pair__more">
+          <summary>Read</summary>
+          <p class="pair__gline">Regulate: For CROs and Heads of Compliance under MAS. A named person signs</p>
+          <p class="pair__blurb">Most firms review their AI controls once a year and assemble the evidence in a three-week scramble when the regulator asks. We map every AI system you run to the controls a regulator expects of it. Then we collect the proof that each control is working, and keep it in a pack that is current on any day it is asked for. It ships as code and scheduled checks in your own repository, not as a platform you rent, and it is refreshed under managed operations. The evidence exists on the day it is asked for. Sold to the CRO or Head of Model Risk.</p>
+        </details>
+      </div>
+        </div>
+      </section>
+      <section class="cut cut--pair g-coconut" data-pasteup-panel="offer-managed-operations" data-jaw-focus="managed-operations">
+        <div class="cut__in rise">
+      <div class="pair__one" data-jaw-focus="managed-operations">
+        <p class="cut__tag">Run</p>
+        <h2 class="cut__h">Managed Operations</h2>
+        <p class="cut__p">We keep running what we built, for as long as you want</p>
+        <details class="pair__more">
+          <summary>Read</summary>
+          <p class="pair__gline">Run: Monthly capacity: our people in your tools, our pager on your systems</p>
+          <p class="pair__blurb">Every system we hand over is designed to run without us. Some teams would rather it ran with us anyway. Managed operations is a monthly line. We watch the forecasts and retrain the models on schedule. We refresh the governance evidence. We answer the pager when an automation stops at two in the morning, and send a one-page report of what ran and what broke. The runbook stays yours, the source stays yours, and the arrangement ends the month you say so.</p>
+        </details>
+      </div>
+      <div class="pair__one" data-jaw-focus="custom-software">
+        <p class="cut__tag">Build</p>
+        <h2 class="cut__h">Custom Software</h2>
+        <p class="cut__p">The dashboard, integration, or internal tool nobody sells</p>
+        <details class="pair__more">
+          <summary>Read</summary>
+          <p class="pair__gline">Build: Systems that run on a schedule inside your own accounts</p>
+          <p class="pair__blurb">Not every problem needs a model. Sometimes the job is a dashboard that reads three systems at once. Or an integration between the PMS and the accounting software. Or an internal tool for the one process your SaaS cannot do. We build that plain software with the same squad and the same rules as everything else: in your accounts, with a runbook, with the source in your repository. Where a model is the cheapest way through one messy step, it goes in; where it is not, it stays out.</p>
+        </details>
+      </div>
+        </div>
+      </section>
+      <section class="cut cut--pair g-mist" data-pasteup-panel="offer-suitability-surveillance" data-jaw-focus="suitability-surveillance">
+        <div class="cut__in rise">
+      <div class="pair__one" data-jaw-focus="suitability-surveillance">
+        <p class="cut__tag">Regulate</p>
+        <h2 class="cut__h">Suitability Screening</h2>
+        <p class="cut__p">Every advisor conversation screened against your suitability rules</p>
+        <details class="pair__more">
+          <summary>Read</summary>
+          <p class="pair__gline">Regulate: For CROs and Heads of Compliance under MAS. A named person signs</p>
+          <p class="pair__blurb">Today a firm hand-checks a small random sample of advisor conversations and never listens to the rest. We screen every recorded conversation against the firm's own suitability rules. The conduct team gets a short queue of flagged cases, each cued to the moment that triggered the flag. People spend their time only on what was flagged, and the sample becomes the whole population. Priced per advisor, sold to the Head of Compliance or Head of Conduct at an insurer, bank, or advisory firm. A pilot: the first engagement funds the speech pipeline and the PDPA handling.</p><p class="cut__tag">Pilot. The first engagement funds the build.</p>
+        </details>
+      </div>
+      <div class="pair__one" data-jaw-focus="ai-optimisation">
+        <p class="cut__tag">Advise</p>
+        <h2 class="cut__h">AI Optimisation</h2>
+        <p class="cut__p">Your existing AI pilot, faster and cheaper to run</p>
+        <details class="pair__more">
+          <summary>Read</summary>
+          <p class="pair__gline">Advise: Where AI and IT spend pays off, and whether what you have is worth keeping</p>
+          <p class="pair__blurb">A pilot that works in a demo and is slow, expensive, or flaky in daily use is the most common thing we are asked to fix. We measure the system you already run on real traffic first: latency, cost per request, failure rate. Then we change a copy, measure again, and keep only what helps: smaller models where accuracy allows, caching, batching, prompt and retrieval fixes. You get the numbers before and after, and an evaluation set your team can rerun without us.</p>
+        </details>
+      </div>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="cut cut--silence" id="silence" aria-hidden="true"></section>
+  <section class="cut cut--plate g-mist" id="practices" data-jaw-focus="hospitality">
+    <div class="cut__in rise">
+      <figure class="plate"><img src="./plates/hospitality-960.webp" srcset="./plates/hospitality-640.webp 640w, ./plates/hospitality-960.webp 960w" sizes="(max-width: 899px) 100vw, 50vw" width="960" height="720" alt="The specimen turned to Hospitality Practice, lit" loading="lazy" decoding="async"></figure>
+      <div class="plate__txt">
+        <h2 class="cut__h">Hospitality Practice</h2>
+        <p class="cut__p">Systems for hotels, F&amp;B, and travel operators</p>
+        <p class="cut__p cut__p--wide">Occupancy moves daily, margins are thin, and the front office runs on a PMS, a channel manager, and a WhatsApp group. Our hospitality practice starts from those systems, not from a blank page. A covers and occupancy forecast per outlet, every morning. Guest and supplier email triaged for the front office to approve. The staff handbook and brand standards answered in one place. A rate or upsell model reviewed on real bookings before anyone trusts it.</p>
+        <p class="cut__tag">Forecasting · Automation · Company Brain · AI Optimisation · AI Consultancy</p>
+      </div>
+    </div>
+  </section>
+  <section class="cut cut--plate g-butter" data-jaw-focus="finance">
+    <div class="cut__in rise">
+      <figure class="plate"><img src="./plates/finance-960.webp" srcset="./plates/finance-640.webp 640w, ./plates/finance-960.webp 960w" sizes="(max-width: 899px) 100vw, 50vw" width="960" height="720" alt="The specimen turned to Finance Practice, lit" loading="lazy" decoding="async"></figure>
+      <div class="plate__txt">
+        <h2 class="cut__h">Finance Practice</h2>
+        <p class="cut__p">For the CFO's office: the close, the cash forecast, the reporting pack</p>
+        <p class="cut__p cut__p--wide">The close, the cash forecast, and the reporting pack take the same week every month. Our finance practice starts from those three, for the CFO and the finance lead of a mid-market company or a fund. A thirteen-week cash forecast with intervals, from your ledger and your receivables ageing. Invoice and bank-line matching, prepared for a person to review. Policies and past board packs answered with their sources. A document-extraction pilot measured, then made cheaper to run. Data stays in your accounts, and the contract says so.</p>
+        <p class="cut__tag">Forecasting · Automation · Company Brain · AI Optimisation · AI Consultancy</p>
+      </div>
+    </div>
+  </section>
+  <section class="cut cut--plate g-coconut" data-jaw-focus="regulated-finance">
+    <div class="cut__in rise">
+      <figure class="plate"><img src="./plates/regulated-finance-960.webp" srcset="./plates/regulated-finance-640.webp 640w, ./plates/regulated-finance-960.webp 960w" sizes="(max-width: 899px) 100vw, 50vw" width="960" height="720" alt="The specimen turned to Regulated Finance Practice, lit" loading="lazy" decoding="async"></figure>
+      <div class="plate__txt">
+        <h2 class="cut__h">Regulated Finance Practice</h2>
+        <p class="cut__p">Banks, insurers, and MAS-licensed fintechs: the door for the CRO and the MLRO</p>
+        <p class="cut__p cut__p--wide">A regulated institution buys differently: vendor due diligence, MAS outsourcing rules, a named person on every deliverable, and a sales cycle measured in quarters. Our regulated finance practice is the door for the Chief Risk Officer, the Head of Model Risk, and the MLRO. Behind it sit four offers: independent model validation, continuous AI governance evidence, an outsourced compliance function for licensed fintechs, and suitability screening of advisor conversations. Each arrives with evidence a reviewer can check without trusting us, and each is signed by a named person.</p>
+        <p class="cut__tag">Model Validation · Compliance Operations · AI Governance · Suitability Screening</p>
+      </div>
+    </div>
+  </section>
+  <section class="cut cut--fit g-mist" id="fit">
+    <div class="cut__in rise">
+      <h2 class="cut__h">Built for the Singapore mid-market.</h2>
+      <p class="cut__p cut__p--wide">Twenty to five hundred people. A property management system or a Xero ledger, and a great deal of email. No data team, and no appetite for a two-year programme. That is not a market we picked. It is the constraint we build around. So the work runs in cloud accounts you already pay for. The first thing we ship is small enough to stop. And the runbook is written for whoever is on shift when it breaks at two in the morning.</p>
+      <ul class="facts"><li><strong>It runs in your accounts</strong><span>Your cloud, your repository, your data. We don't rent you a platform, and we don't hold your data hostage at renewal time.</span></li><li><strong>Stop whenever you like</strong><span>Scope call, discovery, build, handover. Each one ends in something you own. None of them needs the next one to have been worth the money.</span></li><li><strong>Your people run it, not ours</strong><span>Source, runbook, and a support line for the first month. If your team can't run it without us a year later, we built the wrong thing.</span></li></ul>
+    </div>
+  </section>
+  <section class="cut cut--how g-butter" id="how">
+    <div class="cut__in rise">
+      <h2 class="cut__h">Four steps, and you can stop after any of them.</h2>
+      <ul class="facts facts--four"><li><strong>Scope call</strong><span>One call</span></li><li><strong>Discovery</strong><span>A plan and a price</span></li><li><strong>Build</strong><span>You can stop at any demo</span></li><li><strong>Handover</strong><span>Source, runbook, support line</span></li></ul>
+    </div>
+  </section>
+  <section class="cut cut--measure g-graphite" id="handover">
+    <div class="cut__in rise">
+      <h2 class="cut__h">Most AI work dies at handover.</h2>
+      <p class="cut__p cut__p--wide">The consultants leave on a Friday. Six months later the thing has quietly stopped being maintained, because nobody inside the company can read it and nobody was ever meant to. That's the failure this practice is built against. The measure of a job here isn't the demo at the end of the build. It's whether the thing is still running a year later, run by your own people, without us.</p>
+      <ul class="facts"><li><strong>The source</strong><span>In your repository, under your licence, with the commit history intact.</span></li><li><strong>The runbook</strong><span>How it runs, what breaks, what to check on a Monday morning. Written for your team, not for ours.</span></li><li><strong>The first month</strong><span>A support line while your people take it over. Then it's yours, and the invoice stops.</span></li></ul>
+    </div>
+  </section>
+  </div>
+
+<section class="close" id="contact">
+  <div class="close-wrap">
+    <h2 class="h2">Tell us the problem. We'll tell you which of the fourteen it is.</h2>
+    <p class="close-sub">Twenty minutes, and it ends in one of three things: a yes, a no, or the name of someone better suited than us.</p>
+    <form class="brief" id="brief" action="mailto:hello@jaw.sg" method="post" enctype="text/plain">
+      <div class="brief-plate">
+        <label class="brief-well">
+          <span class="brief-well-name">The problem, in one sentence</span>
+          <input name="problem" type="text" required>
+        </label>
+        <div class="brief-lines">
+        <label class="brief-line"><span class="brief-line-name">Your name</span><input name="name" type="text" required></label>
+        <label class="brief-line"><span class="brief-line-name">Company</span><input name="company" type="text"></label>
+        <label class="brief-line"><span class="brief-line-name">Work email</span><input name="email" type="email" required></label>
+        </div>
+        <div class="brief-foot">
+          <button type="submit" class="btn btn-primary">Send the brief</button>
+          <a class="brief-alt" href="mailto:hello@jaw.sg">Send a brief by email</a>
+        </div>
+      </div>
+      <p class="brief-note">This opens your own mail app with the brief filled in. Nothing leaves this page.</p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer class="colophon">
+  <div class="colophon-wrap">
+    <div>
+      <span class="wordmark"><span class="wordmark-dot" aria-hidden="true"></span>JAW AI</span>
+      <p class="colophon-line">Seventeen names on the brain: fourteen offerings and three practices. No slide decks.</p>
+    </div>
+    <ul class="colophon-nav"><li><a href="#offer">The offer</a></li><li><a href="#practices">Practices</a></li><li><a href="#how">How we work</a></li><li><a href="mailto:hello@jaw.sg">hello@jaw.sg</a></li></ul>
+    <p class="mono">The brain on this page is a real human cortex: crest nodes sampled from the FreeSurfer fsaverage pial surface. Every point labelled on it is read from our own service files.</p>
+    <p class="mono">Anything you send through this site is used only to reply to your enquiry, under Singapore's Personal Data Protection Act.</p>
+    <p class="mono colophon-copy">JAW AI. Singapore.</p>
+  </div>
+</footer>
+<script type="module" src="./js/main.js"></script>
+</body>
+</html>
