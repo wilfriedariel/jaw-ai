@@ -311,25 +311,8 @@ body[data-ground="paper"] .btn-top:hover { background: none; color: var(--key-pa
 @keyframes fade { to { opacity: 1; } }
 .hero-foot { display: grid; gap: 22px; }
 .hero-foot > * { min-width: 0; }   /* the select's intrinsic width is its longest option; without this the hero overflows a phone */
-.ask, .scroll-cue { opacity: 0; animation: fade 900ms var(--ease) 900ms forwards; }
-
-.ask { margin: 0; max-width: min(470px, 100%); }
-.ask-label { display: block; font-family: var(--display); font-variation-settings: "wdth" 110; font-weight: 600; font-size: 17px; letter-spacing: -0.014em; margin-bottom: 11px; }
-.ask-field { display: flex; }
-.ask-field select {
-  flex: 1 1 0; width: 100%; min-width: 0; font: 400 17px/1.4 var(--text); color: var(--on-chamber);
-  background: var(--chamber-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 6l5 5 5-5' fill='none' stroke='%23f0b23f' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 18px center / 14px;
-  border: 1px solid var(--chamber-3); border-right: 0;
-  padding: 15px 44px 15px 22px; appearance: none; -webkit-appearance: none; cursor: pointer;
-  border-radius: 4px 0 0 4px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.ask-field select:invalid, .ask-field select option[value=""] { color: var(--on-chamber-3); }
-.ask-field select option { color: var(--ink); background: var(--paper); }
-.ask-go { font-family: var(--sans); font-variation-settings: "wdth" 106; font-size: 14px; letter-spacing: -0.004em; color: var(--on-chamber); background: none; border: 1px solid var(--chamber-3); padding: 0 24px; border-radius: 0 4px 4px 0; cursor: pointer; transition: background var(--micro) var(--ease), color var(--micro) var(--ease); }
-.ask-go:hover { background: var(--key); color: var(--key-ink); border-color: var(--key); }
-.ask-result { margin: 12px 0 0; min-height: 2.8em; font-size: 15px; line-height: 1.5; color: var(--on-chamber-3); }
-.ask-result .hit { color: var(--key); font-family: var(--display); font-variation-settings: "wdth" 110; font-weight: 600; letter-spacing: -0.015em; }
+.hero-cta, .scroll-cue { opacity: 0; animation: fade 900ms var(--ease) 900ms forwards; }
+.hero-cta { justify-self: start; }
 
 .scroll-cue { display: none; }
 @media (min-width: 1000px) {
@@ -411,6 +394,40 @@ figure.plate img { width: 100%; height: auto; }
 .g-graphite .facts--four span { color: #b8b1a7; }
 @media (min-width: 800px) { .facts { grid-template-columns: repeat(3, 1fr); } .facts--four { grid-template-columns: repeat(4, 1fr); } }
 .cut--measure { min-height: 80svh; }
+
+/* ---------------------------------------------------------------- the index
+   2026-09-27: the service offering section, Fable's design.md v3 ("the index"). Not a grid of
+   cards and not a graph: a sticky head column (the site's own editorial grid) beside plates,
+   one per real group in content/catalog.ts, each plate holding its services as named rows. The
+   blurb behind each row reuses .pair__more / .pair__blurb, already built for exactly this. */
+.cut--index { align-items: start; }
+.index { display: grid; gap: 40px; max-width: 1240px; width: 100%; margin-inline: auto; }
+.index__plates { display: grid; gap: 20px; }
+.index-plate { background: var(--paper-2); border-radius: var(--r-md); padding: 28px 32px; display: grid; gap: 20px; }
+.index-plate__head { display: grid; gap: 4px; }
+.index-plate__label { margin: 0; font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: var(--fs-label); letter-spacing: 0.16em; text-transform: uppercase; color: var(--jade); }
+.index-plate__line { margin: 0; font-family: var(--text); font-size: 15px; color: var(--ink-2); }
+.index-plate__rows { display: grid; gap: 24px; }
+.index-row { display: grid; gap: 6px; }
+.index-row__head { display: grid; gap: 4px; }
+.index-row__name { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: 24px; letter-spacing: -0.02em; transition: color var(--micro) var(--ease); }
+.index-row:hover .index-row__name { color: var(--jade); }
+.index-row__line { margin: 0; font-family: var(--text); font-size: var(--fs-text); line-height: 1.45; max-width: 52ch; color: var(--ink-2); }
+@media (min-width: 1000px) {
+  .index { grid-template-columns: 300px 1fr; gap: 64px; }
+}
+
+/* ---------------------------------------------------------------- the profile
+   2026-09-27: Our Profile is the three people behind JAW AI (content/team.ts), not a copy
+   statement. Three cards, same plate ground as the index, no photography (none licensed). */
+.team { display: grid; gap: 40px; max-width: 1240px; width: 100%; margin-inline: auto; }
+.team__people { display: grid; gap: 20px; }
+@media (min-width: 800px) { .team__people { grid-template-columns: repeat(3, 1fr); } }
+.team-card { background: var(--paper-2); border-radius: var(--r-md); padding: 28px 26px; display: grid; gap: 16px; align-content: start; }
+.team-card__name { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: 22px; letter-spacing: -0.02em; }
+.team-card__bio { margin: 0; font-family: var(--text); font-size: 16px; line-height: 1.55; color: var(--ink-2); }
+.team-card__skills { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.team-card__skills li { font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: 12px; letter-spacing: 0.01em; color: var(--jade); background: rgba(12, 90, 72, 0.08); border-radius: var(--r-pill); padding: 5px 12px; }
 
 /* ---------------------------------------------------------------- the paste-up
    The fourteen fast cuts, the seven weeks and the seven offering pairs, stop scrolling past one
@@ -504,6 +521,10 @@ figure.plate img { width: 100%; height: auto; }
 @media (min-width: 1000px) {
   .grid-split { display: grid; grid-template-columns: 320px minmax(0, 1fr); column-gap: var(--gutter); }
   .act-head { position: sticky; top: calc(var(--bar) + 44px); align-self: start; }
+  /* 2026-09-27: the index (Service Offering) reuses .act-head for its sticky head column, but
+     the team (Our Profile) reuses it only for the .h2/.label sizing below and must not stick —
+     it produced a real bug, the heading pinned mid-scroll and overlapped the team cards. */
+  .team__head { position: static; top: auto; }
 }
 /* a heading in a 320px column has to be set smaller than one that owns the page width, or it
    breaks into six lines and reads as a mistake */
@@ -762,16 +783,14 @@ figure.plate img { width: 100%; height: auto; }
 <a class="skip" href="#main">Skip to the content</a>
 
 <div class="brain-layer" id="brain" data-rung="probing">
-  <img class="poster" src="./brain/poster-800.webp" srcset="./brain/poster-640.webp 640w, ./brain/poster-800.webp 800w, ./brain/poster-1600.webp 1600w" sizes="(max-width: 999px) 100vw, 78vw" alt="A human cortex drawn as points and lines, with the 17 JAW AI offerings marked on it" width="1600" height="1000" fetchpriority="high">
+  <img class="poster" src="./brain/poster-800.webp" srcset="./brain/poster-640.webp 640w, ./brain/poster-800.webp 800w, ./brain/poster-1600.webp 1600w" sizes="(max-width: 999px) 100vw, 78vw" alt="A human cortex drawn as points and lines, slowly turning" width="1600" height="1000" fetchpriority="high">
   <canvas aria-hidden="true"></canvas>
-  <div class="labels"></div>
   <div class="hud hud-top"></div>
   <div class="hud hud-corner"></div>
-  <aside class="card" hidden aria-live="polite"></aside>
 </div>
 <header class="topbar">
   <a class="wordmark" href="#hero"><span class="wordmark-dot" aria-hidden="true"></span>JAW AI</a>
-  <nav class="topnav" aria-label="Sections"><ul><li><a href="#offer">The offer</a></li><li><a href="#practices">Practices</a></li><li><a href="#how">How we work</a></li></ul></nav>
+  <nav class="topnav" aria-label="Sections"><ul><li><a href="#offer">The offer</a></li><li><a href="#profile">Our profile</a></li><li><a href="#contact">Contact</a></li></ul></nav>
   <a class="btn btn-primary btn-top" href="#contact">Book a 20-minute scope call</a>
 </header>
 <main id="main">
@@ -779,297 +798,229 @@ figure.plate img { width: 100%; height: auto; }
 <section class="hero" id="hero">
   <div class="hero-head">
     <h1 class="h1"><span class="h1-line"><span class="h1-inner" style="--i:0">AI systems</span></span><span class="h1-line"><span class="h1-inner" style="--i:1">that keep running</span></span><span class="h1-line"><span class="h1-inner" style="--i:2">after we leave.</span></span></h1>
-    <p class="hero-lede">Forecasts, reconciliations, and an assistant that answers from your own files. For Singapore companies whose numbers live in Excel and whose decisions live in an inbox. Every offering is a name on the brain. Drag it.</p>
+    <p class="hero-lede">Forecasts, reconciliations, and an assistant that answers from your own files. For Singapore companies whose numbers live in Excel and whose decisions live in an inbox.</p>
   </div>
   <div class="hero-foot">
-    <form class="ask" id="ask" autocomplete="off">
-      <label class="ask-label" for="ask-select">So what's the problem?</label>
-      <div class="ask-field">
-        <select id="ask-select" name="problem">
-          <option value="" selected>Pick the line that sounds like your week</option>
-          <option value="forecasting">Every forecast in the company lives in a spreadsheet. It's ready on Thursday. The decision was Monday.</option>
-          <option value="automation">Two people spend the first three hours of every day moving numbers between two systems you already own.</option>
-          <option value="company-brain">The answer is in a document from 2021, and the person who knows which one has left.</option>
-          <option value="ai-optimisation">You bought an AI pilot last year. It demos beautifully. Nobody on the floor uses it.</option>
-          <option value="it-transformation">The system nobody dares touch is the one the whole business runs on. The vendor who built it is gone.</option>
-          <option value="ai-talent">The plan needs three senior engineers. The budget carries one.</option>
-          <option value="ai-governance">The regulator asked for the evidence, and your team spent three weeks assembling what should already have existed.</option>
-        </select>
-        <button type="submit" class="ask-go">Open</button>
-      </div>
-      <p class="ask-result" aria-live="polite">Drag it. Move the pointer to steer it. Click a name to read it.</p>
-    </form>
-    <a class="scroll-cue" href="#situations"><span>Scroll</span><span class="scroll-rule" aria-hidden="true"></span></a>
+    <a class="btn btn-primary hero-cta" href="#contact">Book a 20-minute scope call</a>
+    <a class="scroll-cue" href="#offer"><span>Scroll</span><span class="scroll-rule" aria-hidden="true"></span></a>
   </div>
 </section>
   <div class="sheet">
-  <section class="cut cut--act" id="situations" data-pasteup-act style="--panels:14">
-    <div class="pasteup__at" id="offer" style="--at:0.5000" aria-hidden="true"></div>
-    <div class="pasteup__stage" data-pasteup>
-      <section class="cut cut--week g-coconut is-on" data-pasteup-panel="week-forecasting" data-jaw-focus="forecasting">
-        <div class="cut__in rise">
-      <p class="cut__h">Every forecast in the company lives in a spreadsheet. It's ready on Thursday. The decision was Monday.</p>
-      <p class="cut__tag">Forecasting</p>
-        </div>
-      </section>
-      <section class="cut cut--week g-mist" data-pasteup-panel="week-automation" data-jaw-focus="automation">
-        <div class="cut__in rise">
-      <p class="cut__h">Two people spend the first three hours of every day moving numbers between two systems you already own.</p>
-      <p class="cut__tag">Automation</p>
-        </div>
-      </section>
-      <section class="cut cut--week g-butter" data-pasteup-panel="week-company-brain" data-jaw-focus="company-brain">
-        <div class="cut__in rise">
-      <p class="cut__h">The answer is in a document from 2021, and the person who knows which one has left.</p>
-      <p class="cut__tag">Company Brain</p>
-        </div>
-      </section>
-      <section class="cut cut--week g-coconut" data-pasteup-panel="week-ai-optimisation" data-jaw-focus="ai-optimisation">
-        <div class="cut__in rise">
-      <p class="cut__h">You bought an AI pilot last year. It demos beautifully. Nobody on the floor uses it.</p>
-      <p class="cut__tag">AI Optimisation</p>
-        </div>
-      </section>
-      <section class="cut cut--week g-graphite" data-pasteup-panel="week-it-transformation" data-jaw-focus="it-transformation">
-        <div class="cut__in rise">
-      <p class="cut__h">The system nobody dares touch is the one the whole business runs on. The vendor who built it is gone.</p>
-      <p class="cut__tag">IT Transformation</p>
-        </div>
-      </section>
-      <section class="cut cut--week g-mist" data-pasteup-panel="week-ai-talent" data-jaw-focus="ai-talent">
-        <div class="cut__in rise">
-      <p class="cut__h">The plan needs three senior engineers. The budget carries one.</p>
-      <p class="cut__tag">Top AI Talent</p>
-        </div>
-      </section>
-      <section class="cut cut--week g-coconut" data-pasteup-panel="week-ai-governance" data-jaw-focus="ai-governance">
-        <div class="cut__in rise">
-      <p class="cut__h">The regulator asked for the evidence, and your team spent three weeks assembling what should already have existed.</p>
-      <p class="cut__tag">AI Governance</p>
-        </div>
-      </section>
-      <section class="cut cut--pair g-mist" data-pasteup-panel="offer-ai-consultancy" data-jaw-focus="ai-consultancy">
-        <div class="cut__in rise">
-      <div class="pair__one" data-jaw-focus="ai-consultancy">
-        <p class="cut__tag">Advise</p>
-        <h2 class="cut__h">AI Consultancy</h2>
-        <p class="cut__p">A two-week plan for where AI pays off first</p>
-        <details class="pair__more">
-          <summary>Read</summary>
-          <p class="pair__gline">Advise: Where AI and IT spend pays off, and whether what you have is worth keeping</p>
-          <p class="pair__blurb">Two weeks that end with a ranked list of where AI pays off in your business, and what each item costs to build and to run. We interview the people who do the work, read the data you already have, and write one page per candidate: the workflow it changes, the data it needs, the price. Where an off-the-shelf tool is good enough, the list says so and names it. You keep the document whether or not you build anything with us.</p>
-        </details>
+  <section class="cut cut--index g-coconut" id="offer">
+    <div class="index">
+      <div class="act-head index__head">
+        <p class="label">The offer</p>
+        <h2 class="h2 rise">Fourteen things we do. Five ways to buy them.</h2>
+        <p class="act-note">Each one opens to what it actually is: what we touch, what you keep, and what it costs you to stop.</p>
       </div>
-      <div class="pair__one" data-jaw-focus="forecasting">
-        <p class="cut__tag">Build</p>
-        <h2 class="cut__h">Forecasting</h2>
-        <p class="cut__p">Demand, occupancy, and cash forecasts you can act on</p>
-        <details class="pair__more">
-          <summary>Read</summary>
-          <p class="pair__gline">Build: Systems that run on a schedule inside your own accounts</p>
-          <p class="pair__blurb">Occupancy, covers, demand, cash: most teams forecast these in a spreadsheet by feel, and the spreadsheet is usually not wrong, just late. We build a model on your own history, backtest it walk-forward against what your team actually forecast on the same dates, and run it in parallel before anyone relies on it. It lands every morning where the team already looks, with an interval on every number. The 13-week cash forecast from a Xero ledger, every figure drilling to its source rows, is the first of these we productised.</p>
-        </details>
-      </div>
+      <div class="index__plates">
+        <div class="index-plate">
+          <div class="index-plate__head">
+            <p class="index-plate__label">Advise</p>
+            <p class="index-plate__line">Where AI and IT spend pays off, and whether what you have is worth keeping</p>
+          </div>
+          <div class="index-plate__rows">
+            <div class="index-row">
+              <div class="index-row__head">
+                <h3 class="index-row__name">AI Consultancy</h3>
+                <p class="index-row__line">A two-week plan for where AI pays off first</p>
+              </div>
+              <details class="pair__more">
+                <summary>Read</summary>
+                <p class="pair__blurb">Two weeks that end with a ranked list of where AI pays off in your business, and what each item costs to build and to run. We interview the people who do the work, read the data you already have, and write one page per candidate: the workflow it changes, the data it needs, the price. Where an off-the-shelf tool is good enough, the list says so and names it. You keep the document whether or not you build anything with us.</p>
+              </details>
+            </div>
+            <div class="index-row">
+              <div class="index-row__head">
+                <h3 class="index-row__name">IT Transformation</h3>
+                <p class="index-row__line">From spreadsheets and legacy systems to a stack your team can run</p>
+              </div>
+              <details class="pair__more">
+                <summary>Read</summary>
+                <p class="pair__blurb">Most mid-market companies run on a legacy system nobody dares touch, a dozen spreadsheets, and three SaaS tools that do not talk to each other. IT transformation is the plan and the migration: which systems stay, which go, what replaces them, and in what order, so the business keeps running while it changes. We map the data first, move one process at a time, and leave every system documented, integrated, and owned by your own people rather than by us.</p>
+              </details>
+            </div>
+            <div class="index-row">
+              <div class="index-row__head">
+                <h3 class="index-row__name">AI Optimisation</h3>
+                <p class="index-row__line">Your existing AI pilot, faster and cheaper to run</p>
+              </div>
+              <details class="pair__more">
+                <summary>Read</summary>
+                <p class="pair__blurb">A pilot that works in a demo and is slow, expensive, or flaky in daily use is the most common thing we are asked to fix. We measure the system you already run on real traffic first: latency, cost per request, failure rate. Then we change a copy, measure again, and keep only what helps: smaller models where accuracy allows, caching, batching, prompt and retrieval fixes. You get the numbers before and after, and an evaluation set your team can rerun without us.</p>
+              </details>
+            </div>
+          </div>
         </div>
-      </section>
-      <section class="cut cut--pair g-butter" data-pasteup-panel="offer-ai-talent" data-jaw-focus="ai-talent">
-        <div class="cut__in rise">
-      <div class="pair__one" data-jaw-focus="ai-talent">
-        <p class="cut__tag">Run</p>
-        <h2 class="cut__h">Top AI Talent</h2>
-        <p class="cut__p">Senior engineers and analysts at a competitive price, managed from Singapore</p>
-        <details class="pair__more">
-          <summary>Read</summary>
-          <p class="pair__gline">Run: Monthly capacity: our people in your tools, our pager on your systems</p>
-          <p class="pair__blurb">When the plan needs more hands than a project gives you, we supply them. Senior AI engineers, software engineers, data analysts, and back-office operators, hired and managed by us, working inside your tools and your hours, at a price a mid-market budget can carry. You get named people, not a bench: a Singapore lead who is accountable, a two-week trial on real work before any commitment, and the same runbook discipline as our builds. Scale from one person to a team, monthly, and stop when the work stops.</p>
-        </details>
-      </div>
-      <div class="pair__one" data-jaw-focus="model-validation">
-        <p class="cut__tag">Regulate</p>
-        <h2 class="cut__h">Model Validation</h2>
-        <p class="cut__p">Your model rebuilt and diffed; a named validator signs the report</p>
-        <details class="pair__more">
-          <summary>Read</summary>
-          <p class="pair__gline">Regulate: For CROs and Heads of Compliance under MAS. A named person signs</p>
-          <p class="pair__blurb">Independent checking of the models a financial institution already runs: credit, pricing, capital, forecasting, and the AI ones. We rebuild the model ourselves and compare our outputs against yours, review the documentation against a standard test battery, and issue a signed validation report with a remediation plan. Every finding points at evidence, a test result or a document line, so a reviewer can check it without trusting us. A named validator signs, with the credentials the regulator will ask about. Sold per model, to the Head of Model Risk or the CRO.</p>
-        </details>
-      </div>
+        <div class="index-plate">
+          <div class="index-plate__head">
+            <p class="index-plate__label">Build</p>
+            <p class="index-plate__line">Systems that run on a schedule inside your own accounts</p>
+          </div>
+          <div class="index-plate__rows">
+            <div class="index-row">
+              <div class="index-row__head">
+                <h3 class="index-row__name">Forecasting</h3>
+                <p class="index-row__line">Demand, occupancy, and cash forecasts you can act on</p>
+              </div>
+              <details class="pair__more">
+                <summary>Read</summary>
+                <p class="pair__blurb">Occupancy, covers, demand, cash: most teams forecast these in a spreadsheet by feel, and the spreadsheet is usually not wrong, just late. We build a model on your own history, backtest it walk-forward against what your team actually forecast on the same dates, and run it in parallel before anyone relies on it. It lands every morning where the team already looks, with an interval on every number. The 13-week cash forecast from a Xero ledger, every figure drilling to its source rows, is the first of these we productised.</p>
+              </details>
+            </div>
+            <div class="index-row">
+              <div class="index-row__head">
+                <h3 class="index-row__name">Automation</h3>
+                <p class="index-row__line">Repeated manual work, moved into software</p>
+              </div>
+              <details class="pair__more">
+                <summary>Read</summary>
+                <p class="pair__blurb">The work that eats a team's week is usually the same twenty tasks: copying between systems, chasing approvals, building the same report, triaging the same inbox. We shadow the team for two days and count the hours rather than ask for them. Then we take the three tasks with the most hours and the least judgement, and move them into software that runs in your own cloud account. Anything that touches money or a customer still waits for a person to approve.</p>
+              </details>
+            </div>
+            <div class="index-row">
+              <div class="index-row__head">
+                <h3 class="index-row__name">Company Brain</h3>
+                <p class="index-row__line">Your documents, answered by one internal assistant</p>
+              </div>
+              <details class="pair__more">
+                <summary>Read</summary>
+                <p class="pair__blurb">The answer to most internal questions exists in a document someone wrote years ago, and the person who knows where it is has left or is on leave. A company brain is one assistant inside your own systems that answers from your documents, respects who may see what, and shows its source every time. Accuracy is measured on a question set your team writes, before rollout and every month after. It reads your wiki; it does not replace it.</p>
+              </details>
+            </div>
+            <div class="index-row">
+              <div class="index-row__head">
+                <h3 class="index-row__name">Custom Software</h3>
+                <p class="index-row__line">The dashboard, integration, or internal tool nobody sells</p>
+              </div>
+              <details class="pair__more">
+                <summary>Read</summary>
+                <p class="pair__blurb">Not every problem needs a model. Sometimes the job is a dashboard that reads three systems at once. Or an integration between the PMS and the accounting software. Or an internal tool for the one process your SaaS cannot do. We build that plain software with the same squad and the same rules as everything else: in your accounts, with a runbook, with the source in your repository. Where a model is the cheapest way through one messy step, it goes in; where it is not, it stays out.</p>
+              </details>
+            </div>
+          </div>
         </div>
-      </section>
-      <section class="cut cut--pair g-coconut" data-pasteup-panel="offer-automation" data-jaw-focus="automation">
-        <div class="cut__in rise">
-      <div class="pair__one" data-jaw-focus="automation">
-        <p class="cut__tag">Build</p>
-        <h2 class="cut__h">Automation</h2>
-        <p class="cut__p">Repeated manual work, moved into software</p>
-        <details class="pair__more">
-          <summary>Read</summary>
-          <p class="pair__gline">Build: Systems that run on a schedule inside your own accounts</p>
-          <p class="pair__blurb">The work that eats a team's week is usually the same twenty tasks: copying between systems, chasing approvals, building the same report, triaging the same inbox. We shadow the team for two days and count the hours rather than ask for them. Then we take the three tasks with the most hours and the least judgement, and move them into software that runs in your own cloud account. Anything that touches money or a customer still waits for a person to approve.</p>
-        </details>
-      </div>
-      <div class="pair__one" data-jaw-focus="business-development">
-        <p class="cut__tag">Grow</p>
-        <h2 class="cut__h">Business Development</h2>
-        <p class="cut__p">Pipeline, partnerships, and the systems that keep them moving</p>
-        <details class="pair__more">
-          <summary>Read</summary>
-          <p class="pair__gline">Grow: The commercial side: pipeline and introductions, on retainer</p>
-          <p class="pair__blurb">Growth usually stalls for a boring reason: leads sit in an inbox, follow-ups depend on one person's memory, and nobody can say which channel actually pays. Business development is the commercial side of what we build. A pipeline your team can see. Outreach and follow-up on a schedule, with a named person approving every send. Partner and channel introductions from our own network in Singapore and the region. And a monthly number that says what each channel returned. We work on retainer, and the pipeline is yours.</p>
-        </details>
-      </div>
+        <div class="index-plate">
+          <div class="index-plate__head">
+            <p class="index-plate__label">Run</p>
+            <p class="index-plate__line">Monthly capacity: our people in your tools, our pager on your systems</p>
+          </div>
+          <div class="index-plate__rows">
+            <div class="index-row">
+              <div class="index-row__head">
+                <h3 class="index-row__name">Top AI Talent</h3>
+                <p class="index-row__line">Senior engineers and analysts at a competitive price, managed from Singapore</p>
+              </div>
+              <details class="pair__more">
+                <summary>Read</summary>
+                <p class="pair__blurb">When the plan needs more hands than a project gives you, we supply them. Senior AI engineers, software engineers, data analysts, and back-office operators, hired and managed by us, working inside your tools and your hours, at a price a mid-market budget can carry. You get named people, not a bench: a Singapore lead who is accountable, a two-week trial on real work before any commitment, and the same runbook discipline as our builds. Scale from one person to a team, monthly, and stop when the work stops.</p>
+              </details>
+            </div>
+            <div class="index-row">
+              <div class="index-row__head">
+                <h3 class="index-row__name">Managed Operations</h3>
+                <p class="index-row__line">We keep running what we built, for as long as you want</p>
+              </div>
+              <details class="pair__more">
+                <summary>Read</summary>
+                <p class="pair__blurb">Every system we hand over is designed to run without us. Some teams would rather it ran with us anyway. Managed operations is a monthly line. We watch the forecasts and retrain the models on schedule. We refresh the governance evidence. We answer the pager when an automation stops at two in the morning, and send a one-page report of what ran and what broke. The runbook stays yours, the source stays yours, and the arrangement ends the month you say so.</p>
+              </details>
+            </div>
+          </div>
         </div>
-      </section>
-      <section class="cut cut--pair g-graphite" data-pasteup-panel="offer-company-brain" data-jaw-focus="company-brain">
-        <div class="cut__in rise">
-      <div class="pair__one" data-jaw-focus="company-brain">
-        <p class="cut__tag">Build</p>
-        <h2 class="cut__h">Company Brain</h2>
-        <p class="cut__p">Your documents, answered by one internal assistant</p>
-        <details class="pair__more">
-          <summary>Read</summary>
-          <p class="pair__gline">Build: Systems that run on a schedule inside your own accounts</p>
-          <p class="pair__blurb">The answer to most internal questions exists in a document someone wrote years ago, and the person who knows where it is has left or is on leave. A company brain is one assistant inside your own systems that answers from your documents, respects who may see what, and shows its source every time. Accuracy is measured on a question set your team writes, before rollout and every month after. It reads your wiki; it does not replace it.</p>
-        </details>
-      </div>
-      <div class="pair__one" data-jaw-focus="compliance-ops">
-        <p class="cut__tag">Regulate</p>
-        <h2 class="cut__h">Compliance Operations</h2>
-        <p class="cut__p">The compliance calendar, the filings, and the evidence, for MAS-licensed firms</p>
-        <details class="pair__more">
-          <summary>Read</summary>
-          <p class="pair__gline">Regulate: For CROs and Heads of Compliance under MAS. A named person signs</p>
-          <p class="pair__blurb">An outsourced compliance function for payment institutions and digital-asset firms that hold a MAS licence. We hold the compliance calendar and file on time. We write and maintain the manuals, and keep the evidence behind every obligation. When MAS publishes, we tell you what it means for your licence specifically. We read each publication once and know which of our clients it binds; everyone else reads it again, by hand, for every client. Your own MLRO stays the accountable officer; a named compliance lead of ours signs the work. Sold by introduction while the practice is small.</p><p class="cut__tag">Pilot. The first engagement funds the build.</p>
-        </details>
-      </div>
+        <div class="index-plate">
+          <div class="index-plate__head">
+            <p class="index-plate__label">Grow</p>
+            <p class="index-plate__line">The commercial side: pipeline and introductions, on retainer</p>
+          </div>
+          <div class="index-plate__rows">
+            <div class="index-row">
+              <div class="index-row__head">
+                <h3 class="index-row__name">Business Development</h3>
+                <p class="index-row__line">Pipeline, partnerships, and the systems that keep them moving</p>
+              </div>
+              <details class="pair__more">
+                <summary>Read</summary>
+                <p class="pair__blurb">Growth usually stalls for a boring reason: leads sit in an inbox, follow-ups depend on one person's memory, and nobody can say which channel actually pays. Business development is the commercial side of what we build. A pipeline your team can see. Outreach and follow-up on a schedule, with a named person approving every send. Partner and channel introductions from our own network in Singapore and the region. And a monthly number that says what each channel returned. We work on retainer, and the pipeline is yours.</p>
+              </details>
+            </div>
+          </div>
         </div>
-      </section>
-      <section class="cut cut--pair g-mist" data-pasteup-panel="offer-it-transformation" data-jaw-focus="it-transformation">
-        <div class="cut__in rise">
-      <div class="pair__one" data-jaw-focus="it-transformation">
-        <p class="cut__tag">Advise</p>
-        <h2 class="cut__h">IT Transformation</h2>
-        <p class="cut__p">From spreadsheets and legacy systems to a stack your team can run</p>
-        <details class="pair__more">
-          <summary>Read</summary>
-          <p class="pair__gline">Advise: Where AI and IT spend pays off, and whether what you have is worth keeping</p>
-          <p class="pair__blurb">Most mid-market companies run on a legacy system nobody dares touch, a dozen spreadsheets, and three SaaS tools that do not talk to each other. IT transformation is the plan and the migration: which systems stay, which go, what replaces them, and in what order, so the business keeps running while it changes. We map the data first, move one process at a time, and leave every system documented, integrated, and owned by your own people rather than by us.</p>
-        </details>
-      </div>
-      <div class="pair__one" data-jaw-focus="ai-governance">
-        <p class="cut__tag">Regulate</p>
-        <h2 class="cut__h">AI Governance</h2>
-        <p class="cut__p">Your AI controls evidenced continuously, not once a year</p>
-        <details class="pair__more">
-          <summary>Read</summary>
-          <p class="pair__gline">Regulate: For CROs and Heads of Compliance under MAS. A named person signs</p>
-          <p class="pair__blurb">Most firms review their AI controls once a year and assemble the evidence in a three-week scramble when the regulator asks. We map every AI system you run to the controls a regulator expects of it. Then we collect the proof that each control is working, and keep it in a pack that is current on any day it is asked for. It ships as code and scheduled checks in your own repository, not as a platform you rent, and it is refreshed under managed operations. The evidence exists on the day it is asked for. Sold to the CRO or Head of Model Risk.</p>
-        </details>
-      </div>
+        <div class="index-plate">
+          <div class="index-plate__head">
+            <p class="index-plate__label">Regulate</p>
+            <p class="index-plate__line">For CROs and Heads of Compliance under MAS. A named person signs</p>
+          </div>
+          <div class="index-plate__rows">
+            <div class="index-row">
+              <div class="index-row__head">
+                <h3 class="index-row__name">Model Validation</h3>
+                <p class="index-row__line">Your model rebuilt and diffed; a named validator signs the report</p>
+              </div>
+              <details class="pair__more">
+                <summary>Read</summary>
+                <p class="pair__blurb">Independent checking of the models a financial institution already runs: credit, pricing, capital, forecasting, and the AI ones. We rebuild the model ourselves and compare our outputs against yours, review the documentation against a standard test battery, and issue a signed validation report with a remediation plan. Every finding points at evidence, a test result or a document line, so a reviewer can check it without trusting us. A named validator signs, with the credentials the regulator will ask about. Sold per model, to the Head of Model Risk or the CRO.</p>
+              </details>
+            </div>
+            <div class="index-row">
+              <div class="index-row__head">
+                <h3 class="index-row__name">Compliance Operations</h3>
+                <p class="index-row__line">The compliance calendar, the filings, and the evidence, for MAS-licensed firms</p>
+              </div>
+              <details class="pair__more">
+                <summary>Read</summary>
+                <p class="pair__blurb">An outsourced compliance function for payment institutions and digital-asset firms that hold a MAS licence. We hold the compliance calendar and file on time. We write and maintain the manuals, and keep the evidence behind every obligation. When MAS publishes, we tell you what it means for your licence specifically. We read each publication once and know which of our clients it binds; everyone else reads it again, by hand, for every client. Your own MLRO stays the accountable officer; a named compliance lead of ours signs the work. Sold by introduction while the practice is small.</p><p class="cut__tag">Pilot. The first engagement funds the build.</p>
+              </details>
+            </div>
+            <div class="index-row">
+              <div class="index-row__head">
+                <h3 class="index-row__name">AI Governance</h3>
+                <p class="index-row__line">Your AI controls evidenced continuously, not once a year</p>
+              </div>
+              <details class="pair__more">
+                <summary>Read</summary>
+                <p class="pair__blurb">Most firms review their AI controls once a year and assemble the evidence in a three-week scramble when the regulator asks. We map every AI system you run to the controls a regulator expects of it. Then we collect the proof that each control is working, and keep it in a pack that is current on any day it is asked for. It ships as code and scheduled checks in your own repository, not as a platform you rent, and it is refreshed under managed operations. The evidence exists on the day it is asked for. Sold to the CRO or Head of Model Risk.</p>
+              </details>
+            </div>
+            <div class="index-row">
+              <div class="index-row__head">
+                <h3 class="index-row__name">Suitability Screening</h3>
+                <p class="index-row__line">Every advisor conversation screened against your suitability rules</p>
+              </div>
+              <details class="pair__more">
+                <summary>Read</summary>
+                <p class="pair__blurb">Today a firm hand-checks a small random sample of advisor conversations and never listens to the rest. We screen every recorded conversation against the firm's own suitability rules. The conduct team gets a short queue of flagged cases, each cued to the moment that triggered the flag. People spend their time only on what was flagged, and the sample becomes the whole population. Priced per advisor, sold to the Head of Compliance or Head of Conduct at an insurer, bank, or advisory firm. A pilot: the first engagement funds the speech pipeline and the PDPA handling.</p><p class="cut__tag">Pilot. The first engagement funds the build.</p>
+              </details>
+            </div>
+          </div>
         </div>
-      </section>
-      <section class="cut cut--pair g-coconut" data-pasteup-panel="offer-managed-operations" data-jaw-focus="managed-operations">
-        <div class="cut__in rise">
-      <div class="pair__one" data-jaw-focus="managed-operations">
-        <p class="cut__tag">Run</p>
-        <h2 class="cut__h">Managed Operations</h2>
-        <p class="cut__p">We keep running what we built, for as long as you want</p>
-        <details class="pair__more">
-          <summary>Read</summary>
-          <p class="pair__gline">Run: Monthly capacity: our people in your tools, our pager on your systems</p>
-          <p class="pair__blurb">Every system we hand over is designed to run without us. Some teams would rather it ran with us anyway. Managed operations is a monthly line. We watch the forecasts and retrain the models on schedule. We refresh the governance evidence. We answer the pager when an automation stops at two in the morning, and send a one-page report of what ran and what broke. The runbook stays yours, the source stays yours, and the arrangement ends the month you say so.</p>
-        </details>
-      </div>
-      <div class="pair__one" data-jaw-focus="custom-software">
-        <p class="cut__tag">Build</p>
-        <h2 class="cut__h">Custom Software</h2>
-        <p class="cut__p">The dashboard, integration, or internal tool nobody sells</p>
-        <details class="pair__more">
-          <summary>Read</summary>
-          <p class="pair__gline">Build: Systems that run on a schedule inside your own accounts</p>
-          <p class="pair__blurb">Not every problem needs a model. Sometimes the job is a dashboard that reads three systems at once. Or an integration between the PMS and the accounting software. Or an internal tool for the one process your SaaS cannot do. We build that plain software with the same squad and the same rules as everything else: in your accounts, with a runbook, with the source in your repository. Where a model is the cheapest way through one messy step, it goes in; where it is not, it stays out.</p>
-        </details>
-      </div>
-        </div>
-      </section>
-      <section class="cut cut--pair g-mist" data-pasteup-panel="offer-suitability-surveillance" data-jaw-focus="suitability-surveillance">
-        <div class="cut__in rise">
-      <div class="pair__one" data-jaw-focus="suitability-surveillance">
-        <p class="cut__tag">Regulate</p>
-        <h2 class="cut__h">Suitability Screening</h2>
-        <p class="cut__p">Every advisor conversation screened against your suitability rules</p>
-        <details class="pair__more">
-          <summary>Read</summary>
-          <p class="pair__gline">Regulate: For CROs and Heads of Compliance under MAS. A named person signs</p>
-          <p class="pair__blurb">Today a firm hand-checks a small random sample of advisor conversations and never listens to the rest. We screen every recorded conversation against the firm's own suitability rules. The conduct team gets a short queue of flagged cases, each cued to the moment that triggered the flag. People spend their time only on what was flagged, and the sample becomes the whole population. Priced per advisor, sold to the Head of Compliance or Head of Conduct at an insurer, bank, or advisory firm. A pilot: the first engagement funds the speech pipeline and the PDPA handling.</p><p class="cut__tag">Pilot. The first engagement funds the build.</p>
-        </details>
-      </div>
-      <div class="pair__one" data-jaw-focus="ai-optimisation">
-        <p class="cut__tag">Advise</p>
-        <h2 class="cut__h">AI Optimisation</h2>
-        <p class="cut__p">Your existing AI pilot, faster and cheaper to run</p>
-        <details class="pair__more">
-          <summary>Read</summary>
-          <p class="pair__gline">Advise: Where AI and IT spend pays off, and whether what you have is worth keeping</p>
-          <p class="pair__blurb">A pilot that works in a demo and is slow, expensive, or flaky in daily use is the most common thing we are asked to fix. We measure the system you already run on real traffic first: latency, cost per request, failure rate. Then we change a copy, measure again, and keep only what helps: smaller models where accuracy allows, caching, batching, prompt and retrieval fixes. You get the numbers before and after, and an evaluation set your team can rerun without us.</p>
-        </details>
-      </div>
-        </div>
-      </section>
-    </div>
-  </section>
-  <section class="cut cut--silence" id="silence" aria-hidden="true"></section>
-  <section class="cut cut--plate g-mist" id="practices" data-jaw-focus="hospitality">
-    <div class="cut__in rise">
-      <figure class="plate"><img src="./plates/hospitality-960.webp" srcset="./plates/hospitality-640.webp 640w, ./plates/hospitality-960.webp 960w" sizes="(max-width: 899px) 100vw, 50vw" width="960" height="720" alt="The specimen turned to Hospitality Practice, lit" loading="lazy" decoding="async"></figure>
-      <div class="plate__txt">
-        <h2 class="cut__h">Hospitality Practice</h2>
-        <p class="cut__p">Systems for hotels, F&amp;B, and travel operators</p>
-        <p class="cut__p cut__p--wide">Occupancy moves daily, margins are thin, and the front office runs on a PMS, a channel manager, and a WhatsApp group. Our hospitality practice starts from those systems, not from a blank page. A covers and occupancy forecast per outlet, every morning. Guest and supplier email triaged for the front office to approve. The staff handbook and brand standards answered in one place. A rate or upsell model reviewed on real bookings before anyone trusts it.</p>
-        <p class="cut__tag">Forecasting · Automation · Company Brain · AI Optimisation · AI Consultancy</p>
       </div>
     </div>
   </section>
-  <section class="cut cut--plate g-butter" data-jaw-focus="finance">
-    <div class="cut__in rise">
-      <figure class="plate"><img src="./plates/finance-960.webp" srcset="./plates/finance-640.webp 640w, ./plates/finance-960.webp 960w" sizes="(max-width: 899px) 100vw, 50vw" width="960" height="720" alt="The specimen turned to Finance Practice, lit" loading="lazy" decoding="async"></figure>
-      <div class="plate__txt">
-        <h2 class="cut__h">Finance Practice</h2>
-        <p class="cut__p">For the CFO's office: the close, the cash forecast, the reporting pack</p>
-        <p class="cut__p cut__p--wide">The close, the cash forecast, and the reporting pack take the same week every month. Our finance practice starts from those three, for the CFO and the finance lead of a mid-market company or a fund. A thirteen-week cash forecast with intervals, from your ledger and your receivables ageing. Invoice and bank-line matching, prepared for a person to review. Policies and past board packs answered with their sources. A document-extraction pilot measured, then made cheaper to run. Data stays in your accounts, and the contract says so.</p>
-        <p class="cut__tag">Forecasting · Automation · Company Brain · AI Optimisation · AI Consultancy</p>
+  <section class="cut cut--team g-mist" id="profile">
+    <div class="team">
+      <div class="act-head team__head">
+        <p class="label">Our profile</p>
+        <h2 class="h2 rise">The people building JAW AI.</h2>
+        
       </div>
-    </div>
-  </section>
-  <section class="cut cut--plate g-coconut" data-jaw-focus="regulated-finance">
-    <div class="cut__in rise">
-      <figure class="plate"><img src="./plates/regulated-finance-960.webp" srcset="./plates/regulated-finance-640.webp 640w, ./plates/regulated-finance-960.webp 960w" sizes="(max-width: 899px) 100vw, 50vw" width="960" height="720" alt="The specimen turned to Regulated Finance Practice, lit" loading="lazy" decoding="async"></figure>
-      <div class="plate__txt">
-        <h2 class="cut__h">Regulated Finance Practice</h2>
-        <p class="cut__p">Banks, insurers, and MAS-licensed fintechs: the door for the CRO and the MLRO</p>
-        <p class="cut__p cut__p--wide">A regulated institution buys differently: vendor due diligence, MAS outsourcing rules, a named person on every deliverable, and a sales cycle measured in quarters. Our regulated finance practice is the door for the Chief Risk Officer, the Head of Model Risk, and the MLRO. Behind it sit four offers: independent model validation, continuous AI governance evidence, an outsourced compliance function for licensed fintechs, and suitability screening of advisor conversations. Each arrives with evidence a reviewer can check without trusting us, and each is signed by a named person.</p>
-        <p class="cut__tag">Model Validation · Compliance Operations · AI Governance · Suitability Screening</p>
+      <div class="team__people">
+        <article class="team-card">
+          <h3 class="team-card__name">Aaron</h3>
+          <p class="team-card__bio">Aaron is a digital transformation and AI business leader with over 13 years of experience across Oracle, Deloitte, and Accenture, helping organisations translate technology and emerging innovations into tangible business outcomes. He has worked across strategy, technology consulting, cloud, AI, and large-scale transformation programmes across both the public and private sectors. With a background spanning strategy, technology, product, and business development, Aaron brings a practical, business-led approach to helping organisations identify, adopt, and scale AI and digital technologies. He holds an MBA from Singapore Management University and a Bachelor of Computing (Information Systems) from the National University of Singapore.</p>
+          <ul class="team-card__skills"><li>AI Transformation Strategy</li><li>Digital Transformation</li><li>Business Process Reengineering</li><li>Data &amp; Cloud Transformation</li><li>Technology Product Management</li></ul>
+        </article>
+        <article class="team-card">
+          <h3 class="team-card__name">Mei Ling</h3>
+          <p class="team-card__bio">Mei Ling has 20 years of experience in technology consulting, service delivery and market development across the private and public sectors, with senior roles at global consulting firms, a leading systems integrator and government agencies. She has led large, high-stakes programmes in enterprise platforms and IT operations, managing teams of more than 70 consultants. Her expertise spans go-to-market strategy, client development, solution design, programme delivery, quality assurance, and stakeholder engagement. She has consistently beaten growth targets and helped organisations adopt new technology, most recently in enterprise AI. She holds a BSc in Electronics Engineering from a UK university.</p>
+          <ul class="team-card__skills"><li>Technology and AI Adoption</li><li>Digital Transformation</li><li>Business Development</li><li>Programme and Delivery Management</li><li>Service Operations Management</li></ul>
+        </article>
+        <article class="team-card">
+          <h3 class="team-card__name">Wilfried Ariel Mulyawan</h3>
+          <p class="team-card__bio">Wilfried leads the technology side at JAW AI, spanning engineering and AI. He previously worked as a quant and Head of Mathematics at a Y Combinator-backed company, building its pricing models and trading strategy, and as an AI engineer at Singapore Management University. He has also run systematic trading books across crypto, forex, and equities markets for over five years. He studied at leading technical universities in Indonesia, Taiwan, and Singapore, and is now a PhD candidate at Nanyang Technological University's College of Computing and Data Science, researching AI for finance and economics.</p>
+          <ul class="team-card__skills"><li>Quantitative Trading &amp; Market Making</li><li>AI Research &amp; Model Development</li><li>Systems &amp; Automation Engineering</li><li>Data Infrastructure &amp; Backtesting</li><li>Technical Product Strategy</li></ul>
+        </article>
       </div>
-    </div>
-  </section>
-  <section class="cut cut--fit g-mist" id="fit">
-    <div class="cut__in rise">
-      <h2 class="cut__h">Built for the Singapore mid-market.</h2>
-      <p class="cut__p cut__p--wide">Twenty to five hundred people. A property management system or a Xero ledger, and a great deal of email. No data team, and no appetite for a two-year programme. That is not a market we picked. It is the constraint we build around. So the work runs in cloud accounts you already pay for. The first thing we ship is small enough to stop. And the runbook is written for whoever is on shift when it breaks at two in the morning.</p>
-      <ul class="facts"><li><strong>It runs in your accounts</strong><span>Your cloud, your repository, your data. We don't rent you a platform, and we don't hold your data hostage at renewal time.</span></li><li><strong>Stop whenever you like</strong><span>Scope call, discovery, build, handover. Each one ends in something you own. None of them needs the next one to have been worth the money.</span></li><li><strong>Your people run it, not ours</strong><span>Source, runbook, and a support line for the first month. If your team can't run it without us a year later, we built the wrong thing.</span></li></ul>
-    </div>
-  </section>
-  <section class="cut cut--how g-butter" id="how">
-    <div class="cut__in rise">
-      <h2 class="cut__h">Four steps, and you can stop after any of them.</h2>
-      <ul class="facts facts--four"><li><strong>Scope call</strong><span>One call</span></li><li><strong>Discovery</strong><span>A plan and a price</span></li><li><strong>Build</strong><span>You can stop at any demo</span></li><li><strong>Handover</strong><span>Source, runbook, support line</span></li></ul>
-    </div>
-  </section>
-  <section class="cut cut--measure g-graphite" id="handover">
-    <div class="cut__in rise">
-      <h2 class="cut__h">Most AI work dies at handover.</h2>
-      <p class="cut__p cut__p--wide">The consultants leave on a Friday. Six months later the thing has quietly stopped being maintained, because nobody inside the company can read it and nobody was ever meant to. That's the failure this practice is built against. The measure of a job here isn't the demo at the end of the build. It's whether the thing is still running a year later, run by your own people, without us.</p>
-      <ul class="facts"><li><strong>The source</strong><span>In your repository, under your licence, with the commit history intact.</span></li><li><strong>The runbook</strong><span>How it runs, what breaks, what to check on a Monday morning. Written for your team, not for ours.</span></li><li><strong>The first month</strong><span>A support line while your people take it over. Then it's yours, and the invoice stops.</span></li></ul>
     </div>
   </section>
   </div>
@@ -1104,10 +1055,10 @@ figure.plate img { width: 100%; height: auto; }
   <div class="colophon-wrap">
     <div>
       <span class="wordmark"><span class="wordmark-dot" aria-hidden="true"></span>JAW AI</span>
-      <p class="colophon-line">Seventeen names on the brain: fourteen offerings and three practices. No slide decks.</p>
+      <p class="colophon-line">Seventeen names in the practice: fourteen offerings and three practices. No slide decks.</p>
     </div>
-    <ul class="colophon-nav"><li><a href="#offer">The offer</a></li><li><a href="#practices">Practices</a></li><li><a href="#how">How we work</a></li><li><a href="mailto:hello@jaw.sg">hello@jaw.sg</a></li></ul>
-    <p class="mono">The brain on this page is a real human cortex: crest nodes sampled from the FreeSurfer fsaverage pial surface. Every point labelled on it is read from our own service files.</p>
+    <ul class="colophon-nav"><li><a href="#offer">The offer</a></li><li><a href="#profile">Our profile</a></li><li><a href="#contact">Contact</a></li><li><a href="mailto:hello@jaw.sg">hello@jaw.sg</a></li></ul>
+    <p class="mono">The brain on this page is a real human cortex: crest nodes sampled from the FreeSurfer fsaverage pial surface.</p>
     <p class="mono">Anything you send through this site is used only to reply to your enquiry, under Singapore's Personal Data Protection Act.</p>
     <p class="mono colophon-copy">JAW AI. Singapore.</p>
   </div>
