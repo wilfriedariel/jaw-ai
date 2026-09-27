@@ -206,8 +206,10 @@ a { color: inherit; }
 .hub[data-side="l"] .dot { transform: translateX(4px); }
 .hub[data-facing="0"] { opacity: 0; pointer-events: none; }
 body[data-act="contact"] .hub:not([data-active="1"]) { opacity: 0; pointer-events: none; }
-.dot { width: 7px; height: 7px; margin-top: 5px; border-radius: 50%; border: 1px solid var(--on-chamber); transform: translateX(-4px); flex: none; }
-.hub[data-active="1"] .dot { border-color: var(--key); background: var(--key); }
+/* --acc is set inline per hub button in main.ts, one colour per group: the dot carries the
+   "warna warni" CSF asked for onto the specimen itself, not just onto the paper below. */
+.dot { width: 7px; height: 7px; margin-top: 5px; border-radius: 50%; border: 1px solid var(--acc, var(--on-chamber)); background: var(--acc, transparent); opacity: 0.85; transform: translateX(-4px); flex: none; }
+.hub[data-active="1"] .dot { border-color: var(--key); background: var(--key); opacity: 1; }
 
 .hud { position: absolute; display: flex; flex-direction: column; gap: 3px; pointer-events: none; color: var(--on-chamber); opacity: 0.82; line-height: 1.6; font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em; }
 .hud-top { top: calc(var(--bar) + 12px); right: var(--margin); text-align: right; }
@@ -310,14 +312,29 @@ body[data-ground="paper"] .btn-top:hover { background: none; color: var(--key-pa
 }
 @keyframes fade { to { opacity: 1; } }
 .hero-foot { display: grid; gap: 22px; }
-.hero-foot > * { min-width: 0; }   /* the select's intrinsic width is its longest option; without this the hero overflows a phone */
-.hero-cta, .scroll-cue { opacity: 0; animation: fade 900ms var(--ease) 900ms forwards; }
-.hero-cta { justify-self: start; }
+.hero-foot > * { min-width: 0; }   /* the input's placeholder can be long; without this the hero overflows a phone */
+.hero-ask, .scroll-cue { opacity: 0; animation: fade 900ms var(--ease) 900ms forwards; }
+.hero-ask { display: grid; gap: 18px; justify-items: start; }
+
+.ask { margin: 0; max-width: min(470px, 100%); width: 100%; }
+.ask-label { display: block; font-family: var(--display); font-variation-settings: "wdth" 110; font-weight: 600; font-size: 15px; letter-spacing: -0.01em; margin-bottom: 10px; color: var(--on-chamber-2); }
+.ask-field { display: flex; }
+.ask-field input {
+  flex: 1 1 0; width: 100%; min-width: 0; font: 400 16px/1.4 var(--text); color: var(--on-chamber);
+  background: var(--chamber-2); border: 1px solid var(--chamber-3); border-right: 0;
+  padding: 14px 18px; border-radius: var(--r-sm) 0 0 var(--r-sm);
+}
+.ask-field input::placeholder { color: var(--on-chamber-3); }
+.ask-field input:focus-visible { outline: 2px solid var(--key); outline-offset: -2px; }
+.ask-go { font-family: var(--sans); font-variation-settings: "wdth" 106; font-size: 14px; letter-spacing: -0.004em; color: var(--on-chamber); background: var(--chamber-2); border: 1px solid var(--chamber-3); padding: 0 22px; border-radius: 0 var(--r-sm) var(--r-sm) 0; cursor: pointer; transition: background var(--micro) var(--ease), color var(--micro) var(--ease); }
+.ask-go:hover { background: var(--key); color: var(--key-ink); border-color: var(--key); }
+.ask-result { margin: 10px 0 0; min-height: 1.6em; font-size: 14px; line-height: 1.5; color: var(--on-chamber-3); }
+.ask-result .hit { color: var(--key); font-family: var(--display); font-variation-settings: "wdth" 110; font-weight: 600; letter-spacing: -0.015em; }
 
 .scroll-cue { display: none; }
 @media (min-width: 1000px) {
   .hero { padding: calc(var(--bar) + 9vh) var(--margin) 46px; pointer-events: none; }
-  .hero a, .hero select, .hero button, .hero form { pointer-events: auto; }
+  .hero a, .hero input, .hero button, .hero form { pointer-events: auto; }
   .hero::before {
     content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
     background:
@@ -395,26 +412,315 @@ figure.plate img { width: 100%; height: auto; }
 @media (min-width: 800px) { .facts { grid-template-columns: repeat(3, 1fr); } .facts--four { grid-template-columns: repeat(4, 1fr); } }
 .cut--measure { min-height: 80svh; }
 
-/* ---------------------------------------------------------------- the index
-   2026-09-27: the service offering section, Fable's design.md v3 ("the index"). Not a grid of
-   cards and not a graph: a sticky head column (the site's own editorial grid) beside plates,
-   one per real group in content/catalog.ts, each plate holding its services as named rows. The
-   blurb behind each row reuses .pair__more / .pair__blurb, already built for exactly this. */
-.cut--index { align-items: start; }
-.index { display: grid; gap: 40px; max-width: 1240px; width: 100%; margin-inline: auto; }
-.index__plates { display: grid; gap: 20px; }
-.index-plate { background: var(--paper-2); border-radius: var(--r-md); padding: 28px 32px; display: grid; gap: 20px; }
-.index-plate__head { display: grid; gap: 4px; }
-.index-plate__label { margin: 0; font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: var(--fs-label); letter-spacing: 0.16em; text-transform: uppercase; color: var(--jade); }
-.index-plate__line { margin: 0; font-family: var(--text); font-size: 15px; color: var(--ink-2); }
-.index-plate__rows { display: grid; gap: 24px; }
-.index-row { display: grid; gap: 6px; }
-.index-row__head { display: grid; gap: 4px; }
-.index-row__name { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: 24px; letter-spacing: -0.02em; transition: color var(--micro) var(--ease); }
-.index-row:hover .index-row__name { color: var(--jade); }
-.index-row__line { margin: 0; font-family: var(--text); font-size: var(--fs-text); line-height: 1.45; max-width: 52ch; color: var(--ink-2); }
+/* ---------------------------------------------------------------- the forecast demo
+   2026-09-27: "see it work", a live proof rather than a claim. Dark ground on purpose — it's
+   the one moment on the page meant to read as an instrument, the way the hero's HUD does.
+   Visual pass by Fable after CSF called the first version "slop": the chart plate is a
+   recessed instrument well (inset shadows, deeper graphite), not a tinted div; the forecast
+   window is its own amber-tinted zone, not visually identical to the training region; the
+   actual/fit lines are told apart by geometry (miter vs round joins) as well as colour, and the
+   fit line alone carries a soft amber glow, since it's the one thing on the chart that moves;
+   the slider is a recessed groove with a lifted bone disc, not a browser-default range input. */
+.cut--demo { min-height: 72svh; }
+.demo-widget { margin-top: 8px; display: grid; gap: 26px; max-width: 720px; }
+
+.demo-chart-wrap {
+  position: relative;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: linear-gradient(180deg, #131110 0%, #0f0d0c 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(246, 243, 236, 0.07),
+    inset 0 1px 0 rgba(246, 243, 236, 0.05),
+    inset 0 12px 28px rgba(0, 0, 0, 0.38);
+}
+.demo-chart {
+  display: block; width: 100%; height: auto; aspect-ratio: 640 / 300; box-sizing: border-box;
+  padding: 16px 18px 14px; overflow: visible;
+  /* the forecast window (the last 12 of 64 weeks) as its own zone: 52/64 = 81.25% */
+  background: linear-gradient(90deg, transparent 0 81.25%, rgba(240, 178, 63, 0.06) 81.25% 100%);
+  background-origin: content-box; background-clip: content-box; background-repeat: no-repeat;
+}
+.demo-actual { fill: none; stroke: var(--coconut); stroke-width: 1.5; stroke-linejoin: miter; stroke-linecap: butt; opacity: 0.78; }
+.demo-fit { fill: none; stroke: var(--key); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; filter: drop-shadow(0 0 5px rgba(240, 178, 63, 0.32)); }
+.demo-split { stroke: rgba(240, 178, 63, 0.55); stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 0 5; }
+.demo-split-label {
+  position: absolute; top: 12px; right: 16px; margin: 0;
+  font-family: var(--sans); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+  color: rgba(240, 178, 63, 0.78);
+}
+
+.demo-controls { display: grid; gap: 14px; }
+.demo-slider-label { font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: 14px; letter-spacing: -0.004em; color: #b8b1a7; }
+.demo-slider-label .demo-state-label { font-variation-settings: "wdth" 112; font-weight: 600; font-size: 17px; color: var(--key); }
+
+#demo-slider {
+  -webkit-appearance: none; appearance: none; width: 100%; height: 6px; margin: 8px 0;
+  border-radius: var(--r-pill); background: linear-gradient(180deg, #0e0c0b, #1b1815);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.65), 0 1px 0 rgba(246, 243, 236, 0.06);
+  cursor: pointer;
+}
+#demo-slider:focus-visible { outline: 2px solid var(--key); outline-offset: 4px; }
+#demo-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--coconut); border: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 4px 10px rgba(0, 0, 0, 0.35), inset 0 -1px 0 rgba(0, 0, 0, 0.14);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+#demo-slider:active::-webkit-slider-thumb { transform: scale(1.08); box-shadow: 0 2px 3px rgba(0, 0, 0, 0.55), 0 8px 18px rgba(0, 0, 0, 0.4), inset 0 -1px 0 rgba(0, 0, 0, 0.14); }
+#demo-slider::-moz-range-track { height: 6px; border-radius: var(--r-pill); background: linear-gradient(180deg, #0e0c0b, #1b1815); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.65); }
+#demo-slider::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--coconut); border: none; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 4px 10px rgba(0, 0, 0, 0.35); }
+
+.demo-state-note { margin: 0; font-family: var(--text); font-size: 15px; line-height: 1.5; color: #b8b1a7; max-width: 48ch; min-height: 3lh; }
+
+.demo-legend { margin: 0; display: flex; flex-wrap: wrap; gap: 22px; font-family: var(--sans); font-variation-settings: "wdth" 104; font-size: 12px; font-weight: 500; color: #b8b1a7; }
+.demo-legend [data-series] { display: inline-flex; align-items: center; gap: 8px; }
+.demo-legend [data-series]::before { content: ""; display: inline-block; width: 20px; height: 2px; border-radius: 1px; }
+.demo-legend [data-series="actual"]::before { background: var(--coconut); opacity: 0.78; height: 1.5px; }
+.demo-legend [data-series="fit"]::before { background: var(--key); box-shadow: 0 0 6px rgba(240, 178, 63, 0.32); }
+.cut--demo .cut__tag { color: #8a8478; border-top-color: rgba(246, 243, 236, 0.18); }
+
+/* ---------------------------------------------------------------- the lead-sort toy
+   2026-09-27: the second "see it work" (CSF: "cold leads, hot leads"). Fourteen seeded leads
+   under one weighted sum (landing/leads.ts). The section sits on coconut and the instrument is
+   a dark well tipped into the paper, which is the atlas image the whole page is built on: a
+   plate in a book. The receipt beside it is printed matter on a card, because a receipt is
+   paper. Same instrument language as the forecast demo: recessed well, a groove slider with a
+   bone disc, amber only on what matters. One hue at three values tells the three bands apart:
+   hot glows, warm is the deep amber without glow, cold is dim bone. Rows are absolutely
+   positioned and slide to their new rank on transform, so a re-sort is a visible re-sort. */
+.cut--leads { min-height: 80svh; }
+.leads-widget {
+  margin-top: 8px; display: grid; gap: 26px; max-width: 1240px; width: 100%;
+  grid-template-columns: 1fr;
+  grid-template-areas: "well" "receipt" "legend" "tag";
+}
+.leads-widget > .cut__tag { grid-area: tag; }
+@media (min-width: 900px) {
+  .leads-widget {
+    grid-template-columns: minmax(0, 1.45fr) minmax(300px, 1fr);
+    grid-template-areas: "well receipt" "legend legend" "tag tag";
+    align-items: start;
+  }
+}
+
+/* the well: same construction as .demo-chart-wrap, taller, and it holds its own controls */
+.leads-well {
+  grid-area: well;
+  position: relative; border-radius: var(--r-md); overflow: hidden;
+  padding: 18px 18px 22px;
+  background: linear-gradient(180deg, #131110 0%, #0f0d0c 100%);
+  color: var(--coconut);
+  box-shadow:
+    inset 0 0 0 1px rgba(246, 243, 236, 0.07),
+    inset 0 1px 0 rgba(246, 243, 236, 0.05),
+    inset 0 12px 28px rgba(0, 0, 0, 0.38);
+  display: grid; gap: 16px;
+}
+.leads-well__head {
+  margin: 0; display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  font-family: var(--sans); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+  color: #8a8478;
+}
+.leads-well__counts { display: inline-flex; gap: 14px; font-variant-numeric: tabular-nums; }
+.leads-well__counts [data-band="hot"] { color: var(--key); }
+.leads-well__counts [data-band="warm"] { color: rgba(240, 178, 63, 0.7); }
+.leads-well__counts [data-band="cold"] { color: #8a8478; }
+
+/* the list. Each row is absolutely positioned at its rank; the list reserves the height. */
+.leads-list {
+  --lead-row: 50px;
+  list-style: none; margin: 0; padding: 0; position: relative;
+  height: calc(var(--n) * var(--lead-row));
+}
+.lead {
+  position: absolute; inset-inline: 0; top: 0; height: calc(var(--lead-row) - 6px);
+  transform: translateY(calc(var(--i) * var(--lead-row)));
+  transition: transform 420ms var(--ease);
+  will-change: transform;
+}
+.lead__btn {
+  appearance: none; width: 100%; height: 100%; margin: 0; padding: 0 12px 0 10px;
+  display: grid; grid-template-columns: 26px minmax(0, 1fr) minmax(60px, 0.9fr) 34px 44px;
+  align-items: center; gap: 10px; text-align: left;
+  font: inherit; color: inherit; cursor: pointer;
+  border: 0; border-radius: var(--r-xs);
+  background: rgba(246, 243, 236, 0.035);
+  box-shadow: inset 0 0 0 1px rgba(246, 243, 236, 0.05);
+  transition: background var(--micro) var(--ease), box-shadow var(--micro) var(--ease);
+}
+.lead__btn:hover { background: rgba(246, 243, 236, 0.06); }
+.lead__btn:focus-visible { outline: 2px solid var(--key); outline-offset: 2px; }
+/* the picked row: an amber rim, lifted a step, the same accent the receipt is reading from */
+.lead__btn[aria-pressed="true"] {
+  background: rgba(240, 178, 63, 0.09);
+  box-shadow: inset 0 0 0 1px rgba(240, 178, 63, 0.55), 0 6px 16px -8px rgba(0, 0, 0, 0.6);
+}
+.lead__rank { font-family: var(--sans); font-weight: 500; font-size: 11px; letter-spacing: 0.08em; font-variant-numeric: tabular-nums; color: #8a8478; }
+.lead__name { font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: 14px; letter-spacing: -0.004em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--coconut); }
+.lead__meter { position: relative; height: 6px; border-radius: var(--r-pill); background: linear-gradient(180deg, #0e0c0b, #1b1815); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.65), 0 1px 0 rgba(246, 243, 236, 0.06); overflow: hidden; }
+.lead__fill { position: absolute; inset: 0 auto 0 0; width: calc(var(--s) * 1%); border-radius: inherit; transition: width 420ms var(--ease), background var(--micro) var(--ease), box-shadow var(--micro) var(--ease); }
+.lead__score { font-family: var(--sans); font-weight: 600; font-size: 15px; font-variant-numeric: tabular-nums; text-align: right; }
+.lead__band { font-family: var(--sans); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; text-align: right; }
+
+/* 2026-09-27: at phone width the fixed rank/meter/score/band columns left the name column too
+   narrow to hold a sector name ("Serviced apartments" truncated to "Service..."), a real bug
+   found testing on a real viewport. The meter bar repeats the score as a shape, not new
+   information, so it is the one to drop; the name gets its width back. */
+@media (max-width: 520px) {
+  .lead__btn { grid-template-columns: 20px minmax(0, 1fr) 30px 44px; padding: 0 10px 0 8px; }
+  .lead__meter { display: none; }
+  .lead__name { font-size: 13.5px; }
+}
+
+/* the three bands: one hue, three values. Hot is the only thing in the well that glows. */
+.lead[data-band="hot"] .lead__fill { background: linear-gradient(90deg, var(--key-deep), var(--key-lit)); box-shadow: 0 0 8px rgba(240, 178, 63, 0.35); }
+.lead[data-band="hot"] .lead__score, .lead[data-band="hot"] .lead__band { color: var(--key); }
+.lead[data-band="warm"] .lead__fill { background: var(--key-deep); opacity: 0.6; }
+.lead[data-band="warm"] .lead__score, .lead[data-band="warm"] .lead__band { color: rgba(240, 178, 63, 0.7); }
+.lead[data-band="cold"] .lead__fill { background: rgba(246, 243, 236, 0.22); }
+.lead[data-band="cold"] .lead__score { color: #b8b1a7; }
+.lead[data-band="cold"] .lead__band { color: #8a8478; }
+
+/* the controls, inside the well: same groove and disc as #demo-slider */
+.leads-controls { display: grid; gap: 12px; padding-top: 6px; border-top: 1px solid rgba(246, 243, 236, 0.08); }
+.leads-slider-label { font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: 14px; letter-spacing: -0.004em; color: #b8b1a7; }
+.leads-slider-label .leads-state-label { font-variation-settings: "wdth" 112; font-weight: 600; font-size: 17px; color: var(--key); }
+#leads-slider {
+  -webkit-appearance: none; appearance: none; width: 100%; height: 6px; margin: 6px 0;
+  border-radius: var(--r-pill); background: linear-gradient(180deg, #0e0c0b, #1b1815);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.65), 0 1px 0 rgba(246, 243, 236, 0.06);
+  cursor: pointer;
+}
+#leads-slider:focus-visible { outline: 2px solid var(--key); outline-offset: 4px; }
+#leads-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--coconut); border: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 4px 10px rgba(0, 0, 0, 0.35), inset 0 -1px 0 rgba(0, 0, 0, 0.14);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+#leads-slider:active::-webkit-slider-thumb { transform: scale(1.08); box-shadow: 0 2px 3px rgba(0, 0, 0, 0.55), 0 8px 18px rgba(0, 0, 0, 0.4), inset 0 -1px 0 rgba(0, 0, 0, 0.14); }
+#leads-slider::-moz-range-track { height: 6px; border-radius: var(--r-pill); background: linear-gradient(180deg, #0e0c0b, #1b1815); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.65); }
+#leads-slider::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--coconut); border: none; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 4px 10px rgba(0, 0, 0, 0.35); }
+.leads-state-note { margin: 0; font-family: var(--text); font-size: 15px; line-height: 1.5; color: #b8b1a7; max-width: 52ch; min-height: 2lh; }
+
+/* the weight readout: five short bars. The number is the truth; the bar is the glance. */
+.leads-weights { margin: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.leads-weight { display: grid; grid-template-columns: 1fr auto; gap: 2px 6px; align-items: baseline; font-family: var(--sans); font-size: 11px; letter-spacing: 0.02em; color: #8a8478; }
+.leads-weight__name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.leads-weight__num { font-weight: 600; font-variant-numeric: tabular-nums; color: #b8b1a7; }
+.leads-weight__bar { grid-column: 1 / -1; display: block; height: 3px; border-radius: var(--r-pill); background: rgba(246, 243, 236, 0.08); position: relative; overflow: hidden; }
+.leads-weight__bar::after { content: ""; position: absolute; inset: 0 auto 0 0; width: calc(var(--w) * 2%); background: var(--key-deep); border-radius: inherit; transition: width 200ms var(--ease); }
+@media (max-width: 519px) { .leads-weights { grid-template-columns: repeat(3, 1fr); } }
+
+/* the receipt: printed matter on a card, beside the instrument */
+.leads-receipt {
+  grid-area: receipt;
+  background: var(--card); border-radius: var(--r-md); padding: 22px 24px 20px;
+  box-shadow: var(--lift-1);
+  display: grid; gap: 10px; align-content: start;
+  color: var(--ink);
+}
+.leads-receipt__title { margin: 0; font-family: var(--sans); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-3); }
+.leads-receipt__name { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: 22px; letter-spacing: -0.02em; min-height: 1lh; }
+.leads-receipt__empty { margin: 0; font-family: var(--text); font-size: 16px; line-height: 1.5; color: var(--ink-2); max-width: 32ch; }
+.leads-receipt__table { width: 100%; border-collapse: collapse; font-family: var(--sans); font-variation-settings: "wdth" 104; font-size: 13px; font-variant-numeric: tabular-nums; }
+.leads-receipt__table th, .leads-receipt__table td { padding: 7px 0; text-align: right; border-bottom: 1px solid var(--rule-soft); font-weight: 500; }
+.leads-receipt__table th:first-child, .leads-receipt__table td:first-child { text-align: left; }
+.leads-receipt__table thead th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-3); font-weight: 500; }
+.leads-receipt__table tbody th { color: var(--ink); }
+.leads-receipt__table tbody td { color: var(--ink-2); }
+.leads-receipt__table tbody td.p { color: var(--ink); font-weight: 600; }
+/* the total: a printed rule above it, the same 2px currentColor rule .cut__tag uses */
+.leads-receipt__table tfoot th, .leads-receipt__table tfoot td { border-bottom: 0; border-top: 2px solid currentColor; padding-top: 10px; font-size: 15px; font-weight: 600; color: var(--ink); }
+.leads-receipt[data-band="hot"] .leads-receipt__table tfoot td { color: var(--key-paper); }
+/* the picked lead's band, printed in ink: --key-paper is the jade the page already uses for
+   amber-at-paper-value (page.css:55), 7.37:1 on coconut. Not amber on white: 1.9:1, unreadable. */
+.leads-receipt__band { font-family: var(--sans); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--key-paper); }
+
+/* the legend: three bands, three short instructions, in ink on the paper */
+.leads-legend { grid-area: legend; margin: 0; display: flex; flex-wrap: wrap; gap: 8px 26px; font-family: var(--sans); font-variation-settings: "wdth" 104; font-size: 13px; color: var(--ink-2); }
+.leads-legend [data-band] { display: inline-flex; align-items: center; gap: 8px; }
+.leads-legend [data-band]::before { content: ""; display: inline-block; width: 20px; height: 6px; border-radius: var(--r-pill); }
+.leads-legend [data-band="hot"]::before { background: linear-gradient(90deg, var(--key-deep), var(--key-lit)); }
+.leads-legend [data-band="warm"]::before { background: var(--key-deep); opacity: 0.6; }
+.leads-legend [data-band="cold"]::before { background: var(--rule); }
+.leads-legend b { font-weight: 600; color: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  .lead, .lead__fill, .leads-weight__bar::after { transition: none; }
+}
+
+/* ---------------------------------------------------------------- the offer, rainbow index
+   2026-09-27 evening: CSF, looking at the two-column index with every blurb open: "very slop".
+   Asked for: rainbow blocks, a big title and one short line each, left and right, scroll
+   animation, three scrolls. So: three panels in flow, each a screen tall at 900px and up, each
+   split into two halves, one group per half. Fourteen blocks, one per service, painted with the
+   group accent that render.mjs sets inline as --acc. Blocks arrive from the side their half is
+   on, under their own view timeline: no pin, no raf loop, no stage that stops under the wheel
+   (what the paste-up got wrong, 1161f66). Motion is the page's own idiom (see "motion" below):
+   native scroll-driven where the browser has it, the .reveal observer where it does not, and
+   simply visible under prefers-reduced-motion and with JavaScript off. */
+.cut--offer { align-items: start; padding-block: clamp(2.5rem, 7vh, 6rem); }
+.offer-panel__in { display: grid; gap: 28px; max-width: 1240px; width: 100%; margin-inline: auto; }
+/* the section head sits at the top of panel 1, full width, not sticky (same call as the old
+   .index__head: CSF did not want a sticky sidebar eating space). actHead() reuses .act-head,
+   whose position: sticky (page.css:641) is meant for a side-by-side sidebar layout elsewhere on
+   the page; reset here or the head floats over the blocks below it as you scroll. */
+.act-head.offer__head { position: static; top: auto; max-width: 62ch; }
+
+.offer-split { display: grid; gap: 20px; }
+.offer-half { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.offer-half__head { display: grid; grid-template-columns: auto 1fr; column-gap: 10px; align-items: baseline; }
+.offer-half__disc { width: 14px; height: 14px; border-radius: 50%; background: var(--acc, var(--jade)); align-self: center; }
+.offer-half__name { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: var(--fs-h3); letter-spacing: -0.02em; display: flex; align-items: center; gap: 10px; }
+.offer-half__line { grid-column: 2; margin: 0; font-family: var(--text); font-size: 15px; line-height: 1.45; color: var(--ink-2); max-width: 40ch; }
+.g-graphite .offer-half__line { color: var(--on-chamber-2); }
+.offer-half__blocks { display: grid; gap: 12px; }
+
+/* the block. One fill per group; the text is graphite on every light fill and coconut on the
+   one dark fill (advise, jade). Measured by hand, 2026-09-27, because the contrast gate reads
+   :root only and these fills are inline:
+     graphite on butter 13.0:1, on sky 11.3:1, on lilac 10.3:1, on coral 6.4:1
+     coconut on jade 7.4:1
+   The GROUP_ACCENT ink values are NOT used on the fills: coral's ink on coral is 2.35:1 and
+   run's ink on mist is 4.09:1, both under AA. Colour lives in the fill, never in the type. */
+.offer-block {
+  --on-acc: var(--ink);
+  position: relative; display: grid; gap: 8px; align-content: start; min-width: 0;
+  background: var(--acc, var(--paper-2)); color: var(--on-acc);
+  border-radius: var(--r-md); padding: 22px 24px 18px;
+  box-shadow: var(--lift-1);
+  transition: box-shadow var(--micro) var(--ease);
+}
+.offer-block[data-group="advise"] { --on-acc: var(--coconut); }
+/* hover lifts by shadow only: transform is owned by the scroll timeline's fill state */
+.offer-block:hover { box-shadow: var(--lift-2); }
+.offer-block__name { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: clamp(22px, 2.1vw, 30px); line-height: 1.02; letter-spacing: -0.024em; text-wrap: balance; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.offer-block__line { margin: 0; font-family: var(--text); font-size: var(--fs-small); line-height: 1.45; max-width: 34ch; }
+.offer-tag { font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: var(--fs-label); letter-spacing: 0.16em; text-transform: uppercase; padding: 4px 10px; border-radius: var(--r-pill); border: 1px solid currentColor; line-height: 1; }
+/* the blurb behind "Read": same <details> as before, recoloured for the fill it sits on */
+.offer-block .pair__more { margin-top: auto; padding-top: 6px; }
+.offer-block .pair__more summary { color: var(--on-acc); }
+.offer-block .pair__more summary:focus-visible { outline-color: var(--on-acc); }
+.offer-block .pair__blurb { color: var(--on-acc); font-size: 15px; max-width: 46ch; padding-bottom: 6px; opacity: 0.92; }
+
+/* the two split shapes and the two half layouts (render.mjs picks: 4+ blocks -> grid) */
+@media (min-width: 560px) {
+  .offer-half--grid .offer-half__blocks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 900px) {
+  .offer-panel { min-height: 100svh; }             /* three panels, three screens: the "3 scrolls" */
+  .offer-split { grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch; }
+  .offer-split--3-4 { grid-template-columns: 3fr 4fr; }
+  .offer-half { grid-template-rows: auto 1fr; }
+  .offer-half--stack .offer-half__blocks { grid-auto-rows: 1fr; }
+  .offer-half--grid .offer-half__blocks { grid-auto-rows: 1fr; }
+  .offer-block { padding: 26px 28px 20px; }
+  .offer-block__line { font-size: var(--fs-text); }
+}
 @media (min-width: 1000px) {
-  .index { grid-template-columns: 300px 1fr; gap: 64px; }
+  .offer-panel__in { gap: 40px; }
+  .offer-split { gap: 28px; }
+  .offer-half__blocks { gap: 16px; }
 }
 
 /* ---------------------------------------------------------------- the profile
@@ -521,10 +827,10 @@ figure.plate img { width: 100%; height: auto; }
 @media (min-width: 1000px) {
   .grid-split { display: grid; grid-template-columns: 320px minmax(0, 1fr); column-gap: var(--gutter); }
   .act-head { position: sticky; top: calc(var(--bar) + 44px); align-self: start; }
-  /* 2026-09-27: the index (Service Offering) reuses .act-head for its sticky head column, but
-     the team (Our Profile) reuses it only for the .h2/.label sizing below and must not stick —
-     it produced a real bug, the heading pinned mid-scroll and overlapped the team cards. */
-  .team__head { position: static; top: auto; }
+  /* 2026-09-27: .index__head and .team__head both reuse .act-head only for its .h2/.label
+     sizing, not its sticky behaviour — team's sticky pin overlapped the cards below it (a
+     real bug), and CSF asked for index's title to sit at the top instead of a sticky sidebar. */
+  .index__head, .team__head { position: static; top: auto; }
 }
 /* a heading in a 320px column has to be set smaller than one that owns the page width, or it
    breaks into six lines and reads as a mistake */
@@ -702,13 +1008,21 @@ figure.plate img { width: 100%; height: auto; }
   background: radial-gradient(120% 150% at 108% -22%, rgba(31, 138, 104, 0.13) 0%, rgba(31, 138, 104, 0.05) 38%, rgba(31, 138, 104, 0) 68%);
 }
 
-/* the three short answers: ruled lines with their names set in the rule, the way a printed
-   form is ruled. No fill, no border, no radius: they are lines, not boxes. */
-.brief-lines { display: grid; margin-top: clamp(18px, 3.4vw, 26px); }
-.brief-line { display: grid; grid-template-columns: minmax(0, 8.4rem) 1fr; align-items: baseline; gap: 10px; padding: 22px 2px 8px; border-bottom: 1px solid var(--brief-rule); transition: border-color var(--micro) var(--ease), box-shadow var(--micro) var(--ease); }
-.brief-line:first-child { padding-top: 14px; }
-.brief-line:focus-within { border-bottom-color: var(--key); box-shadow: inset 0 -2px 0 0 var(--key); }
-.brief-line-name { font-family: var(--sans); font-variation-settings: "wdth" 100; font-weight: 500; font-size: 14px; letter-spacing: -0.004em; color: var(--on-chamber-2); }
+/* the three short answers: 2026-09-27, boxed. Ruled lines with no fill read right in the
+   design doc's own screenshots and wrong live on a real screen — CSF's read, after seeing it,
+   was that bare underlines look unfinished ("AI slop"), not restrained. Each is its own shaped,
+   coloured field now, matching the well below rather than standing apart from it. */
+.brief-lines { display: grid; gap: 12px; margin-top: clamp(18px, 3.4vw, 26px); }
+.brief-line {
+  display: grid; grid-template-columns: minmax(0, 8.4rem) 1fr; align-items: center; gap: 10px;
+  padding: 13px 16px; border-radius: var(--r-sm); background: var(--chamber-2);
+  box-shadow: inset 0 0 0 1px rgba(246, 243, 236, 0.09);
+  transition: box-shadow var(--micro) var(--ease);
+}
+.brief-line:focus-within { box-shadow: inset 0 0 0 2px var(--key); }
+/* 2026-09-27: a divider between label and field, so the row reads as two parts, not one loose
+   line — CSF's ask, after the boxed version alone still read as slop to him. */
+.brief-line-name { padding-right: 10px; border-right: 1px solid rgba(246, 243, 236, 0.14); font-family: var(--sans); font-variation-settings: "wdth" 100; font-weight: 500; font-size: 14px; letter-spacing: -0.004em; color: var(--on-chamber-2); }
 .brief-line input { width: 100%; min-width: 0; font: 400 17px/1.5 var(--text); color: var(--on-chamber); background: none; border: 0; padding: 0; caret-color: var(--key); }
 .brief-line input:focus { outline: none; }
 
@@ -731,7 +1045,11 @@ figure.plate img { width: 100%; height: auto; }
 .brief-alt:hover { color: var(--on-chamber); border-bottom-color: var(--key); }
 .brief-note { margin: 20px 0 0; color: var(--on-chamber-3); font-size: 14px; line-height: 1.6; max-width: 50ch; }
 
-@media (max-width: 460px) { .brief-line { grid-template-columns: 1fr; gap: 0; padding: 18px 2px 7px; } .brief-line input { font-size: 18px; } }
+@media (max-width: 460px) {
+  .brief-line { grid-template-columns: 1fr; gap: 6px; padding: 12px 14px; }
+  .brief-line input { font-size: 18px; }
+  .brief-line-name { padding-right: 0; padding-bottom: 6px; border-right: 0; border-bottom: 1px solid rgba(246, 243, 236, 0.14); }
+}
 
 /* ---------------------------------------------------------------- the colophon */
 .colophon { position: relative; z-index: 2; background: var(--chamber); color: var(--on-chamber); border-top: 1px solid var(--chamber-3); padding-block: 62px 46px; }
@@ -765,7 +1083,26 @@ figure.plate img { width: 100%; height: auto; }
     .close::before { animation: uncover linear both; animation-timeline: view(); animation-range: entry 0% entry 100%; }
     @keyframes uncover { from { opacity: 1; } to { opacity: 0.82; } }
   }
+
+  /* the offer: each half head and each block arrives from its own side and then rests. The
+     timeline is the element's own, so lower blocks arrive later because they are lower, and
+     the next panel's top blocks start while the last of this one are still settling: one
+     continuous alternating stream over three screens, nothing pinned. */
+  .offer-slide { animation: offer-in linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
+  .offer-half--l .offer-slide { --from: -6vw; }
+  .offer-half--r .offer-slide { --from: 6vw; }
+  @keyframes offer-in { from { opacity: 0; transform: translateX(var(--from, 0)); } to { opacity: 1; transform: none; } }
 }
+/* below 900px the halves stack into one column, so "left and right" becomes alternate blocks:
+   odd from the left, even from the right. Same keyframes, same range. */
+@media (max-width: 899px) {
+  .offer-half--l .offer-slide, .offer-half--r .offer-slide { --from: -6vw; }
+  .offer-half .offer-block:nth-child(even) { --from: 6vw; }
+}
+/* the observer fallback (main.ts adds .reveal where view() is unsupported): slide, not rise */
+.offer-slide.reveal { transform: translateX(var(--from, 0)); }
+.offer-slide.reveal[data-in="1"] { transform: none; }
+
 .reveal { opacity: 0; transform: translateY(16px); transition: opacity var(--reveal) var(--ease), transform var(--reveal) var(--ease); }
 .reveal[data-in="1"] { opacity: 1; transform: none; }
 
@@ -774,7 +1111,7 @@ figure.plate img { width: 100%; height: auto; }
   *, *::before, *::after { animation-duration: 1ms !important; animation-delay: 0ms !important; transition-duration: 1ms !important; }
   .h1-inner { transform: none; }
   .hero-lede, .hero-foot { opacity: 1; }
-  .rise, .reveal { opacity: 1; transform: none; animation: none; }
+  .rise, .reveal, .offer-slide { opacity: 1; transform: none; animation: none; }
 }
 </style>
 </head>
@@ -783,10 +1120,12 @@ figure.plate img { width: 100%; height: auto; }
 <a class="skip" href="#main">Skip to the content</a>
 
 <div class="brain-layer" id="brain" data-rung="probing">
-  <img class="poster" src="./brain/poster-800.webp" srcset="./brain/poster-640.webp 640w, ./brain/poster-800.webp 800w, ./brain/poster-1600.webp 1600w" sizes="(max-width: 999px) 100vw, 78vw" alt="A human cortex drawn as points and lines, slowly turning" width="1600" height="1000" fetchpriority="high">
+  <img class="poster" src="./brain/poster-800.webp" srcset="./brain/poster-640.webp 640w, ./brain/poster-800.webp 800w, ./brain/poster-1600.webp 1600w" sizes="(max-width: 999px) 100vw, 78vw" alt="A human cortex drawn as points and lines, with 14 JAW AI services named on it" width="1600" height="1000" fetchpriority="high">
   <canvas aria-hidden="true"></canvas>
+  <div class="labels"></div>
   <div class="hud hud-top"></div>
   <div class="hud hud-corner"></div>
+  <aside class="card" hidden aria-live="polite"></aside>
 </div>
 <header class="topbar">
   <a class="wordmark" href="#hero"><span class="wordmark-dot" aria-hidden="true"></span>JAW AI</a>
@@ -801,50 +1140,56 @@ figure.plate img { width: 100%; height: auto; }
     <p class="hero-lede">Forecasts, reconciliations, and an assistant that answers from your own files. For Singapore companies whose numbers live in Excel and whose decisions live in an inbox.</p>
   </div>
   <div class="hero-foot">
-    <a class="btn btn-primary hero-cta" href="#contact">Book a 20-minute scope call</a>
+    <div class="hero-ask">
+      <a class="btn btn-primary hero-cta" href="#contact">Book a 20-minute scope call</a>
+      <form class="ask" id="ask" autocomplete="off">
+        <label class="ask-label" for="ask-input">Jump to a service</label>
+        <div class="ask-field">
+          <input id="ask-input" type="text" name="service" list="ask-list" placeholder="Type a service name…">
+          <button type="submit" class="ask-go">Open</button>
+        </div>
+        <datalist id="ask-list"><option value="AI Consultancy"><option value="Forecasting"><option value="Top AI Talent"><option value="Model Validation"><option value="Automation"><option value="Business Development"><option value="Company Brain"><option value="Compliance Operations"><option value="IT Transformation"><option value="AI Governance"><option value="Managed Operations"><option value="Custom Software"><option value="Suitability Screening"><option value="AI Optimisation"></datalist>
+        <p class="ask-result" aria-live="polite"></p>
+      </form>
+    </div>
     <a class="scroll-cue" href="#offer"><span>Scroll</span><span class="scroll-rule" aria-hidden="true"></span></a>
   </div>
 </section>
   <div class="sheet">
-  <section class="cut cut--index g-coconut" id="offer">
-    <div class="index">
-      <div class="act-head index__head">
+  <section class="cut cut--offer g-coconut offer-panel" id="offer" data-panel="1">
+    <div class="offer-panel__in">
+      <div class="act-head offer__head">
         <p class="label">The offer</p>
         <h2 class="h2 rise">Fourteen things we do. Five ways to buy them.</h2>
-        <p class="act-note">Each one opens to what it actually is: what we touch, what you keep, and what it costs you to stop.</p>
+        
       </div>
-      <div class="index__plates">
-        <div class="index-plate">
-          <div class="index-plate__head">
-            <p class="index-plate__label">Advise</p>
-            <p class="index-plate__line">Where AI and IT spend pays off, and whether what you have is worth keeping</p>
+      <div class="offer-split offer-split--3-4">
+        <div class="offer-half offer-half--l offer-half--stack" data-group="advise" style="--acc:#0c5a48">
+          <div class="offer-half__head offer-slide">
+            <span class="offer-half__disc" aria-hidden="true"></span>
+            <h3 class="offer-half__name">Advise</h3>
+            <p class="offer-half__line">Where AI and IT spend pays off, and what's worth keeping</p>
           </div>
-          <div class="index-plate__rows">
-            <div class="index-row">
-              <div class="index-row__head">
-                <h3 class="index-row__name">AI Consultancy</h3>
-                <p class="index-row__line">A two-week plan for where AI pays off first</p>
-              </div>
+          <div class="offer-half__blocks">
+            <div class="offer-block index-row offer-slide" data-slug="ai-consultancy" data-group="advise">
+              <h4 class="offer-block__name">AI Consultancy</h4>
+              <p class="offer-block__line">A two-week plan for where AI pays off first</p>
               <details class="pair__more">
                 <summary>Read</summary>
                 <p class="pair__blurb">Two weeks that end with a ranked list of where AI pays off in your business, and what each item costs to build and to run. We interview the people who do the work, read the data you already have, and write one page per candidate: the workflow it changes, the data it needs, the price. Where an off-the-shelf tool is good enough, the list says so and names it. You keep the document whether or not you build anything with us.</p>
               </details>
             </div>
-            <div class="index-row">
-              <div class="index-row__head">
-                <h3 class="index-row__name">IT Transformation</h3>
-                <p class="index-row__line">From spreadsheets and legacy systems to a stack your team can run</p>
-              </div>
+            <div class="offer-block index-row offer-slide" data-slug="it-transformation" data-group="advise">
+              <h4 class="offer-block__name">IT Transformation</h4>
+              <p class="offer-block__line">From legacy and spreadsheets to a stack your team can run</p>
               <details class="pair__more">
                 <summary>Read</summary>
                 <p class="pair__blurb">Most mid-market companies run on a legacy system nobody dares touch, a dozen spreadsheets, and three SaaS tools that do not talk to each other. IT transformation is the plan and the migration: which systems stay, which go, what replaces them, and in what order, so the business keeps running while it changes. We map the data first, move one process at a time, and leave every system documented, integrated, and owned by your own people rather than by us.</p>
               </details>
             </div>
-            <div class="index-row">
-              <div class="index-row__head">
-                <h3 class="index-row__name">AI Optimisation</h3>
-                <p class="index-row__line">Your existing AI pilot, faster and cheaper to run</p>
-              </div>
+            <div class="offer-block index-row offer-slide" data-slug="ai-optimisation" data-group="advise">
+              <h4 class="offer-block__name">AI Optimisation</h4>
+              <p class="offer-block__line">Your existing AI pilot, faster and cheaper to run</p>
               <details class="pair__more">
                 <summary>Read</summary>
                 <p class="pair__blurb">A pilot that works in a demo and is slow, expensive, or flaky in daily use is the most common thing we are asked to fix. We measure the system you already run on real traffic first: latency, cost per request, failure rate. Then we change a copy, measure again, and keep only what helps: smaller models where accuracy allows, caching, batching, prompt and retrieval fixes. You get the numbers before and after, and an evaluation set your team can rerun without us.</p>
@@ -852,47 +1197,40 @@ figure.plate img { width: 100%; height: auto; }
             </div>
           </div>
         </div>
-        <div class="index-plate">
-          <div class="index-plate__head">
-            <p class="index-plate__label">Build</p>
-            <p class="index-plate__line">Systems that run on a schedule inside your own accounts</p>
+        <div class="offer-half offer-half--r offer-half--grid" data-group="build" style="--acc:#8fd8e8">
+          <div class="offer-half__head offer-slide">
+            <span class="offer-half__disc" aria-hidden="true"></span>
+            <h3 class="offer-half__name">Build</h3>
+            <p class="offer-half__line">Systems that run on a schedule inside your own accounts</p>
           </div>
-          <div class="index-plate__rows">
-            <div class="index-row">
-              <div class="index-row__head">
-                <h3 class="index-row__name">Forecasting</h3>
-                <p class="index-row__line">Demand, occupancy, and cash forecasts you can act on</p>
-              </div>
+          <div class="offer-half__blocks">
+            <div class="offer-block index-row offer-slide" data-slug="forecasting" data-group="build">
+              <h4 class="offer-block__name">Forecasting</h4>
+              <p class="offer-block__line">Demand, occupancy, and cash forecasts you can act on</p>
               <details class="pair__more">
                 <summary>Read</summary>
                 <p class="pair__blurb">Occupancy, covers, demand, cash: most teams forecast these in a spreadsheet by feel, and the spreadsheet is usually not wrong, just late. We build a model on your own history, backtest it walk-forward against what your team actually forecast on the same dates, and run it in parallel before anyone relies on it. It lands every morning where the team already looks, with an interval on every number. The 13-week cash forecast from a Xero ledger, every figure drilling to its source rows, is the first of these we productised.</p>
               </details>
             </div>
-            <div class="index-row">
-              <div class="index-row__head">
-                <h3 class="index-row__name">Automation</h3>
-                <p class="index-row__line">Repeated manual work, moved into software</p>
-              </div>
+            <div class="offer-block index-row offer-slide" data-slug="automation" data-group="build">
+              <h4 class="offer-block__name">Automation</h4>
+              <p class="offer-block__line">Repeated manual work, moved into software</p>
               <details class="pair__more">
                 <summary>Read</summary>
                 <p class="pair__blurb">The work that eats a team's week is usually the same twenty tasks: copying between systems, chasing approvals, building the same report, triaging the same inbox. We shadow the team for two days and count the hours rather than ask for them. Then we take the three tasks with the most hours and the least judgement, and move them into software that runs in your own cloud account. Anything that touches money or a customer still waits for a person to approve.</p>
               </details>
             </div>
-            <div class="index-row">
-              <div class="index-row__head">
-                <h3 class="index-row__name">Company Brain</h3>
-                <p class="index-row__line">Your documents, answered by one internal assistant</p>
-              </div>
+            <div class="offer-block index-row offer-slide" data-slug="company-brain" data-group="build">
+              <h4 class="offer-block__name">Company Brain</h4>
+              <p class="offer-block__line">Your documents, answered by one internal assistant</p>
               <details class="pair__more">
                 <summary>Read</summary>
                 <p class="pair__blurb">The answer to most internal questions exists in a document someone wrote years ago, and the person who knows where it is has left or is on leave. A company brain is one assistant inside your own systems that answers from your documents, respects who may see what, and shows its source every time. Accuracy is measured on a question set your team writes, before rollout and every month after. It reads your wiki; it does not replace it.</p>
               </details>
             </div>
-            <div class="index-row">
-              <div class="index-row__head">
-                <h3 class="index-row__name">Custom Software</h3>
-                <p class="index-row__line">The dashboard, integration, or internal tool nobody sells</p>
-              </div>
+            <div class="offer-block index-row offer-slide" data-slug="custom-software" data-group="build">
+              <h4 class="offer-block__name">Custom Software</h4>
+              <p class="offer-block__line">The dashboard, integration, or internal tool nobody sells</p>
               <details class="pair__more">
                 <summary>Read</summary>
                 <p class="pair__blurb">Not every problem needs a model. Sometimes the job is a dashboard that reads three systems at once. Or an integration between the PMS and the accounting software. Or an internal tool for the one process your SaaS cannot do. We build that plain software with the same squad and the same rules as everything else: in your accounts, with a runbook, with the source in your repository. Where a model is the cheapest way through one messy step, it goes in; where it is not, it stays out.</p>
@@ -900,27 +1238,30 @@ figure.plate img { width: 100%; height: auto; }
             </div>
           </div>
         </div>
-        <div class="index-plate">
-          <div class="index-plate__head">
-            <p class="index-plate__label">Run</p>
-            <p class="index-plate__line">Monthly capacity: our people in your tools, our pager on your systems</p>
+      </div>
+    </div>
+  </section>
+  <section class="cut cut--offer g-mist offer-panel" id="offer-2" data-panel="2">
+    <div class="offer-panel__in">
+      <div class="offer-split offer-split--1-1">
+        <div class="offer-half offer-half--l offer-half--stack" data-group="run" style="--acc:#ffd84d">
+          <div class="offer-half__head offer-slide">
+            <span class="offer-half__disc" aria-hidden="true"></span>
+            <h3 class="offer-half__name">Run</h3>
+            <p class="offer-half__line">Our people in your tools, our pager on your systems. Monthly.</p>
           </div>
-          <div class="index-plate__rows">
-            <div class="index-row">
-              <div class="index-row__head">
-                <h3 class="index-row__name">Top AI Talent</h3>
-                <p class="index-row__line">Senior engineers and analysts at a competitive price, managed from Singapore</p>
-              </div>
+          <div class="offer-half__blocks">
+            <div class="offer-block index-row offer-slide" data-slug="ai-talent" data-group="run">
+              <h4 class="offer-block__name">Top AI Talent</h4>
+              <p class="offer-block__line">Senior engineers and analysts, managed from Singapore</p>
               <details class="pair__more">
                 <summary>Read</summary>
                 <p class="pair__blurb">When the plan needs more hands than a project gives you, we supply them. Senior AI engineers, software engineers, data analysts, and back-office operators, hired and managed by us, working inside your tools and your hours, at a price a mid-market budget can carry. You get named people, not a bench: a Singapore lead who is accountable, a two-week trial on real work before any commitment, and the same runbook discipline as our builds. Scale from one person to a team, monthly, and stop when the work stops.</p>
               </details>
             </div>
-            <div class="index-row">
-              <div class="index-row__head">
-                <h3 class="index-row__name">Managed Operations</h3>
-                <p class="index-row__line">We keep running what we built, for as long as you want</p>
-              </div>
+            <div class="offer-block index-row offer-slide" data-slug="managed-operations" data-group="run">
+              <h4 class="offer-block__name">Managed Operations</h4>
+              <p class="offer-block__line">We keep running what we built. Stop any month.</p>
               <details class="pair__more">
                 <summary>Read</summary>
                 <p class="pair__blurb">Every system we hand over is designed to run without us. Some teams would rather it ran with us anyway. Managed operations is a monthly line. We watch the forecasts and retrain the models on schedule. We refresh the governance evidence. We answer the pager when an automation stops at two in the morning, and send a one-page report of what ran and what broke. The runbook stays yours, the source stays yours, and the arrangement ends the month you say so.</p>
@@ -928,17 +1269,16 @@ figure.plate img { width: 100%; height: auto; }
             </div>
           </div>
         </div>
-        <div class="index-plate">
-          <div class="index-plate__head">
-            <p class="index-plate__label">Grow</p>
-            <p class="index-plate__line">The commercial side: pipeline and introductions, on retainer</p>
+        <div class="offer-half offer-half--r offer-half--stack" data-group="grow" style="--acc:#ff6a4d">
+          <div class="offer-half__head offer-slide">
+            <span class="offer-half__disc" aria-hidden="true"></span>
+            <h3 class="offer-half__name">Grow</h3>
+            <p class="offer-half__line">The commercial side: pipeline and introductions, on retainer</p>
           </div>
-          <div class="index-plate__rows">
-            <div class="index-row">
-              <div class="index-row__head">
-                <h3 class="index-row__name">Business Development</h3>
-                <p class="index-row__line">Pipeline, partnerships, and the systems that keep them moving</p>
-              </div>
+          <div class="offer-half__blocks">
+            <div class="offer-block index-row offer-slide" data-slug="business-development" data-group="grow">
+              <h4 class="offer-block__name">Business Development</h4>
+              <p class="offer-block__line">Pipeline, partnerships, and the systems that keep them moving</p>
               <details class="pair__more">
                 <summary>Read</summary>
                 <p class="pair__blurb">Growth usually stalls for a boring reason: leads sit in an inbox, follow-ups depend on one person's memory, and nobody can say which channel actually pays. Business development is the commercial side of what we build. A pipeline your team can see. Outreach and follow-up on a schedule, with a named person approving every send. Partner and channel introductions from our own network in Singapore and the region. And a monthly number that says what each channel returned. We work on retainer, and the pipeline is yours.</p>
@@ -946,54 +1286,250 @@ figure.plate img { width: 100%; height: auto; }
             </div>
           </div>
         </div>
-        <div class="index-plate">
-          <div class="index-plate__head">
-            <p class="index-plate__label">Regulate</p>
-            <p class="index-plate__line">For CROs and Heads of Compliance under MAS. A named person signs</p>
+      </div>
+    </div>
+  </section>
+  <section class="cut cut--offer g-graphite offer-panel" id="offer-3" data-panel="3">
+    <div class="offer-panel__in">
+      <div class="offer-split offer-split--1-1">
+        <div class="offer-half offer-half--l offer-half--stack" data-group="regulate" style="--acc:#cbbcf7">
+          <div class="offer-half__head offer-slide">
+            <span class="offer-half__disc" aria-hidden="true"></span>
+            <h3 class="offer-half__name">Regulate</h3>
+            <p class="offer-half__line">For CROs and Heads of Compliance under MAS. A named person signs</p>
           </div>
-          <div class="index-plate__rows">
-            <div class="index-row">
-              <div class="index-row__head">
-                <h3 class="index-row__name">Model Validation</h3>
-                <p class="index-row__line">Your model rebuilt and diffed; a named validator signs the report</p>
-              </div>
+          <div class="offer-half__blocks">
+            <div class="offer-block index-row offer-slide" data-slug="model-validation" data-group="regulate">
+              <h4 class="offer-block__name">Model Validation</h4>
+              <p class="offer-block__line">Rebuilt, diffed, and signed by a named validator</p>
               <details class="pair__more">
                 <summary>Read</summary>
                 <p class="pair__blurb">Independent checking of the models a financial institution already runs: credit, pricing, capital, forecasting, and the AI ones. We rebuild the model ourselves and compare our outputs against yours, review the documentation against a standard test battery, and issue a signed validation report with a remediation plan. Every finding points at evidence, a test result or a document line, so a reviewer can check it without trusting us. A named validator signs, with the credentials the regulator will ask about. Sold per model, to the Head of Model Risk or the CRO.</p>
               </details>
             </div>
-            <div class="index-row">
-              <div class="index-row__head">
-                <h3 class="index-row__name">Compliance Operations</h3>
-                <p class="index-row__line">The compliance calendar, the filings, and the evidence, for MAS-licensed firms</p>
-              </div>
-              <details class="pair__more">
-                <summary>Read</summary>
-                <p class="pair__blurb">An outsourced compliance function for payment institutions and digital-asset firms that hold a MAS licence. We hold the compliance calendar and file on time. We write and maintain the manuals, and keep the evidence behind every obligation. When MAS publishes, we tell you what it means for your licence specifically. We read each publication once and know which of our clients it binds; everyone else reads it again, by hand, for every client. Your own MLRO stays the accountable officer; a named compliance lead of ours signs the work. Sold by introduction while the practice is small.</p><p class="cut__tag">Pilot. The first engagement funds the build.</p>
-              </details>
-            </div>
-            <div class="index-row">
-              <div class="index-row__head">
-                <h3 class="index-row__name">AI Governance</h3>
-                <p class="index-row__line">Your AI controls evidenced continuously, not once a year</p>
-              </div>
+            <div class="offer-block index-row offer-slide" data-slug="ai-governance" data-group="regulate">
+              <h4 class="offer-block__name">AI Governance</h4>
+              <p class="offer-block__line">Your AI controls evidenced continuously, not once a year</p>
               <details class="pair__more">
                 <summary>Read</summary>
                 <p class="pair__blurb">Most firms review their AI controls once a year and assemble the evidence in a three-week scramble when the regulator asks. We map every AI system you run to the controls a regulator expects of it. Then we collect the proof that each control is working, and keep it in a pack that is current on any day it is asked for. It ships as code and scheduled checks in your own repository, not as a platform you rent, and it is refreshed under managed operations. The evidence exists on the day it is asked for. Sold to the CRO or Head of Model Risk.</p>
               </details>
             </div>
-            <div class="index-row">
-              <div class="index-row__head">
-                <h3 class="index-row__name">Suitability Screening</h3>
-                <p class="index-row__line">Every advisor conversation screened against your suitability rules</p>
-              </div>
+          </div>
+        </div>
+        <div class="offer-half offer-half--r offer-half--stack" data-group="regulate" style="--acc:#cbbcf7">
+          <div class="offer-half__head offer-slide">
+            <span class="offer-half__disc" aria-hidden="true"></span>
+            <h3 class="offer-half__name">Regulate <span class="offer-tag">Pilot</span></h3>
+            <p class="offer-half__line">Pilot. The first engagement funds the build.</p>
+          </div>
+          <div class="offer-half__blocks">
+            <div class="offer-block index-row offer-slide" data-slug="compliance-ops" data-group="regulate">
+              <h4 class="offer-block__name">Compliance Operations <span class="offer-tag">Pilot</span></h4>
+              <p class="offer-block__line">Calendar, filings, and evidence for MAS-licensed firms</p>
               <details class="pair__more">
                 <summary>Read</summary>
-                <p class="pair__blurb">Today a firm hand-checks a small random sample of advisor conversations and never listens to the rest. We screen every recorded conversation against the firm's own suitability rules. The conduct team gets a short queue of flagged cases, each cued to the moment that triggered the flag. People spend their time only on what was flagged, and the sample becomes the whole population. Priced per advisor, sold to the Head of Compliance or Head of Conduct at an insurer, bank, or advisory firm. A pilot: the first engagement funds the speech pipeline and the PDPA handling.</p><p class="cut__tag">Pilot. The first engagement funds the build.</p>
+                <p class="pair__blurb">An outsourced compliance function for payment institutions and digital-asset firms that hold a MAS licence. We hold the compliance calendar and file on time. We write and maintain the manuals, and keep the evidence behind every obligation. When MAS publishes, we tell you what it means for your licence specifically. We read each publication once and know which of our clients it binds; everyone else reads it again, by hand, for every client. Your own MLRO stays the accountable officer; a named compliance lead of ours signs the work. Sold by introduction while the practice is small.</p>
+              </details>
+            </div>
+            <div class="offer-block index-row offer-slide" data-slug="suitability-surveillance" data-group="regulate">
+              <h4 class="offer-block__name">Suitability Screening <span class="offer-tag">Pilot</span></h4>
+              <p class="offer-block__line">Every advisor conversation screened against your suitability rules</p>
+              <details class="pair__more">
+                <summary>Read</summary>
+                <p class="pair__blurb">Today a firm hand-checks a small random sample of advisor conversations and never listens to the rest. We screen every recorded conversation against the firm's own suitability rules. The conduct team gets a short queue of flagged cases, each cued to the moment that triggered the flag. People spend their time only on what was flagged, and the sample becomes the whole population. Priced per advisor, sold to the Head of Compliance or Head of Conduct at an insurer, bank, or advisory firm. A pilot: the first engagement funds the speech pipeline and the PDPA handling.</p>
               </details>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+  <section class="cut cut--demo g-graphite" id="demo">
+    <div class="cut__in rise">
+      <p class="label">See it work</p>
+      <h2 class="cut__h">The same 52 weeks. Three different forecasts.</h2>
+      <p class="cut__p cut__p--wide">This is real math, computed in your browser right now, not a picture. Drag the slider between three models fit to the same data. Watch what each one does to the next 12 weeks, which none of them ever saw.</p>
+      <div class="demo-widget">
+        <div class="demo-chart-wrap">
+          <svg class="demo-chart" viewBox="0 0 640 300" preserveAspectRatio="none" aria-hidden="true">
+            <line class="demo-split" x1="520.0" y1="0" x2="520.0" y2="300"></line>
+            <path class="demo-actual"></path>
+            <path class="demo-fit"></path>
+          </svg>
+          <p class="demo-split-label">Forecast →</p>
+        </div>
+        <div class="demo-controls">
+          <label class="demo-slider-label" for="demo-slider">Model: <span class="demo-state-label"></span></label>
+          <input id="demo-slider" type="range" min="0" max="100" step="1" value="50">
+          <p class="demo-state-note"></p>
+        </div>
+        <p class="demo-legend"><span data-series="actual">What actually happened</span><span data-series="fit">The model's forecast</span></p>
+        <p class="cut__tag">Sample data, generated for this page. Illustrative, not a client's numbers.</p>
+      </div>
+    </div>
+  </section>
+  <section class="cut cut--leads g-coconut" id="leads">
+    <div class="cut__in rise">
+      <p class="label">See it sort</p>
+      <h2 class="cut__h">Fourteen leads. One formula you can read.</h2>
+      <p class="cut__p cut__p--wide">Every lead here has five numbers: last contact, replies, company size, where it came from, and a budget signal. The score is a weighted sum of those five, nothing else. Move the slider and the 14 re-sort. Click one to see its five products and their sum.</p>
+      <div class="leads-widget">
+        <div class="leads-well">
+          <p class="leads-well__head"><span>Ranked by score</span><span class="leads-well__counts"><span data-band="hot">4 Hot</span><span data-band="warm">8 Warm</span><span data-band="cold">2 Cold</span></span></p>
+          <ol class="leads-list" style="--n:14">
+          <li class="lead" data-id="11" data-band="hot" style="--i:0;--s:79">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Serviced apartments, score 79, Hot">
+              <span class="lead__rank">01</span>
+              <span class="lead__name">Serviced apartments</span>
+              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
+              <span class="lead__score">79</span>
+              <span class="lead__band">Hot</span>
+            </button>
+          </li>
+          <li class="lead" data-id="4" data-band="hot" style="--i:1;--s:77">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Wealth advisor, score 77, Hot">
+              <span class="lead__rank">02</span>
+              <span class="lead__name">Wealth advisor</span>
+              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
+              <span class="lead__score">77</span>
+              <span class="lead__band">Hot</span>
+            </button>
+          </li>
+          <li class="lead" data-id="6" data-band="hot" style="--i:2;--s:73">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Tuition chain, score 73, Hot">
+              <span class="lead__rank">03</span>
+              <span class="lead__name">Tuition chain</span>
+              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
+              <span class="lead__score">73</span>
+              <span class="lead__band">Hot</span>
+            </button>
+          </li>
+          <li class="lead" data-id="8" data-band="hot" style="--i:3;--s:67">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Logistics broker, score 67, Hot">
+              <span class="lead__rank">04</span>
+              <span class="lead__name">Logistics broker</span>
+              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
+              <span class="lead__score">67</span>
+              <span class="lead__band">Hot</span>
+            </button>
+          </li>
+          <li class="lead" data-id="0" data-band="warm" style="--i:4;--s:57">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Freight forwarder, score 57, Warm">
+              <span class="lead__rank">05</span>
+              <span class="lead__name">Freight forwarder</span>
+              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
+              <span class="lead__score">57</span>
+              <span class="lead__band">Warm</span>
+            </button>
+          </li>
+          <li class="lead" data-id="10" data-band="warm" style="--i:5;--s:57">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Interior fit-out, score 57, Warm">
+              <span class="lead__rank">06</span>
+              <span class="lead__name">Interior fit-out</span>
+              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
+              <span class="lead__score">57</span>
+              <span class="lead__band">Warm</span>
+            </button>
+          </li>
+          <li class="lead" data-id="9" data-band="warm" style="--i:6;--s:56">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Family office, score 56, Warm">
+              <span class="lead__rank">07</span>
+              <span class="lead__name">Family office</span>
+              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
+              <span class="lead__score">56</span>
+              <span class="lead__band">Warm</span>
+            </button>
+          </li>
+          <li class="lead" data-id="1" data-band="warm" style="--i:7;--s:51">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Dental group, score 51, Warm">
+              <span class="lead__rank">08</span>
+              <span class="lead__name">Dental group</span>
+              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
+              <span class="lead__score">51</span>
+              <span class="lead__band">Warm</span>
+            </button>
+          </li>
+          <li class="lead" data-id="2" data-band="warm" style="--i:8;--s:49">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Property manager, score 49, Warm">
+              <span class="lead__rank">09</span>
+              <span class="lead__name">Property manager</span>
+              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
+              <span class="lead__score">49</span>
+              <span class="lead__band">Warm</span>
+            </button>
+          </li>
+          <li class="lead" data-id="12" data-band="warm" style="--i:9;--s:47">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Insurance broker, score 47, Warm">
+              <span class="lead__rank">10</span>
+              <span class="lead__name">Insurance broker</span>
+              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
+              <span class="lead__score">47</span>
+              <span class="lead__band">Warm</span>
+            </button>
+          </li>
+          <li class="lead" data-id="13" data-band="warm" style="--i:10;--s:46">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Food distributor, score 46, Warm">
+              <span class="lead__rank">11</span>
+              <span class="lead__name">Food distributor</span>
+              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
+              <span class="lead__score">46</span>
+              <span class="lead__band">Warm</span>
+            </button>
+          </li>
+          <li class="lead" data-id="3" data-band="warm" style="--i:11;--s:42">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Boutique hotel, score 42, Warm">
+              <span class="lead__rank">12</span>
+              <span class="lead__name">Boutique hotel</span>
+              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
+              <span class="lead__score">42</span>
+              <span class="lead__band">Warm</span>
+            </button>
+          </li>
+          <li class="lead" data-id="7" data-band="cold" style="--i:12;--s:28">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Private clinic, score 28, Cold">
+              <span class="lead__rank">13</span>
+              <span class="lead__name">Private clinic</span>
+              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
+              <span class="lead__score">28</span>
+              <span class="lead__band">Cold</span>
+            </button>
+          </li>
+          <li class="lead" data-id="5" data-band="cold" style="--i:13;--s:18">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Marine supplier, score 18, Cold">
+              <span class="lead__rank">14</span>
+              <span class="lead__name">Marine supplier</span>
+              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
+              <span class="lead__score">18</span>
+              <span class="lead__band">Cold</span>
+            </button>
+          </li>
+          </ol>
+          <div class="leads-controls">
+            <label class="leads-slider-label" for="leads-slider">What counts most: <span class="leads-state-label">Balanced</span></label>
+            <input id="leads-slider" type="range" min="0" max="100" step="1" value="50">
+            <p class="leads-state-note">All five signals weigh 20 points each. Our starting point, before we tune it with you.</p>
+            <p class="leads-weights" aria-label="Weights now">
+            <span class="leads-weight" data-key="recency"><span class="leads-weight__name">Last contact</span><span class="leads-weight__num">20</span><i class="leads-weight__bar" style="--w:20"></i></span>
+            <span class="leads-weight" data-key="replies"><span class="leads-weight__name">Replies</span><span class="leads-weight__num">20</span><i class="leads-weight__bar" style="--w:20"></i></span>
+            <span class="leads-weight" data-key="size"><span class="leads-weight__name">Company size</span><span class="leads-weight__num">20</span><i class="leads-weight__bar" style="--w:20"></i></span>
+            <span class="leads-weight" data-key="origin"><span class="leads-weight__name">Came from</span><span class="leads-weight__num">20</span><i class="leads-weight__bar" style="--w:20"></i></span>
+            <span class="leads-weight" data-key="budget"><span class="leads-weight__name">Budget</span><span class="leads-weight__num">20</span><i class="leads-weight__bar" style="--w:20"></i></span>
+            </p>
+          </div>
+        </div>
+        <aside class="leads-receipt" aria-live="polite">
+          <p class="leads-receipt__title">Why this score</p>
+          <p class="leads-receipt__name"></p>
+          <p class="leads-receipt__empty">Click a lead on the left to see its five products and their sum.</p>
+          <table class="leads-receipt__table" hidden>
+            <thead><tr><th>Signal</th><th>Value</th><th>As 0 to 1</th><th>Weight</th><th>Points</th></tr></thead>
+            <tbody><tr data-key="recency"><th scope="row">Last contact</th><td class="v"></td><td class="n"></td><td class="w"></td><td class="p"></td></tr><tr data-key="replies"><th scope="row">Replies</th><td class="v"></td><td class="n"></td><td class="w"></td><td class="p"></td></tr><tr data-key="size"><th scope="row">Company size</th><td class="v"></td><td class="n"></td><td class="w"></td><td class="p"></td></tr><tr data-key="origin"><th scope="row">Came from</th><td class="v"></td><td class="n"></td><td class="w"></td><td class="p"></td></tr><tr data-key="budget"><th scope="row">Budget</th><td class="v"></td><td class="n"></td><td class="w"></td><td class="p"></td></tr></tbody>
+            <tfoot><tr><th scope="row" colspan="4">Score</th><td class="t"></td></tr></tfoot>
+          </table>
+        </aside>
+        <p class="leads-legend"><span data-band="hot"><b>Hot</b> Call this week.</span><span data-band="warm"><b>Warm</b> Keep the thread going.</span><span data-band="cold"><b>Cold</b> Park it. Look again in 30 days.</span></p>
+        <p class="cut__tag">Sample leads, generated for this page. Illustrative, not anyone's pipeline.</p>
       </div>
     </div>
   </section>
@@ -1016,7 +1552,7 @@ figure.plate img { width: 100%; height: auto; }
           <ul class="team-card__skills"><li>Technology and AI Adoption</li><li>Digital Transformation</li><li>Business Development</li><li>Programme and Delivery Management</li><li>Service Operations Management</li></ul>
         </article>
         <article class="team-card">
-          <h3 class="team-card__name">Wilfried Ariel Mulyawan</h3>
+          <h3 class="team-card__name">Wilfried</h3>
           <p class="team-card__bio">Wilfried leads the technology side at JAW AI, spanning engineering and AI. He previously worked as a quant and Head of Mathematics at a Y Combinator-backed company, building its pricing models and trading strategy, and as an AI engineer at Singapore Management University. He has also run systematic trading books across crypto, forex, and equities markets for over five years. He studied at leading technical universities in Indonesia, Taiwan, and Singapore, and is now a PhD candidate at Nanyang Technological University's College of Computing and Data Science, researching AI for finance and economics.</p>
           <ul class="team-card__skills"><li>Quantitative Trading &amp; Market Making</li><li>AI Research &amp; Model Development</li><li>Systems &amp; Automation Engineering</li><li>Data Infrastructure &amp; Backtesting</li><li>Technical Product Strategy</li></ul>
         </article>
