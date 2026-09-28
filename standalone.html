@@ -934,7 +934,9 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
 .team-card { background: var(--paper-2); border-radius: var(--r-md); padding: 28px 26px; display: grid; gap: 16px; align-content: start; }
 .team-card__head { display: flex; align-items: center; gap: 16px; }
 .team-card__avatar { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; flex: none; }
-.team-card__name { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: var(--fs-h3); letter-spacing: -0.02em; }
+/* the name reads at roughly the avatar's own height, so the two carry equal weight: a mark and
+   a name, not a small caption under a picture. */
+.team-card__name { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: clamp(30px, 6vw, 40px); line-height: 0.95; letter-spacing: -0.02em; }
 .team-card__bio { margin: 0; font-family: var(--text); font-size: var(--fs-text); line-height: 1.55; color: var(--ink-2); }
 .team-card__skills { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .team-card__skills li { font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: var(--fs-name); letter-spacing: 0.01em; color: var(--jade); background: rgba(12, 90, 72, 0.08); border-radius: var(--r-pill); padding: 6px 13px; }
