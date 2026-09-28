@@ -923,11 +923,15 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
 
 /* ---------------------------------------------------------------- the profile
    2026-09-27: Our Profile is the three people behind JAW AI (content/team.ts), not a copy
-   statement. Three cards, same plate ground as the index, no photography (none licensed). */
+   statement. Three cards, same plate ground as the index.
+   2026-09-28: CSF's own hand-drawn portraits, added where "no photography (none licensed)" used
+   to sit. A circle, not a square: it reads as a mark next to the name rather than a cropped
+   photo, and it is forgiving of the three drawings' slightly different framing. */
 .team { display: grid; gap: 40px; max-width: 1240px; width: 100%; margin-inline: auto; }
 .team__people { display: grid; gap: 20px; }
 @media (min-width: 800px) { .team__people { grid-template-columns: repeat(3, 1fr); } }
 .team-card { background: var(--paper-2); border-radius: var(--r-md); padding: 28px 26px; display: grid; gap: 16px; align-content: start; }
+.team-card__avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; background: var(--card); box-shadow: inset 0 0 0 1px var(--rule-soft); }
 .team-card__name { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: var(--fs-h3); letter-spacing: -0.02em; }
 .team-card__bio { margin: 0; font-family: var(--text); font-size: var(--fs-text); line-height: 1.55; color: var(--ink-2); }
 .team-card__skills { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
@@ -1783,16 +1787,19 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
       </div>
       <div class="team__people">
         <article class="team-card">
+          <img class="team-card__avatar" src="./assets/team/aaron.png" alt="" width="96" height="96">
           <h3 class="team-card__name">Aaron</h3>
           <p class="team-card__bio">Aaron is a digital transformation and AI business leader with over 13 years of experience across Oracle, Deloitte, and Accenture, helping organisations translate technology and emerging innovations into tangible business outcomes. He has worked across strategy, technology consulting, cloud, AI, and large-scale transformation programmes across both the public and private sectors. With a background spanning strategy, technology, product, and business development, Aaron brings a practical, business-led approach to helping organisations identify, adopt, and scale AI and digital technologies. He holds an MBA from Singapore Management University and a Bachelor of Computing (Information Systems) from the National University of Singapore.</p>
           <ul class="team-card__skills"><li>AI Transformation Strategy</li><li>Digital Transformation</li><li>Business Process Reengineering</li><li>Data &amp; Cloud Transformation</li><li>Technology Product Management</li></ul>
         </article>
         <article class="team-card">
+          <img class="team-card__avatar" src="./assets/team/meiling.png" alt="" width="96" height="96">
           <h3 class="team-card__name">Mei Ling</h3>
           <p class="team-card__bio">Mei Ling has 20 years of experience in technology consulting, service delivery and market development across the private and public sectors, with senior roles at global consulting firms, a leading systems integrator and government agencies. She has led large, high-stakes programmes in enterprise platforms and IT operations, managing teams of more than 70 consultants. Her expertise spans go-to-market strategy, client development, solution design, programme delivery, quality assurance, and stakeholder engagement. She has consistently beaten growth targets and helped organisations adopt new technology, most recently in enterprise AI. She holds a BSc in Electronics Engineering from a UK university.</p>
           <ul class="team-card__skills"><li>Technology and AI Adoption</li><li>Digital Transformation</li><li>Business Development</li><li>Programme and Delivery Management</li><li>Service Operations Management</li></ul>
         </article>
         <article class="team-card">
+          <img class="team-card__avatar" src="./assets/team/wilfried.png" alt="" width="96" height="96">
           <h3 class="team-card__name">Wilfried</h3>
           <p class="team-card__bio">Wilfried leads the technology side at JAW AI, spanning engineering and AI. He previously worked as a quant and Head of Mathematics at a Y Combinator-backed company, building its pricing models and trading strategy, and as an AI engineer at Singapore Management University. He has also run systematic trading books across crypto, forex, and equities markets for over five years. He studied at leading technical universities in Indonesia, Taiwan, and Singapore, and is now a PhD candidate at Nanyang Technological University's College of Computing and Data Science, researching AI for finance and economics.</p>
           <ul class="team-card__skills"><li>Quantitative Trading &amp; Market Making</li><li>AI Research &amp; Model Development</li><li>Systems &amp; Automation Engineering</li><li>Data Infrastructure &amp; Backtesting</li><li>Technical Product Strategy</li></ul>
