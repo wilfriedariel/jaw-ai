@@ -9,7 +9,8 @@
 <meta property="og:title" content="JAW AI. AI systems that keep running after we leave.">
 <meta property="og:description" content="JAW AI builds forecasting, automation, and internal assistants for Singapore companies that run on spreadsheets and email. Seventeen offerings, five ways to buy them, and the system keeps running after we leave.">
 <meta property="og:type" content="website">
-<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="icon" href="./favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&family=Newsreader:opsz,wght@6..72,400..600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
@@ -29,6 +30,15 @@
      Both stops are measured against --key-ink in qa/jaw/contrast_check.mjs. */
   --key-lit: #ffc862;
   --key-deep: #d99a2c;
+
+  /* the receipt's five segments: five values of the one hue, deep to paper value, in signal
+     order. Shapes on a card, keyed to five printed numbers, not five accents. Three of the five
+     are existing tokens; the two intermediates are the only new literals. */
+  --key-step-1: var(--key-deep);
+  --key-step-2: #e6a636;
+  --key-step-3: var(--key);
+  --key-step-4: #f5c546;
+  --key-step-5: var(--butter);
 
   /* --- GROUNDS. Every ground on the page is the paper, the ink, the room, or the specimen;
      nothing is imported (DESIGN_TASTE_2026-09-08.md). Sky and lilac were deleted 2026-09-08
@@ -103,14 +113,20 @@
   --gutter: 40px;
 
   --fs-h1: clamp(40px, 11.2vw, 58px);
-  --fs-h2: clamp(29px, 7.4vw, 38px);
-  --fs-h3: 21px;
+  --fs-h2: clamp(30px, 8vw, 40px);        /* was 29..38: one section-head size, .cut__h and .h2 both read it */
+  --fs-h3: 22px;                           /* was 21: block names, card name, team names, the toys' readouts */
   --fs-lede: clamp(20px, 5.2vw, 23px);
   --fs-text: 18px;
   --fs-small: 16px;
-  --fs-sub: 21px;            /* the step that was missing between the lede and the body */
-  --fs-name: 15px;           /* where the tracked capitals used to be */
-  --fs-label: 11px;
+  --fs-sub: 21px;                          /* the step between the lede and the body: the toys' notes */
+  --fs-name: 15px;
+  --fs-label: 12px;                        /* was 11: the pilot tag and .num; 11px was the one size under the HUD */
+
+  /* the muted inks on graphite. .act-graphite already redefines --ink-2/--ink-3 to these exact
+     values (page.css 798..808) but the cuts use .g-graphite, which never did, so the demo block
+     typed #b8b1a7 and #8a8478 as literals eleven times. Named once, measured once. */
+  --on-graphite-2: #b8b1a7;   /* 8.5:1 on graphite */
+  --on-graphite-3: #8a8478;   /* 4.9:1 on graphite */
 }
 
 @media (min-width: 1000px) {
@@ -120,14 +136,14 @@
     --act-y: 152px;
     --gutter: 80px;
     --fs-h1: clamp(58px, 5.9vw, 92px);
-    --fs-h2: clamp(34px, 3.5vw, 54px);
-    --fs-h3: 23px;
+    --fs-h2: clamp(36px, 3.9vw, 58px);      /* was 34..54: the ceiling is .cut__h's old 58, so the demo does not shrink */
+    --fs-h3: clamp(24px, 2.1vw, 30px);      /* was 23: .offer-block__name's old clamp, now the one h3 */
     --fs-lede: clamp(22px, 1.7vw, 31px);
-    --fs-text: 19px;
+    --fs-text: 20px;                         /* was 19: every explanatory line joins this */
     --fs-small: 17px;
     --fs-sub: 26px;
     --fs-name: 15px;
-    --fs-label: 11px;
+    --fs-label: 12px;
   }
 }
 
@@ -167,6 +183,7 @@ a { color: inherit; }
 
 .skip { position: absolute; left: -9999px; top: 8px; z-index: 60; background: var(--key); color: var(--key-ink); padding: 10px 14px; font-family: var(--sans); }
 .skip:focus { left: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
 /* ---------------------------------------------------------------- the chamber */
 .brain-layer {
@@ -222,21 +239,30 @@ body[data-act="contact"] .hub:not([data-active="1"]) { opacity: 0; pointer-event
   .hub[data-active="1"] { opacity: 1; pointer-events: auto; }
 }
 
-/* the specimen card: the one element on the page with a shadow, because it floats over glass */
+/* the specimen card: the one element on the page with a shadow, because it floats over glass.
+   2026-09-28: it sits on the specimen's centre line, not the bottom of the screen. aimAt() turns
+   the clicked hub to face the camera, so the hub lands at the canvas centre; the card sits beside
+   it on the same line. `translate` is used for the centring so `transform` stays free for the
+   arrival keyframe. */
 .card {
-  position: absolute; right: var(--margin); bottom: 74px; width: min(374px, calc(100% - 2 * var(--margin)));
-  background: var(--chamber-2); padding: 24px 26px 22px; z-index: 3; border-radius: 6px;
+  position: absolute; right: var(--margin); top: 50%; bottom: auto; translate: 0 -50%;
+  width: min(400px, calc(100% - 2 * var(--margin)));
+  max-height: calc(100svh - 2 * (var(--bar) + 24px)); overflow: auto;
+  background: var(--chamber-2); padding: 26px 28px 24px; z-index: 3; border-radius: 6px;
   box-shadow: inset 0 1px 0 var(--plate-rim), inset 0 0 0 1px var(--chamber-3), 0 1px 0 var(--plate-seam);
+  animation: card-in 240ms var(--ease) both;
 }
+@keyframes card-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 .card[hidden] { display: none; }
-.card-group { margin: 0 0 10px; color: var(--key); }
-.card-name { margin: 0; font-size: 27px; line-height: 1.04; }
-.card-line { margin: 7px 0 14px; color: var(--on-chamber-2); font-size: 16px; font-style: italic; }
-.card-blurb { margin: 0; font-size: 16px; line-height: 1.6; color: var(--on-chamber-2); }
-.card-foot { margin: 18px 0 0; display: flex; justify-content: space-between; align-items: center; font-family: var(--sans); font-variation-settings: "wdth" 104; font-size: var(--fs-name); letter-spacing: -0.004em; }
+.card-group { margin: 0 0 12px; color: var(--key); display: flex; align-items: center; gap: 9px; }
+/* the same disc the hub carries on the specimen, so the card is visibly the hub's */
+.card-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--acc, var(--key)); flex: none; }
+.card-name { margin: 0; font-size: var(--fs-h3); line-height: 1.04; }
+.card-blurb { margin: 10px 0 0; font-size: var(--fs-text); line-height: 1.5; color: var(--on-chamber-2); max-width: 30ch; }
+.card-foot { margin: 20px 0 0; display: flex; justify-content: space-between; align-items: center; font-family: var(--sans); font-variation-settings: "wdth" 104; font-size: var(--fs-name); letter-spacing: -0.004em; }
 .card-foot a { color: var(--key); text-decoration: none; border-bottom: 1px solid var(--key); padding-bottom: 3px; }
 .card-close { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--on-chamber-3); background: none; border: 0; padding: 0; cursor: pointer; }
-@media (max-width: 999px) { .card { left: var(--margin); right: var(--margin); width: auto; bottom: 12px; } }
+@media (max-width: 999px) { .card { left: var(--margin); right: var(--margin); width: auto; top: auto; bottom: 14px; translate: none; } }
 
 /* ---------------------------------------------------------------- the bar */
 .topbar {
@@ -258,13 +284,15 @@ body[data-ground="dark"] .topbar {
 }
 body[data-ground="paper"] .topnav a { color: var(--ink-2); }
 body[data-ground="dark"] .topnav a { color: var(--on-chamber-2); }
-body[data-ground="dark"] .wordmark-dot { background: var(--key); }
-.wordmark { display: inline-flex; align-items: center; gap: 10px; font-size: 17px; letter-spacing: -0.01em; text-decoration: none; font-variation-settings: "wdth" 108; font-weight: 700; }
-.wordmark-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--key); flex: none; }
-body[data-ground="paper"] .wordmark-dot { background: var(--key-paper); }
+/* the mark: CSF's own file (2026-09-28), replacing the amber-dot-plus-text placeholder. A real
+   logo doesn't recolour per ground the way the dot did; it's the same blue gradient on chamber
+   and on paper, which is the point of a mark rather than a token-painted glyph. */
+.wordmark { display: inline-flex; align-items: center; text-decoration: none; }
+.wordmark-mark { display: block; height: 24px; width: auto; }
+@media (min-width: 1000px) { .wordmark-mark { height: 28px; } }
 .topnav { margin-left: auto; }
 .topnav ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
-.topnav a { font-family: var(--sans); font-variation-settings: "wdth" 100; font-size: 14px; letter-spacing: -0.004em; color: var(--on-chamber-2); text-decoration: none; transition: color var(--micro) var(--ease); }
+.topnav a { font-family: var(--sans); font-variation-settings: "wdth" 100; font-size: var(--fs-name); letter-spacing: -0.004em; color: var(--on-chamber-2); text-decoration: none; transition: color var(--micro) var(--ease); }
 body[data-ground="paper"] .topnav a { color: var(--ink-2); }
 .topnav a:hover { color: var(--key); }
 @media (max-width: 999px) { .topnav { display: none; } .btn-top { margin-left: auto; } }
@@ -272,7 +300,7 @@ body[data-ground="paper"] .topnav a { color: var(--ink-2); }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; border-radius: var(--r-pill);
   font-family: var(--sans); font-variation-settings: "wdth" 100; font-weight: 600;
-  font-size: 14px; letter-spacing: -0.006em; text-decoration: none;
+  font-size: var(--fs-name); letter-spacing: -0.006em; text-decoration: none;
   padding: 12px 22px; border: 1px solid transparent; cursor: pointer; border-radius: 4px;
   transition: background var(--micro) var(--ease), color var(--micro) var(--ease),
               border-color var(--micro) var(--ease), box-shadow var(--micro) var(--ease);
@@ -286,13 +314,13 @@ body[data-ground="paper"] .btn-primary:hover { background: var(--key-paper); col
    the one that sends the brief: asking twice, once before the argument has been made, costs
    more than it earns on a considered purchase (DESIGN_TASTE_2026-09-08.md, section 6). */
 .btn-top {
-  padding: 4px 0 3px; border: 0; border-radius: 0; background: none; font-size: 14px;
+  padding: 4px 0 3px; border: 0; border-radius: 0; background: none; font-size: var(--fs-name);
   color: inherit; box-shadow: inset 0 -1.5px 0 0 var(--key);
 }
 .btn-top:hover { background: none; color: var(--key); }
 body[data-ground="paper"] .btn-top { background: none; color: inherit; box-shadow: inset 0 -1.5px 0 0 var(--key-paper); }
 body[data-ground="paper"] .btn-top:hover { background: none; color: var(--key-paper); }
-@media (max-width: 560px) { .btn-top { font-size: 13.5px; } }
+@media (max-width: 560px) { .btn-top { font-size: 14px; } }
 
 /* ---------------------------------------------------------------- act I, the hero */
 .hero {
@@ -317,18 +345,18 @@ body[data-ground="paper"] .btn-top:hover { background: none; color: var(--key-pa
 .hero-ask { display: grid; gap: 18px; justify-items: start; }
 
 .ask { margin: 0; max-width: min(470px, 100%); width: 100%; }
-.ask-label { display: block; font-family: var(--display); font-variation-settings: "wdth" 110; font-weight: 600; font-size: 15px; letter-spacing: -0.01em; margin-bottom: 10px; color: var(--on-chamber-2); }
+.ask-label { display: block; font-family: var(--display); font-variation-settings: "wdth" 110; font-weight: 600; font-size: var(--fs-name); letter-spacing: -0.01em; margin-bottom: 10px; color: var(--on-chamber-2); }
 .ask-field { display: flex; }
 .ask-field input {
-  flex: 1 1 0; width: 100%; min-width: 0; font: 400 16px/1.4 var(--text); color: var(--on-chamber);
+  flex: 1 1 0; width: 100%; min-width: 0; font: 400 var(--fs-small)/1.4 var(--text); color: var(--on-chamber);
   background: var(--chamber-2); border: 1px solid var(--chamber-3); border-right: 0;
   padding: 14px 18px; border-radius: var(--r-sm) 0 0 var(--r-sm);
 }
 .ask-field input::placeholder { color: var(--on-chamber-3); }
 .ask-field input:focus-visible { outline: 2px solid var(--key); outline-offset: -2px; }
-.ask-go { font-family: var(--sans); font-variation-settings: "wdth" 106; font-size: 14px; letter-spacing: -0.004em; color: var(--on-chamber); background: var(--chamber-2); border: 1px solid var(--chamber-3); padding: 0 22px; border-radius: 0 var(--r-sm) var(--r-sm) 0; cursor: pointer; transition: background var(--micro) var(--ease), color var(--micro) var(--ease); }
+.ask-go { font-family: var(--sans); font-variation-settings: "wdth" 106; font-size: var(--fs-name); letter-spacing: -0.004em; color: var(--on-chamber); background: var(--chamber-2); border: 1px solid var(--chamber-3); padding: 0 22px; border-radius: 0 var(--r-sm) var(--r-sm) 0; cursor: pointer; transition: background var(--micro) var(--ease), color var(--micro) var(--ease); }
 .ask-go:hover { background: var(--key); color: var(--key-ink); border-color: var(--key); }
-.ask-result { margin: 10px 0 0; min-height: 1.6em; font-size: 14px; line-height: 1.5; color: var(--on-chamber-3); }
+.ask-result { margin: 10px 0 0; min-height: 1.6em; font-size: var(--fs-name); line-height: 1.5; color: var(--on-chamber-3); }
 .ask-result .hit { color: var(--key); font-family: var(--display); font-variation-settings: "wdth" 110; font-weight: 600; letter-spacing: -0.015em; }
 
 .scroll-cue { display: none; }
@@ -345,7 +373,7 @@ body[data-ground="paper"] .btn-top:hover { background: none; color: var(--key-pa
   .hero-foot { grid-row: 3; grid-template-columns: minmax(0, 470px) 1fr; align-items: end; gap: 40px; }
   .scroll-cue {
     display: inline-flex; align-items: center; gap: 14px; justify-self: end; align-self: end;
-    font-family: var(--sans); font-variation-settings: "wdth" 104; font-size: 11px;
+    font-family: var(--sans); font-variation-settings: "wdth" 104; font-size: var(--fs-label);
     letter-spacing: 0.01em; color: var(--on-chamber-3); text-decoration: none;
   }
   .scroll-rule { width: 74px; height: 1px; background: var(--chamber-3); position: relative; overflow: hidden; }
@@ -364,11 +392,14 @@ body[data-ground="paper"] .btn-top:hover { background: none; color: var(--key-pa
 .sheet > .cut:first-child { border-radius: var(--r-lg) var(--r-lg) 0 0; box-shadow: var(--lift-chamber); min-height: 64svh; }
 .g-butter { background: var(--butter); } .g-mist { background: var(--mist); }
 .g-coconut { background: var(--coconut); }
-.g-graphite { background: var(--graphite); color: var(--coconut); }
-.cut__h { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: clamp(30px, 4.2vw, 58px); line-height: 1.0; letter-spacing: -0.03em; text-wrap: balance; max-width: 22ch; }
+/* 2026-09-28: .act-graphite already redefines --ink-2/--ink-3 for graphite (798..808 below);
+   .g-graphite never did, so components on a graphite cut (the forecast demo, the leads toy) typed
+   #b8b1a7 / #8a8478 as literals instead. Named once as --on-graphite-2/3 (:root), read here, so
+   every graphite component can read a token instead of retyping the bytes. */
+.g-graphite { background: var(--graphite); color: var(--coconut); --ink: var(--coconut); --ink-2: var(--on-graphite-2); --ink-3: var(--on-graphite-3); --key-paper: var(--key); --rule: rgba(246, 243, 236, 0.24); --rule-soft: rgba(246, 243, 236, 0.13); }
+.cut__h { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: var(--fs-h2); line-height: 1.0; letter-spacing: -0.03em; text-wrap: balance; max-width: 22ch; }
 .cut__p { margin: 0; font-family: var(--text); font-size: var(--fs-lede); line-height: 1.4; max-width: 40ch; color: var(--ink-2); }
-.g-graphite .cut__p { color: #b8b1a7; }
-.cut__p--wide { max-width: 56ch; font-size: var(--fs-text); line-height: 1.55; }
+.cut__p--wide { max-width: 44ch; }
 .cut__tag { margin: 0; font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: var(--fs-name); letter-spacing: -0.004em; padding-top: 10px; border-top: 2px solid currentColor; justify-self: start; }
 .cut--week .cut__h { font-family: var(--text); font-variation-settings: normal; font-weight: 400; font-size: clamp(26px, 3.4vw, 46px); letter-spacing: -0.01em; max-width: 26ch; }
 @media (min-width: 900px) { .cut--week:nth-of-type(odd) .cut__in { justify-items: end; text-align: right; } .cut--week:nth-of-type(odd) .cut__tag { justify-self: end; } }
@@ -382,8 +413,7 @@ body[data-ground="paper"] .btn-top:hover { background: none; color: var(--key-pa
 .pair__more summary::before { content: "+ "; }
 .pair__more[open] summary::before { content: "\2013 "; }
 .pair__gline { margin: 6px 0 8px; font-family: var(--sans); font-size: 12px; letter-spacing: 0.04em; color: var(--ink-2); }
-.g-graphite .pair__gline { color: #b8b1a7; }
-.pair__blurb { margin: 0; font-family: var(--text); font-size: 16px; line-height: 1.6; max-width: 52ch; color: var(--ink-2); }
+.pair__blurb { margin: 0; font-family: var(--text); font-size: var(--fs-text); line-height: 1.6; max-width: 52ch; color: var(--ink-2); }
 /* three plates, three angles: a print tipped in at the same angle three times is a template */
 .cut.cut--plate[data-jaw-focus="regulated-finance"] .plate { --tilt: -0.45deg; }   /* outranks the nth-of-type rule */
 .cut--silence { min-height: 100svh; background: transparent; }
@@ -406,23 +436,23 @@ figure.plate img { width: 100%; height: auto; }
 .facts li { display: grid; gap: 4px; border-top: 2px solid currentColor; padding-top: 12px; }
 .facts strong { font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: 20px; letter-spacing: -0.02em; }
 .facts span { font-family: var(--text); font-size: 16px; line-height: 1.5; color: var(--ink-2); }
-.g-graphite .facts span { color: #b8b1a7; }
 .facts--four span { font-family: var(--sans); font-size: var(--fs-name); letter-spacing: -0.004em; color: var(--ink-2); }
-.g-graphite .facts--four span { color: #b8b1a7; }
 @media (min-width: 800px) { .facts { grid-template-columns: repeat(3, 1fr); } .facts--four { grid-template-columns: repeat(4, 1fr); } }
 .cut--measure { min-height: 80svh; }
 
 /* ---------------------------------------------------------------- the forecast demo
-   2026-09-27: "see it work", a live proof rather than a claim. Dark ground on purpose — it's
+   2026-09-27: "see it work", a live proof rather than a claim. Dark ground on purpose: it's
    the one moment on the page meant to read as an instrument, the way the hero's HUD does.
    Visual pass by Fable after CSF called the first version "slop": the chart plate is a
    recessed instrument well (inset shadows, deeper graphite), not a tinted div; the forecast
-   window is its own amber-tinted zone, not visually identical to the training region; the
-   actual/fit lines are told apart by geometry (miter vs round joins) as well as colour, and the
-   fit line alone carries a soft amber glow, since it's the one thing on the chart that moves;
-   the slider is a recessed groove with a lifted bone disc, not a browser-default range input. */
+   window is its own amber-tinted zone; the actual/fit lines are told apart by geometry (miter
+   vs round joins) as well as colour, and the fit line alone carries a soft amber glow; the
+   slider is a recessed groove with a lifted bone disc.
+   2026-09-28: CSF, "way too small, people need to read like documents... make it more like
+   toys". The readout is now the biggest type after the h2, the note is a lede, the groove has
+   three named stops, and every ink here is a token (--on-graphite-2/3, page.css :root). */
 .cut--demo { min-height: 72svh; }
-.demo-widget { margin-top: 8px; display: grid; gap: 26px; max-width: 720px; }
+.demo-widget { margin-top: 12px; display: grid; gap: 28px; max-width: 880px; }
 
 .demo-chart-wrap {
   position: relative;
@@ -444,50 +474,83 @@ figure.plate img { width: 100%; height: auto; }
 .demo-actual { fill: none; stroke: var(--coconut); stroke-width: 1.5; stroke-linejoin: miter; stroke-linecap: butt; opacity: 0.78; }
 .demo-fit { fill: none; stroke: var(--key); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; filter: drop-shadow(0 0 5px rgba(240, 178, 63, 0.32)); }
 .demo-split { stroke: rgba(240, 178, 63, 0.55); stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 0 5; }
+/* the window's name, in sentence case: T1 gives capitals to the hub pills and the HUD only */
 .demo-split-label {
   position: absolute; top: 12px; right: 16px; margin: 0;
-  font-family: var(--sans); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
-  color: rgba(240, 178, 63, 0.78);
+  font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: var(--fs-name); letter-spacing: -0.004em;
+  color: var(--key);
 }
 
-.demo-controls { display: grid; gap: 14px; }
-.demo-slider-label { font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: 14px; letter-spacing: -0.004em; color: #b8b1a7; }
-.demo-slider-label .demo-state-label { font-variation-settings: "wdth" 112; font-weight: 600; font-size: 17px; color: var(--key); }
+.demo-controls { display: grid; gap: 10px; }
+/* the readout: the word for the model, big. It is what the slider changes and it is the answer. */
+.demo-readout { margin: 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 14px; }
+.demo-slider-label { font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: var(--fs-name); letter-spacing: -0.004em; color: var(--ink-2); }
+.demo-state-label { font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: var(--fs-h3); letter-spacing: -0.024em; line-height: 1.04; color: var(--key); }
 
+.demo-groove { display: block; }
 #demo-slider {
-  -webkit-appearance: none; appearance: none; width: 100%; height: 6px; margin: 8px 0;
+  -webkit-appearance: none; appearance: none; width: 100%; height: 6px; margin: 10px 0 4px;
   border-radius: var(--r-pill); background: linear-gradient(180deg, #0e0c0b, #1b1815);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.65), 0 1px 0 rgba(246, 243, 236, 0.06);
   cursor: pointer;
 }
 #demo-slider:focus-visible { outline: 2px solid var(--key); outline-offset: 4px; }
 #demo-slider::-webkit-slider-thumb {
-  -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--coconut); border: none;
+  -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: var(--coconut); border: none;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 4px 10px rgba(0, 0, 0, 0.35), inset 0 -1px 0 rgba(0, 0, 0, 0.14);
   transition: transform 120ms ease, box-shadow 120ms ease;
 }
 #demo-slider:active::-webkit-slider-thumb { transform: scale(1.08); box-shadow: 0 2px 3px rgba(0, 0, 0, 0.55), 0 8px 18px rgba(0, 0, 0, 0.4), inset 0 -1px 0 rgba(0, 0, 0, 0.14); }
 #demo-slider::-moz-range-track { height: 6px; border-radius: var(--r-pill); background: linear-gradient(180deg, #0e0c0b, #1b1815); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.65); }
-#demo-slider::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--coconut); border: none; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 4px 10px rgba(0, 0, 0, 0.35); }
+#demo-slider::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: var(--coconut); border: none; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 4px 10px rgba(0, 0, 0, 0.35); }
 
-.demo-state-note { margin: 0; font-family: var(--text); font-size: 15px; line-height: 1.5; color: #b8b1a7; max-width: 48ch; min-height: 3lh; }
+/* the three stops: the groove is a dial, and these are its positions. The word under the
+   current stop takes the ink; the others stay muted. data-state is set by main.ts. */
+.demo-stops { margin: 0; display: grid; grid-template-columns: 1fr 1fr 1fr; font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: var(--fs-name); letter-spacing: -0.004em; color: var(--ink-3); }
+.demo-stops span:nth-child(2) { text-align: center; }
+.demo-stops span:nth-child(3) { text-align: right; }
+.demo-widget[data-state="under"] .demo-stops span:nth-child(1),
+.demo-widget[data-state="good"] .demo-stops span:nth-child(2),
+.demo-widget[data-state="over"] .demo-stops span:nth-child(3) { color: var(--ink); }
 
-.demo-legend { margin: 0; display: flex; flex-wrap: wrap; gap: 22px; font-family: var(--sans); font-variation-settings: "wdth" 104; font-size: 12px; font-weight: 500; color: #b8b1a7; }
+/* the note: one or two sentences at the sub step, the size a toy's caption should be */
+.demo-state-note { margin: 6px 0 0; font-family: var(--text); font-size: var(--fs-sub); line-height: 1.35; color: var(--ink); max-width: 30ch; min-height: 2lh; text-wrap: pretty; }
+
+.demo-legend { margin: 0; display: flex; flex-wrap: wrap; gap: 8px 22px; font-family: var(--sans); font-variation-settings: "wdth" 104; font-size: var(--fs-name); font-weight: 500; color: var(--ink-2); }
 .demo-legend [data-series] { display: inline-flex; align-items: center; gap: 8px; }
-.demo-legend [data-series]::before { content: ""; display: inline-block; width: 20px; height: 2px; border-radius: 1px; }
+.demo-legend [data-series]::before { content: ""; display: inline-block; width: 22px; height: 2px; border-radius: 1px; }
 .demo-legend [data-series="actual"]::before { background: var(--coconut); opacity: 0.78; height: 1.5px; }
 .demo-legend [data-series="fit"]::before { background: var(--key); box-shadow: 0 0 6px rgba(240, 178, 63, 0.32); }
-.cut--demo .cut__tag { color: #8a8478; border-top-color: rgba(246, 243, 236, 0.18); }
+/* the point: why this toy is on a consultancy's page, at lede size, in the display face */
+.demo-point { margin: 4px 0 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: var(--fs-lede); line-height: 1.2; letter-spacing: -0.024em; max-width: 24ch; text-wrap: balance; }
+.cut--demo .cut__tag { color: var(--ink-3); border-top-color: var(--rule-soft); }
+
+@media (min-width: 1000px) {
+  /* the chart and its controls side by side: the readout sits beside the well at eye level,
+     the way a dial sits beside a gauge. Below 1000px they stack. */
+  .demo-widget { max-width: 1240px; grid-template-columns: minmax(0, 1.5fr) minmax(300px, 1fr); grid-template-areas: "chart controls" "legend legend" "point point" "tag tag"; column-gap: 40px; align-items: center; }
+  .demo-chart-wrap { grid-area: chart; }
+  .demo-controls { grid-area: controls; }
+  .demo-legend { grid-area: legend; }
+  .demo-point { grid-area: point; }
+  .cut--demo .cut__tag { grid-area: tag; }
+}
 
 /* ---------------------------------------------------------------- the lead-sort toy
    2026-09-27: the second "see it work" (CSF: "cold leads, hot leads"). Fourteen seeded leads
    under one weighted sum (landing/leads.ts). The section sits on coconut and the instrument is
    a dark well tipped into the paper, which is the atlas image the whole page is built on: a
-   plate in a book. The receipt beside it is printed matter on a card, because a receipt is
-   paper. Same instrument language as the forecast demo: recessed well, a groove slider with a
-   bone disc, amber only on what matters. One hue at three values tells the three bands apart:
-   hot glows, warm is the deep amber without glow, cold is dim bone. Rows are absolutely
-   positioned and slide to their new rank on transform, so a re-sort is a visible re-sort. */
+   plate in a book. The receipt beside it is printed matter on a card.
+   2026-09-28, second pass, after CSF saw it live ("so many business at once, table not easy to
+   understand, plain, too small, no animation"): the list is a ladder in three tiers with a
+   fold after the seventh rank; each row carries a story line derived from its own numbers; the
+   receipt is a bar of 100 points partitioned into the five products, a counting total, and
+   five cards, no table. Rows are absolutely positioned and every move (slot, height, tier type
+   size, story opening, score, band colour) is a transition on a property main.ts sets. The two
+   counting numbers are registered custom properties read by CSS counters. */
+@property --score { syntax: "<integer>"; initial-value: 0; inherits: true; }
+@property --total { syntax: "<integer>"; initial-value: 0; inherits: true; }
+
 .cut--leads { min-height: 80svh; }
 .leads-widget {
   margin-top: 8px; display: grid; gap: 26px; max-width: 1240px; width: 100%;
@@ -497,11 +560,13 @@ figure.plate img { width: 100%; height: auto; }
 .leads-widget > .cut__tag { grid-area: tag; }
 @media (min-width: 900px) {
   .leads-widget {
-    grid-template-columns: minmax(0, 1.45fr) minmax(300px, 1fr);
+    grid-template-columns: minmax(0, 1.45fr) minmax(320px, 1fr);
     grid-template-areas: "well receipt" "legend legend" "tag tag";
     align-items: start;
   }
 }
+/* the real number behind a counted one, for anything that reads text rather than pixels */
+.leads-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 /* the well: same construction as .demo-chart-wrap, taller, and it holds its own controls */
 .leads-well {
@@ -526,65 +591,137 @@ figure.plate img { width: 100%; height: auto; }
 .leads-well__counts [data-band="warm"] { color: rgba(240, 178, 63, 0.7); }
 .leads-well__counts [data-band="cold"] { color: #8a8478; }
 
-/* the list. Each row is absolutely positioned at its rank; the list reserves the height. */
-.leads-list {
-  --lead-row: 50px;
-  list-style: none; margin: 0; padding: 0; position: relative;
-  height: calc(var(--n) * var(--lead-row));
+/* the ladder: three tiers and a fold. Every slot is a custom property so one edit retunes it.
+   --r is the zero-based rank main.ts sets; the y formulas below read it. */
+.leads-ladder {
+  --lead-1: 88px; --lead-2: 64px; --lead-3: 46px; --lead-gap: 6px; --fold-h: 40px;
+  --y1: calc(var(--lead-1) + var(--lead-gap));
+  --y2: calc(var(--y1) + var(--lead-2) + var(--lead-gap));
+  --y3: calc(var(--y2) + var(--lead-2) + var(--lead-gap));
+  --step: calc(var(--lead-3) + var(--lead-gap));
+  --fold-y: calc(var(--y3) + 4 * var(--step));
+  --open-y: calc(var(--fold-y) + var(--fold-h) + var(--lead-gap) + 7 * var(--step));
+  position: relative; overflow: clip; overflow-clip-margin: 4px;
+  height: calc(var(--fold-y) + var(--fold-h));
+  transition: height 520ms var(--ease);
 }
+.leads-ladder[data-open="true"] { height: calc(var(--open-y) + var(--fold-h)); }
+.leads-list { list-style: none; margin: 0; padding: 0; position: absolute; inset: 0; }
+
+/* a row: its slot, height and tier come from data-rank. Tier 3 is the default. */
 .lead {
-  position: absolute; inset-inline: 0; top: 0; height: calc(var(--lead-row) - 6px);
-  transform: translateY(calc(var(--i) * var(--lead-row)));
-  transition: transform 420ms var(--ease);
+  position: absolute; inset-inline: 0; top: 0;
+  --y: calc(var(--y3) + (var(--r) - 3) * var(--step));
+  --h: var(--lead-3);
+  --name-fs: 14.5px; --score-fs: 17px; --rank-fs: 11px; --rank-col: 28px;
+  --story-row: 0fr; --story-o: 0;
+  height: var(--h); transform: translateY(var(--y)); opacity: 1;
+  transition-property: transform, height, opacity, visibility;
+  transition-duration: 520ms, 520ms, 520ms, 0s;
+  transition-timing-function: var(--ease);
+  transition-delay: 0s;
   will-change: transform;
 }
+.lead[data-rank="0"] { --y: 0px; --h: var(--lead-1); --name-fs: 21px; --score-fs: 44px; --rank-fs: 13px; --rank-col: 36px; --story-row: 1fr; --story-o: 1; }
+.lead[data-rank="1"], .lead[data-rank="2"] { --h: var(--lead-2); --name-fs: 17px; --score-fs: 28px; --rank-col: 32px; --story-row: 1fr; --story-o: 1; }
+.lead[data-rank="1"] { --y: var(--y1); }
+.lead[data-rank="2"] { --y: var(--y2); }
+/* under the fold: same step, offset by the fold row */
+.lead[data-rank="7"], .lead[data-rank="8"], .lead[data-rank="9"], .lead[data-rank="10"], .lead[data-rank="11"], .lead[data-rank="12"], .lead[data-rank="13"] {
+  --y: calc(var(--y3) + (var(--r) - 3) * var(--step) + var(--fold-h) + var(--lead-gap));
+}
+/* closed: the seven under the fold are hidden, after their slide out if they were just visible;
+   a row sliding in becomes visible at the start of its move */
+.leads-ladder[data-open="false"] .lead[data-rank="7"], .leads-ladder[data-open="false"] .lead[data-rank="8"], .leads-ladder[data-open="false"] .lead[data-rank="9"], .leads-ladder[data-open="false"] .lead[data-rank="10"], .leads-ladder[data-open="false"] .lead[data-rank="11"], .leads-ladder[data-open="false"] .lead[data-rank="12"], .leads-ladder[data-open="false"] .lead[data-rank="13"] {
+  visibility: hidden; transition-delay: 0s, 0s, 0s, 520ms;
+}
+
+/* the entrance: rows deal in from below, staggered by rank, once, when the well arrives.
+   Gated on html.js so a reader with JavaScript off sees the ladder as rendered. */
+html.js .leads-well[data-in="0"] .lead { transform: translateY(calc(var(--y) + 28px)); opacity: 0; }
+html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms), 0s, calc(var(--r) * 45ms), 0s; }
+
+/* the button fills the row. Band colour is a rule on the left, a wash, and the score's ink. */
 .lead__btn {
-  appearance: none; width: 100%; height: 100%; margin: 0; padding: 0 12px 0 10px;
-  display: grid; grid-template-columns: 26px minmax(0, 1fr) minmax(60px, 0.9fr) 34px 44px;
-  align-items: center; gap: 10px; text-align: left;
+  appearance: none; width: 100%; height: 100%; margin: 0; padding: 0 14px 0 12px;
+  display: grid; grid-template-columns: var(--rank-col) minmax(0, 1fr) auto 60px;
+  align-items: center; gap: 12px; text-align: left;
   font: inherit; color: inherit; cursor: pointer;
   border: 0; border-radius: var(--r-xs);
-  background: rgba(246, 243, 236, 0.035);
-  box-shadow: inset 0 0 0 1px rgba(246, 243, 236, 0.05);
-  transition: background var(--micro) var(--ease), box-shadow var(--micro) var(--ease);
+  background: linear-gradient(90deg, var(--band-wash), transparent 60%), rgba(246, 243, 236, 0.035);
+  box-shadow: inset 3px 0 0 var(--band-rule), inset 0 0 0 1px rgba(246, 243, 236, 0.05);
+  transition: background 360ms var(--ease), box-shadow 360ms var(--ease);
 }
-.lead__btn:hover { background: rgba(246, 243, 236, 0.06); }
+.lead__btn:hover { background: linear-gradient(90deg, var(--band-wash), transparent 60%), rgba(246, 243, 236, 0.065); }
 .lead__btn:focus-visible { outline: 2px solid var(--key); outline-offset: 2px; }
 /* the picked row: an amber rim, lifted a step, the same accent the receipt is reading from */
 .lead__btn[aria-pressed="true"] {
-  background: rgba(240, 178, 63, 0.09);
-  box-shadow: inset 0 0 0 1px rgba(240, 178, 63, 0.55), 0 6px 16px -8px rgba(0, 0, 0, 0.6);
+  background: linear-gradient(90deg, var(--band-wash), transparent 60%), rgba(240, 178, 63, 0.09);
+  box-shadow: inset 3px 0 0 var(--band-rule), inset 0 0 0 1px rgba(240, 178, 63, 0.55), 0 6px 16px -8px rgba(0, 0, 0, 0.6);
+  transition-duration: var(--micro);
 }
-.lead__rank { font-family: var(--sans); font-weight: 500; font-size: 11px; letter-spacing: 0.08em; font-variant-numeric: tabular-nums; color: #8a8478; }
-.lead__name { font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: 14px; letter-spacing: -0.004em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--coconut); }
-.lead__meter { position: relative; height: 6px; border-radius: var(--r-pill); background: linear-gradient(180deg, #0e0c0b, #1b1815); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.65), 0 1px 0 rgba(246, 243, 236, 0.06); overflow: hidden; }
-.lead__fill { position: absolute; inset: 0 auto 0 0; width: calc(var(--s) * 1%); border-radius: inherit; transition: width 420ms var(--ease), background var(--micro) var(--ease), box-shadow var(--micro) var(--ease); }
-.lead__score { font-family: var(--sans); font-weight: 600; font-size: 15px; font-variant-numeric: tabular-nums; text-align: right; }
-.lead__band { font-family: var(--sans); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; text-align: right; }
-
-/* 2026-09-27: at phone width the fixed rank/meter/score/band columns left the name column too
-   narrow to hold a sector name ("Serviced apartments" truncated to "Service..."), a real bug
-   found testing on a real viewport. The meter bar repeats the score as a shape, not new
-   information, so it is the one to drop; the name gets its width back. */
-@media (max-width: 520px) {
-  .lead__btn { grid-template-columns: 20px minmax(0, 1fr) 30px 44px; padding: 0 10px 0 8px; }
-  .lead__meter { display: none; }
-  .lead__name { font-size: 13.5px; }
+.lead__rank { font-family: var(--sans); font-weight: 500; font-size: var(--rank-fs); letter-spacing: 0.08em; font-variant-numeric: tabular-nums; color: #8a8478; transition: font-size 520ms var(--ease); }
+.lead__body { display: grid; grid-template-rows: auto var(--story-row); min-width: 0; transition: grid-template-rows 520ms var(--ease); }
+.lead__name { font-family: var(--sans); font-variation-settings: "wdth" 108; font-weight: 600; font-size: var(--name-fs); line-height: 1.15; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--coconut); transition: font-size 520ms var(--ease); }
+.lead__story { overflow: hidden; min-height: 0; opacity: var(--story-o); font-family: var(--text); font-size: 15px; line-height: 1.35; color: #b8b1a7; padding-top: 3px; transition: opacity 320ms var(--ease); }
+/* the score: a counter on --score, so it counts. The .leads-sr child holds the real number. */
+.lead__score {
+  position: relative; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600;
+  font-size: var(--score-fs); line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; text-align: right;
+  color: var(--band-ink); counter-reset: sc var(--score);
+  transition: font-size 520ms var(--ease), color 360ms var(--ease), text-shadow 360ms var(--ease), --score 380ms var(--ease-quart);
 }
+.lead__score::after { content: counter(sc); }
+.lead__band { font-family: var(--sans); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; text-align: right; color: var(--band-ink); justify-self: end; transition: color 360ms var(--ease), box-shadow 360ms var(--ease); }
+.lead[data-rank="0"] .lead__band { padding: 6px 11px; border-radius: var(--r-pill); box-shadow: inset 0 0 0 1px currentColor; }
 
 /* the three bands: one hue, three values. Hot is the only thing in the well that glows. */
-.lead[data-band="hot"] .lead__fill { background: linear-gradient(90deg, var(--key-deep), var(--key-lit)); box-shadow: 0 0 8px rgba(240, 178, 63, 0.35); }
-.lead[data-band="hot"] .lead__score, .lead[data-band="hot"] .lead__band { color: var(--key); }
-.lead[data-band="warm"] .lead__fill { background: var(--key-deep); opacity: 0.6; }
-.lead[data-band="warm"] .lead__score, .lead[data-band="warm"] .lead__band { color: rgba(240, 178, 63, 0.7); }
-.lead[data-band="cold"] .lead__fill { background: rgba(246, 243, 236, 0.22); }
-.lead[data-band="cold"] .lead__score { color: #b8b1a7; }
-.lead[data-band="cold"] .lead__band { color: #8a8478; }
+.lead[data-band="hot"]  { --band-rule: var(--key); --band-wash: rgba(240, 178, 63, 0.09); --band-ink: var(--key); }
+.lead[data-band="warm"] { --band-rule: rgba(217, 154, 44, 0.55); --band-wash: rgba(240, 178, 63, 0.03); --band-ink: rgba(240, 178, 63, 0.72); }
+.lead[data-band="cold"] { --band-rule: rgba(246, 243, 236, 0.14); --band-wash: transparent; --band-ink: #8a8478; }
+.lead[data-band="hot"] .lead__score { text-shadow: 0 0 18px rgba(240, 178, 63, 0.38); }
+.lead[data-band="cold"] .lead__name { color: #d6d0c6; }
+
+/* the fold: a dashed row of the ladder. Two labels in the markup; data-open shows one. */
+.leads-fold {
+  position: absolute; inset-inline: 0; top: var(--fold-y); height: var(--fold-h);
+  appearance: none; margin: 0; padding: 0; cursor: pointer;
+  border: 1px dashed rgba(246, 243, 236, 0.2); border-radius: var(--r-xs); background: transparent;
+  font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: 13px; letter-spacing: 0.01em; color: #b8b1a7;
+  transition: top 520ms var(--ease), background var(--micro) var(--ease), color var(--micro) var(--ease);
+}
+.leads-fold:hover { background: rgba(246, 243, 236, 0.05); color: var(--coconut); }
+.leads-fold:focus-visible { outline: 2px solid var(--key); outline-offset: 2px; }
+.leads-ladder[data-open="true"] .leads-fold { top: var(--open-y); }
+.leads-fold__less { display: none; }
+.leads-ladder[data-open="true"] .leads-fold__more { display: none; }
+.leads-ladder[data-open="true"] .leads-fold__less { display: inline; }
+
+/* phones: taller top tiers so a two-line story fits, narrower fixed columns */
+@media (max-width: 519px) {
+  .leads-ladder { --lead-1: 96px; --lead-2: 70px; }
+  .lead__btn { grid-template-columns: var(--rank-col) minmax(0, 1fr) auto 50px; gap: 10px; padding: 0 10px 0 9px; }
+  .lead { --rank-col: 22px; }
+  .lead[data-rank="0"] { --score-fs: 36px; --name-fs: 19px; --rank-col: 26px; }
+  .lead[data-rank="1"], .lead[data-rank="2"] { --score-fs: 24px; --rank-col: 24px; }
+  .lead__story { font-size: 13.5px; }
+  .lead[data-rank="0"] .lead__band { padding: 4px 8px; }
+  /* the top three tiers have room to spare (checked: ~30px of slack in --lead-1/2 once the
+     story's own two lines are accounted for), so a long sector name ("Serviced apartments")
+     wraps to a second line there instead of truncating to "Serviced a..." — a real bug, found
+     testing on a real viewport, the same class the v1 list already fixed once (page.css history).
+     The compact tiers (rank 3+) keep the ellipsis: no story line there to make room against. */
+  .lead[data-rank="0"] .lead__name, .lead[data-rank="1"] .lead__name, .lead[data-rank="2"] .lead__name {
+    white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.15;
+  }
+}
 
 /* the controls, inside the well: same groove and disc as #demo-slider */
 .leads-controls { display: grid; gap: 12px; padding-top: 6px; border-top: 1px solid rgba(246, 243, 236, 0.08); }
 .leads-slider-label { font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: 14px; letter-spacing: -0.004em; color: #b8b1a7; }
-.leads-slider-label .leads-state-label { font-variation-settings: "wdth" 112; font-weight: 600; font-size: 17px; color: var(--key); }
+.leads-slider-label .leads-state-label { display: inline-block; font-variation-settings: "wdth" 112; font-weight: 600; font-size: 17px; color: var(--key); }
+.leads-state-label[data-flip="1"] { animation: label-flip 320ms var(--ease) both; }
+@keyframes label-flip { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 #leads-slider {
   -webkit-appearance: none; appearance: none; width: 100%; height: 6px; margin: 6px 0;
   border-radius: var(--r-pill); background: linear-gradient(180deg, #0e0c0b, #1b1815);
@@ -604,37 +741,91 @@ figure.plate img { width: 100%; height: auto; }
 
 /* the weight readout: five short bars. The number is the truth; the bar is the glance. */
 .leads-weights { margin: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-.leads-weight { display: grid; grid-template-columns: 1fr auto; gap: 2px 6px; align-items: baseline; font-family: var(--sans); font-size: 11px; letter-spacing: 0.02em; color: #8a8478; }
+.leads-weight { display: grid; grid-template-columns: 1fr auto; gap: 3px 6px; align-items: baseline; font-family: var(--sans); font-size: 12px; letter-spacing: 0.01em; color: #8a8478; }
 .leads-weight__name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.leads-weight__num { font-weight: 600; font-variant-numeric: tabular-nums; color: #b8b1a7; }
-.leads-weight__bar { grid-column: 1 / -1; display: block; height: 3px; border-radius: var(--r-pill); background: rgba(246, 243, 236, 0.08); position: relative; overflow: hidden; }
-.leads-weight__bar::after { content: ""; position: absolute; inset: 0 auto 0 0; width: calc(var(--w) * 2%); background: var(--key-deep); border-radius: inherit; transition: width 200ms var(--ease); }
+.leads-weight__num { font-weight: 600; font-size: 13px; font-variant-numeric: tabular-nums; color: #b8b1a7; }
+.leads-weight__bar { grid-column: 1 / -1; display: block; height: 5px; border-radius: var(--r-pill); background: rgba(246, 243, 236, 0.08); position: relative; overflow: hidden; }
+.leads-weight__bar::after { content: ""; position: absolute; inset: 0 auto 0 0; width: calc(var(--w) * 2%); background: var(--key-deep); border-radius: inherit; transition: width 240ms var(--ease); }
 @media (max-width: 519px) { .leads-weights { grid-template-columns: repeat(3, 1fr); } }
 
-/* the receipt: printed matter on a card, beside the instrument */
-.leads-receipt {
+/* the receipt: printed matter on a card. A bar of 100 points partitioned into the five
+   products, a counting total, five cards, and the sum in prose. Band ink is the paper-value
+   amber (--key-paper, the jade, page.css:55) for hot, and plain ink otherwise; the five
+   segments are the five steps of the amber, in signal order, keyed to the five cards. */
+.rcpt {
   grid-area: receipt;
-  background: var(--card); border-radius: var(--r-md); padding: 22px 24px 20px;
+  background: var(--card); border-radius: var(--r-md); padding: 26px 28px 24px;
   box-shadow: var(--lift-1);
-  display: grid; gap: 10px; align-content: start;
-  color: var(--ink);
+  display: grid; gap: 18px; align-content: start;
+  color: var(--ink); --band-ink: var(--ink-2);
 }
-.leads-receipt__title { margin: 0; font-family: var(--sans); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-3); }
-.leads-receipt__name { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: 22px; letter-spacing: -0.02em; min-height: 1lh; }
-.leads-receipt__empty { margin: 0; font-family: var(--text); font-size: 16px; line-height: 1.5; color: var(--ink-2); max-width: 32ch; }
-.leads-receipt__table { width: 100%; border-collapse: collapse; font-family: var(--sans); font-variation-settings: "wdth" 104; font-size: 13px; font-variant-numeric: tabular-nums; }
-.leads-receipt__table th, .leads-receipt__table td { padding: 7px 0; text-align: right; border-bottom: 1px solid var(--rule-soft); font-weight: 500; }
-.leads-receipt__table th:first-child, .leads-receipt__table td:first-child { text-align: left; }
-.leads-receipt__table thead th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-3); font-weight: 500; }
-.leads-receipt__table tbody th { color: var(--ink); }
-.leads-receipt__table tbody td { color: var(--ink-2); }
-.leads-receipt__table tbody td.p { color: var(--ink); font-weight: 600; }
-/* the total: a printed rule above it, the same 2px currentColor rule .cut__tag uses */
-.leads-receipt__table tfoot th, .leads-receipt__table tfoot td { border-bottom: 0; border-top: 2px solid currentColor; padding-top: 10px; font-size: 15px; font-weight: 600; color: var(--ink); }
-.leads-receipt[data-band="hot"] .leads-receipt__table tfoot td { color: var(--key-paper); }
-/* the picked lead's band, printed in ink: --key-paper is the jade the page already uses for
-   amber-at-paper-value (page.css:55), 7.37:1 on coconut. Not amber on white: 1.9:1, unreadable. */
-.leads-receipt__band { font-family: var(--sans); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--key-paper); }
+.rcpt[data-band="hot"] { --band-ink: var(--key-paper); }
+.rcpt[data-band="cold"] { --band-ink: var(--ink-3); }
+.rcpt [data-key="recency"] { --step: var(--key-step-1); }
+.rcpt [data-key="replies"] { --step: var(--key-step-2); }
+.rcpt [data-key="size"]    { --step: var(--key-step-3); }
+.rcpt [data-key="origin"]  { --step: var(--key-step-4); }
+.rcpt [data-key="budget"]  { --step: var(--key-step-5); }
+
+.rcpt__head { display: grid; gap: 5px; }
+.rcpt__title { margin: 0; font-family: var(--sans); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-3); }
+.rcpt__name { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: 26px; line-height: 1.05; letter-spacing: -0.02em; }
+.rcpt__story { margin: 0; font-family: var(--text); font-size: 17px; line-height: 1.4; color: var(--ink-2); }
+
+/* the bar: a groove of 100 points; each segment is one product, points wide */
+.rcpt__bar {
+  display: flex; gap: 2px; height: 28px; padding: 3px;
+  border-radius: var(--r-pill); background: var(--wash);
+  box-shadow: inset 0 1px 2px rgba(22, 21, 15, 0.12), inset 0 0 0 1px rgba(22, 21, 15, 0.05);
+  overflow: hidden;
+}
+.rcpt__seg {
+  display: block; flex: 0 0 calc(var(--pts) * 1%); min-width: 0; height: 100%;
+  border-radius: var(--r-pill); background: var(--step); transform-origin: left center;
+  transition: flex-basis 520ms var(--ease);
+}
+.rcpt.is-built .rcpt__seg { animation: seg-in 620ms var(--ease) both; animation-delay: calc(var(--k) * 90ms); }
+@keyframes seg-in { from { transform: scaleX(0); } to { transform: none; } }
+
+/* the total: a counter on --total, so it counts. The .leads-sr child holds the real number. */
+.rcpt__total { margin: 0; display: grid; grid-template-columns: auto auto; grid-template-rows: auto auto; align-items: baseline; column-gap: 12px; row-gap: 2px; justify-content: start; }
+.rcpt__num {
+  position: relative; grid-row: 1 / 3;
+  font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600;
+  font-size: 56px; line-height: 0.95; letter-spacing: -0.03em; font-variant-numeric: tabular-nums;
+  color: var(--band-ink); counter-reset: tot var(--total);
+  transition: color 360ms var(--ease), --total 620ms var(--ease-quart);
+}
+.rcpt__num::after { content: counter(tot); }
+.rcpt__of { font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: 13px; letter-spacing: 0.02em; color: var(--ink-3); align-self: end; }
+.rcpt__band { grid-column: 2; font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: 15px; color: var(--band-ink); transition: color 360ms var(--ease); }
+
+/* the five: one card per signal, ruled on the left in its segment's colour */
+.rcpt__five { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.rcpt__sig { display: grid; gap: 4px; align-content: start; min-width: 0; padding: 2px 0 0 10px; border-left: 3px solid var(--step); }
+.rcpt.is-built .rcpt__sig { animation: sig-in 520ms var(--ease) both; animation-delay: calc(140ms + var(--k) * 70ms); }
+@keyframes sig-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.rcpt__sig-name { font-family: var(--sans); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rcpt__sig-val { font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: 15px; line-height: 1.25; color: var(--ink); }
+.rcpt__sig-eq { font-family: var(--sans); font-size: 13px; font-variant-numeric: tabular-nums; color: var(--ink-2); }
+.rcpt__sig-eq b { font-weight: 500; }
+.rcpt__x { color: var(--ink-3); }
+.rcpt__sig-pts { font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: 24px; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: var(--ink); padding-top: 2px; }
+.rcpt__sig-pts b { font-weight: inherit; }
+.rcpt__sum { margin: 0; padding-top: 12px; border-top: 2px solid currentColor; font-family: var(--text); font-size: 16px; line-height: 1.5; color: var(--ink-2); }
+.rcpt__sum b { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+/* narrow: the five stack as rows, the product on the right */
+@media (max-width: 559px) {
+  .rcpt { padding: 22px 20px 20px; }
+  .rcpt__five { grid-template-columns: 1fr; gap: 0; }
+  .rcpt__sig { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "name pts" "val pts" "eq pts"; align-items: center; column-gap: 14px; padding: 9px 0 9px 10px; border-bottom: 1px solid var(--rule-soft); }
+  .rcpt__sig:last-child { border-bottom: 0; }
+  .rcpt__sig-name { grid-area: name; }
+  .rcpt__sig-val { grid-area: val; }
+  .rcpt__sig-eq { grid-area: eq; }
+  .rcpt__sig-pts { grid-area: pts; text-align: right; padding-top: 0; }
+  .rcpt__num { font-size: 48px; }
+}
 
 /* the legend: three bands, three short instructions, in ink on the paper */
 .leads-legend { grid-area: legend; margin: 0; display: flex; flex-wrap: wrap; gap: 8px 26px; font-family: var(--sans); font-variation-settings: "wdth" 104; font-size: 13px; color: var(--ink-2); }
@@ -646,7 +837,10 @@ figure.plate img { width: 100%; height: auto; }
 .leads-legend b { font-weight: 600; color: var(--ink); }
 
 @media (prefers-reduced-motion: reduce) {
-  .lead, .lead__fill, .leads-weight__bar::after { transition: none; }
+  .leads-ladder, .lead, .lead__btn, .lead__body, .lead__name, .lead__rank, .lead__story, .lead__score, .lead__band,
+  .leads-fold, .leads-weight__bar::after, .leads-state-label,
+  .rcpt__seg, .rcpt__num, .rcpt__band, .rcpt__sig { transition: none; animation: none; }
+  html.js .leads-well[data-in="0"] .lead { opacity: 1; transform: translateY(var(--y)); }
 }
 
 /* ---------------------------------------------------------------- the offer, rainbow index
@@ -669,11 +863,15 @@ figure.plate img { width: 100%; height: auto; }
 
 .offer-split { display: grid; gap: 20px; }
 .offer-half { display: grid; gap: 14px; align-content: start; min-width: 0; }
-.offer-half__head { display: grid; grid-template-columns: auto 1fr; column-gap: 10px; align-items: baseline; }
-.offer-half__disc { width: 14px; height: 14px; border-radius: 50%; background: var(--acc, var(--jade)); align-self: center; }
+.offer-half__head { display: grid; grid-template-columns: auto 1fr; column-gap: 12px; align-items: baseline; }
+/* the group mark: the specimen's own node-and-line grammar at 40x24, in the group's accent */
+.offer-mark { grid-row: 1; align-self: center; color: var(--acc, var(--jade)); overflow: visible; }
+.offer-mark__line { fill: none; stroke: currentColor; stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; opacity: 0.75; }
+.offer-mark__leaf { fill: var(--paper); stroke: currentColor; stroke-width: 1.1; }
+.offer-mark__hub { fill: currentColor; }
+.g-graphite .offer-mark__leaf { fill: var(--graphite); }
 .offer-half__name { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: var(--fs-h3); letter-spacing: -0.02em; display: flex; align-items: center; gap: 10px; }
-.offer-half__line { grid-column: 2; margin: 0; font-family: var(--text); font-size: 15px; line-height: 1.45; color: var(--ink-2); max-width: 40ch; }
-.g-graphite .offer-half__line { color: var(--on-chamber-2); }
+.offer-half__line { grid-column: 2; margin: 0; font-family: var(--text); font-size: var(--fs-text); line-height: 1.45; color: var(--ink-2); max-width: 40ch; }
 .offer-half__blocks { display: grid; gap: 12px; }
 
 /* the block. One fill per group; the text is graphite on every light fill and coconut on the
@@ -689,19 +887,20 @@ figure.plate img { width: 100%; height: auto; }
   background: var(--acc, var(--paper-2)); color: var(--on-acc);
   border-radius: var(--r-md); padding: 22px 24px 18px;
   box-shadow: var(--lift-1);
-  transition: box-shadow var(--micro) var(--ease);
+  transition: box-shadow var(--micro) var(--ease), transform var(--micro) var(--ease);
 }
 .offer-block[data-group="advise"] { --on-acc: var(--coconut); }
-/* hover lifts by shadow only: transform is owned by the scroll timeline's fill state */
-.offer-block:hover { box-shadow: var(--lift-2); }
-.offer-block__name { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: clamp(22px, 2.1vw, 30px); line-height: 1.02; letter-spacing: -0.024em; text-wrap: balance; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-.offer-block__line { margin: 0; font-family: var(--text); font-size: var(--fs-small); line-height: 1.45; max-width: 34ch; }
+/* the hover lifts: a shadow step and 3px. Possible because the arrival's fill mode is
+   `backwards` (below): past its scroll range the animation lets go and transform is free. */
+.offer-block:hover { box-shadow: var(--lift-2); transform: translateY(-3px); }
+.offer-block__name { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: var(--fs-h3); line-height: 1.02; letter-spacing: -0.024em; text-wrap: balance; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.offer-block__line { margin: 0; font-family: var(--text); font-size: var(--fs-text); line-height: 1.45; max-width: 34ch; }
 .offer-tag { font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: var(--fs-label); letter-spacing: 0.16em; text-transform: uppercase; padding: 4px 10px; border-radius: var(--r-pill); border: 1px solid currentColor; line-height: 1; }
 /* the blurb behind "Read": same <details> as before, recoloured for the fill it sits on */
 .offer-block .pair__more { margin-top: auto; padding-top: 6px; }
 .offer-block .pair__more summary { color: var(--on-acc); }
 .offer-block .pair__more summary:focus-visible { outline-color: var(--on-acc); }
-.offer-block .pair__blurb { color: var(--on-acc); font-size: 15px; max-width: 46ch; padding-bottom: 6px; opacity: 0.92; }
+.offer-block .pair__blurb { color: var(--on-acc); font-size: var(--fs-text); max-width: 46ch; padding-bottom: 6px; opacity: 0.92; }
 
 /* the two split shapes and the two half layouts (render.mjs picks: 4+ blocks -> grid) */
 @media (min-width: 560px) {
@@ -715,7 +914,6 @@ figure.plate img { width: 100%; height: auto; }
   .offer-half--stack .offer-half__blocks { grid-auto-rows: 1fr; }
   .offer-half--grid .offer-half__blocks { grid-auto-rows: 1fr; }
   .offer-block { padding: 26px 28px 20px; }
-  .offer-block__line { font-size: var(--fs-text); }
 }
 @media (min-width: 1000px) {
   .offer-panel__in { gap: 40px; }
@@ -730,10 +928,10 @@ figure.plate img { width: 100%; height: auto; }
 .team__people { display: grid; gap: 20px; }
 @media (min-width: 800px) { .team__people { grid-template-columns: repeat(3, 1fr); } }
 .team-card { background: var(--paper-2); border-radius: var(--r-md); padding: 28px 26px; display: grid; gap: 16px; align-content: start; }
-.team-card__name { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: 22px; letter-spacing: -0.02em; }
-.team-card__bio { margin: 0; font-family: var(--text); font-size: 16px; line-height: 1.55; color: var(--ink-2); }
+.team-card__name { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: var(--fs-h3); letter-spacing: -0.02em; }
+.team-card__bio { margin: 0; font-family: var(--text); font-size: var(--fs-text); line-height: 1.55; color: var(--ink-2); }
 .team-card__skills { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-.team-card__skills li { font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: 12px; letter-spacing: 0.01em; color: var(--jade); background: rgba(12, 90, 72, 0.08); border-radius: var(--r-pill); padding: 5px 12px; }
+.team-card__skills li { font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: var(--fs-name); letter-spacing: 0.01em; color: var(--jade); background: rgba(12, 90, 72, 0.08); border-radius: var(--r-pill); padding: 6px 13px; }
 
 /* ---------------------------------------------------------------- the paste-up
    The fourteen fast cuts, the seven weeks and the seven offering pairs, stop scrolling past one
@@ -832,10 +1030,8 @@ figure.plate img { width: 100%; height: auto; }
      real bug), and CSF asked for index's title to sit at the top instead of a sticky sidebar. */
   .index__head, .team__head { position: static; top: auto; }
 }
-/* a heading in a 320px column has to be set smaller than one that owns the page width, or it
-   breaks into six lines and reads as a mistake */
-.act-head .h2 { font-size: clamp(28px, 5.8vw, 34px); }
-@media (min-width: 1000px) { .act-head .h2 { font-size: clamp(30px, 2.7vw, 41px); } }
+/* 2026-09-28: .act-head .h2's own smaller size (for a 320px sidebar column) deleted: no act
+   head sits in that column any more, and .h2 already reads --fs-h2. */
 
 /* the intro anatomy: the heading owns the wide column, the label and note sit at its foot */
 .act-intro { display: grid; gap: 26px; }
@@ -985,7 +1181,7 @@ figure.plate img { width: 100%; height: auto; }
   }
 }
 .close-wrap { max-width: 1320px; margin-inline: auto; padding-inline: var(--margin); }
-.close .h2 { font-size: clamp(32px, 6.4vw, 62px); max-width: 18ch; }
+.close .h2 { font-size: var(--fs-h2); max-width: 18ch; }
 .close-sub { margin: 24px 0 0; color: var(--on-chamber-2); font-size: var(--fs-lede); line-height: 1.44; max-width: 44ch; }
 .brief { margin: 46px 0 0; max-width: 740px; }
 
@@ -1022,8 +1218,8 @@ figure.plate img { width: 100%; height: auto; }
 .brief-line:focus-within { box-shadow: inset 0 0 0 2px var(--key); }
 /* 2026-09-27: a divider between label and field, so the row reads as two parts, not one loose
    line — CSF's ask, after the boxed version alone still read as slop to him. */
-.brief-line-name { padding-right: 10px; border-right: 1px solid rgba(246, 243, 236, 0.14); font-family: var(--sans); font-variation-settings: "wdth" 100; font-weight: 500; font-size: 14px; letter-spacing: -0.004em; color: var(--on-chamber-2); }
-.brief-line input { width: 100%; min-width: 0; font: 400 17px/1.5 var(--text); color: var(--on-chamber); background: none; border: 0; padding: 0; caret-color: var(--key); }
+.brief-line-name { padding-right: 10px; border-right: 1px solid rgba(246, 243, 236, 0.14); font-family: var(--sans); font-variation-settings: "wdth" 100; font-weight: 500; font-size: var(--fs-name); letter-spacing: -0.004em; color: var(--on-chamber-2); }
+.brief-line input { width: 100%; min-width: 0; font: 400 var(--fs-text)/1.5 var(--text); color: var(--on-chamber); background: none; border: 0; padding: 0; caret-color: var(--key); }
 .brief-line input:focus { outline: none; }
 
 /* the one thing on the page that is a field. It is recessed where the plate is raised, so the
@@ -1035,15 +1231,15 @@ figure.plate img { width: 100%; height: auto; }
   transition: box-shadow var(--micro) var(--ease);
 }
 .brief-well:focus-within { box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.42), inset 0 0 0 2px var(--key); }
-.brief-well-name { display: block; font-family: var(--sans); font-variation-settings: "wdth" 100; font-weight: 500; font-size: 14px; letter-spacing: -0.004em; color: var(--on-chamber-2); }
+.brief-well-name { display: block; font-family: var(--sans); font-variation-settings: "wdth" 100; font-weight: 500; font-size: var(--fs-name); letter-spacing: -0.004em; color: var(--on-chamber-2); }
 .brief-well input { width: 100%; margin-top: 7px; font: 400 clamp(19px, 2.2vw, 22px)/1.4 var(--text); color: var(--on-chamber); background: none; border: 0; padding: 0; caret-color: var(--key); }
 .brief-well input:focus { outline: none; }
 
 /* one ask. The mail link is a line of text under it, not a second pill. */
 .brief-foot { margin-top: clamp(24px, 4.4vw, 32px); display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; }
-.brief-alt { font-family: var(--sans); font-variation-settings: "wdth" 100; font-size: 14px; letter-spacing: -0.004em; color: var(--on-chamber-2); text-decoration: none; border-bottom: 1px solid var(--brief-rule); padding-bottom: 2px; transition: color var(--micro) var(--ease), border-color var(--micro) var(--ease); }
+.brief-alt { font-family: var(--sans); font-variation-settings: "wdth" 100; font-size: var(--fs-name); letter-spacing: -0.004em; color: var(--on-chamber-2); text-decoration: none; border-bottom: 1px solid var(--brief-rule); padding-bottom: 2px; transition: color var(--micro) var(--ease), border-color var(--micro) var(--ease); }
 .brief-alt:hover { color: var(--on-chamber); border-bottom-color: var(--key); }
-.brief-note { margin: 20px 0 0; color: var(--on-chamber-3); font-size: 14px; line-height: 1.6; max-width: 50ch; }
+.brief-note { margin: 20px 0 0; color: var(--on-chamber-3); font-size: var(--fs-small); line-height: 1.6; max-width: 50ch; }
 
 @media (max-width: 460px) {
   .brief-line { grid-template-columns: 1fr; gap: 6px; padding: 12px 14px; }
@@ -1056,7 +1252,7 @@ figure.plate img { width: 100%; height: auto; }
 .colophon-wrap { max-width: 1320px; margin-inline: auto; padding-inline: var(--margin); display: grid; gap: 28px; }
 .colophon-line { margin: 14px 0 0; color: var(--on-chamber-2); font-size: var(--fs-small); max-width: 38ch; }
 .colophon-nav { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 22px; }
-.colophon-nav a { font-family: var(--sans); font-variation-settings: "wdth" 100; font-size: 14px; letter-spacing: -0.004em; color: var(--on-chamber-2); text-decoration: none; }
+.colophon-nav a { font-family: var(--sans); font-variation-settings: "wdth" 100; font-size: var(--fs-name); letter-spacing: -0.004em; color: var(--on-chamber-2); text-decoration: none; }
 .colophon-nav a:hover { color: var(--key); }
 .colophon p.mono { margin: 0; color: var(--on-chamber-3); max-width: 60ch; line-height: 1.7; }
 @media (min-width: 1000px) {
@@ -1084,24 +1280,39 @@ figure.plate img { width: 100%; height: auto; }
     @keyframes uncover { from { opacity: 1; } to { opacity: 0.82; } }
   }
 
-  /* the offer: each half head and each block arrives from its own side and then rests. The
-     timeline is the element's own, so lower blocks arrive later because they are lower, and
-     the next panel's top blocks start while the last of this one are still settling: one
-     continuous alternating stream over three screens, nothing pinned. */
-  .offer-slide { animation: offer-in linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
-  .offer-half--l .offer-slide { --from: -6vw; }
-  .offer-half--r .offer-slide { --from: 6vw; }
-  @keyframes offer-in { from { opacity: 0; transform: translateX(var(--from, 0)); } to { opacity: 1; transform: none; } }
+  /* the offer, the curtain. Each half head and each block arrives from its own side: the fill
+     wipes open from that side (the curtain), the block slides the last 5vw home on --ease so it
+     decelerates into place instead of stopping dead, and the name and line rise onto it a beat
+     later. The timeline is the element's own, so lower blocks arrive later because they are
+     lower; the second column of a 2x2 half takes a slightly later range so a row does not land in
+     lockstep. Fill is `backwards`, not `both`: past the range the animation lets go, the element's
+     own styles return (identical to the `to` frame), and transform is free for the hover lift. */
+  .offer-slide { animation: offer-in var(--ease) backwards; animation-timeline: view(); animation-range: entry 0% cover 36%; }
+  .offer-half--l .offer-slide { --from: -5vw; --clip: inset(0 100% 0 0 round var(--r-md)); }
+  .offer-half--r .offer-slide { --from: 5vw; --clip: inset(0 0 0 100% round var(--r-md)); }
+  .offer-half--grid .offer-block:nth-child(even) { animation-range: entry 6% cover 42%; }
+  @keyframes offer-in {
+    from { opacity: 0.35; transform: translateX(var(--from, 0)) translateY(10px); clip-path: var(--clip, inset(0 round var(--r-md))); }
+    to   { opacity: 1; transform: none; clip-path: inset(0 round var(--r-md)); }
+  }
+  .offer-block__name, .offer-block__line { animation: offer-text var(--ease) backwards; animation-timeline: view(); animation-range: entry 10% cover 40%; }
+  @keyframes offer-text { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  /* the group mark draws its lines and lights its hub as the head lands */
+  .offer-mark__line { stroke-dasharray: 1; animation: mark-draw var(--ease) backwards; animation-timeline: view(); animation-range: entry 10% cover 44%; }
+  .offer-mark__hub, .offer-mark__leaf { transform-box: fill-box; transform-origin: center; animation: mark-node var(--ease) backwards; animation-timeline: view(); animation-range: entry 20% cover 46%; }
+  @keyframes mark-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+  @keyframes mark-node { from { transform: scale(0); } to { transform: scale(1); } }
 }
 /* below 900px the halves stack into one column, so "left and right" becomes alternate blocks:
    odd from the left, even from the right. Same keyframes, same range. */
 @media (max-width: 899px) {
-  .offer-half--l .offer-slide, .offer-half--r .offer-slide { --from: -6vw; }
-  .offer-half .offer-block:nth-child(even) { --from: 6vw; }
+  .offer-half--l .offer-slide, .offer-half--r .offer-slide { --from: -5vw; --clip: inset(0 100% 0 0 round var(--r-md)); }
+  .offer-half .offer-block:nth-child(even) { --from: 5vw; --clip: inset(0 0 0 100% round var(--r-md)); }
 }
-/* the observer fallback (main.ts adds .reveal where view() is unsupported): slide, not rise */
-.offer-slide.reveal { transform: translateX(var(--from, 0)); }
-.offer-slide.reveal[data-in="1"] { transform: none; }
+/* the observer fallback (main.ts adds .reveal where view() is unsupported): the same wipe and
+   slide on a transition. The text and the mark simply appear with their block there. */
+.offer-slide.reveal { opacity: 0.35; transform: translateX(var(--from, 0)) translateY(10px); clip-path: var(--clip, none); transition: opacity var(--reveal) var(--ease), transform var(--reveal) var(--ease), clip-path var(--reveal) var(--ease); }
+.offer-slide.reveal[data-in="1"] { opacity: 1; transform: none; clip-path: inset(0 round var(--r-md)); }
 
 .reveal { opacity: 0; transform: translateY(16px); transition: opacity var(--reveal) var(--ease), transform var(--reveal) var(--ease); }
 .reveal[data-in="1"] { opacity: 1; transform: none; }
@@ -1111,7 +1322,8 @@ figure.plate img { width: 100%; height: auto; }
   *, *::before, *::after { animation-duration: 1ms !important; animation-delay: 0ms !important; transition-duration: 1ms !important; }
   .h1-inner { transform: none; }
   .hero-lede, .hero-foot { opacity: 1; }
-  .rise, .reveal, .offer-slide { opacity: 1; transform: none; animation: none; }
+  .rise, .reveal, .offer-slide, .offer-block__name, .offer-block__line, .offer-mark__line, .offer-mark__hub, .offer-mark__leaf { opacity: 1; transform: none; clip-path: none; animation: none; stroke-dashoffset: 0; }
+  .card { animation: none; }
 }
 </style>
 </head>
@@ -1128,7 +1340,7 @@ figure.plate img { width: 100%; height: auto; }
   <aside class="card" hidden aria-live="polite"></aside>
 </div>
 <header class="topbar">
-  <a class="wordmark" href="#hero"><span class="wordmark-dot" aria-hidden="true"></span>JAW AI</a>
+  <a class="wordmark" href="#hero"><img class="wordmark-mark" src="./assets/jaw-logo.png" alt="JAW AI" width="123" height="45"></a>
   <nav class="topnav" aria-label="Sections"><ul><li><a href="#offer">The offer</a></li><li><a href="#profile">Our profile</a></li><li><a href="#contact">Contact</a></li></ul></nav>
   <a class="btn btn-primary btn-top" href="#contact">Book a 20-minute scope call</a>
 </header>
@@ -1166,7 +1378,7 @@ figure.plate img { width: 100%; height: auto; }
       <div class="offer-split offer-split--3-4">
         <div class="offer-half offer-half--l offer-half--stack" data-group="advise" style="--acc:#0c5a48">
           <div class="offer-half__head offer-slide">
-            <span class="offer-half__disc" aria-hidden="true"></span>
+            <svg class="offer-mark" viewBox="0 0 48 28" width="40" height="24" aria-hidden="true"><path class="offer-mark__line" d="M12 14 L30 7 M12 14 L34 21" pathLength="1"/><circle class="offer-mark__leaf" cx="30" cy="7" r="2.2"/><circle class="offer-mark__leaf" cx="34" cy="21" r="2.2"/><circle class="offer-mark__hub" cx="12" cy="14" r="4"/></svg>
             <h3 class="offer-half__name">Advise</h3>
             <p class="offer-half__line">Where AI and IT spend pays off, and what's worth keeping</p>
           </div>
@@ -1199,7 +1411,7 @@ figure.plate img { width: 100%; height: auto; }
         </div>
         <div class="offer-half offer-half--r offer-half--grid" data-group="build" style="--acc:#8fd8e8">
           <div class="offer-half__head offer-slide">
-            <span class="offer-half__disc" aria-hidden="true"></span>
+            <svg class="offer-mark" viewBox="0 0 48 28" width="40" height="24" aria-hidden="true"><path class="offer-mark__line" d="M24 14 L9 7 M24 14 L39 7 M24 14 L11 22 M24 14 L37 22" pathLength="1"/><circle class="offer-mark__leaf" cx="9" cy="7" r="2.2"/><circle class="offer-mark__leaf" cx="39" cy="7" r="2.2"/><circle class="offer-mark__leaf" cx="11" cy="22" r="2.2"/><circle class="offer-mark__leaf" cx="37" cy="22" r="2.2"/><circle class="offer-mark__hub" cx="24" cy="14" r="4"/></svg>
             <h3 class="offer-half__name">Build</h3>
             <p class="offer-half__line">Systems that run on a schedule inside your own accounts</p>
           </div>
@@ -1246,7 +1458,7 @@ figure.plate img { width: 100%; height: auto; }
       <div class="offer-split offer-split--1-1">
         <div class="offer-half offer-half--l offer-half--stack" data-group="run" style="--acc:#ffd84d">
           <div class="offer-half__head offer-slide">
-            <span class="offer-half__disc" aria-hidden="true"></span>
+            <svg class="offer-mark" viewBox="0 0 48 28" width="40" height="24" aria-hidden="true"><path class="offer-mark__line" d="M10 14 L38 14" pathLength="1"/><circle class="offer-mark__leaf" cx="24" cy="14" r="2.2"/><circle class="offer-mark__leaf" cx="38" cy="14" r="2.2"/><circle class="offer-mark__hub" cx="10" cy="14" r="4"/></svg>
             <h3 class="offer-half__name">Run</h3>
             <p class="offer-half__line">Our people in your tools, our pager on your systems. Monthly.</p>
           </div>
@@ -1271,7 +1483,7 @@ figure.plate img { width: 100%; height: auto; }
         </div>
         <div class="offer-half offer-half--r offer-half--stack" data-group="grow" style="--acc:#ff6a4d">
           <div class="offer-half__head offer-slide">
-            <span class="offer-half__disc" aria-hidden="true"></span>
+            <svg class="offer-mark" viewBox="0 0 48 28" width="40" height="24" aria-hidden="true"><path class="offer-mark__line" d="M8 21 L22 12 L40 6 M22 12 L36 20" pathLength="1"/><circle class="offer-mark__leaf" cx="8" cy="21" r="2.2"/><circle class="offer-mark__leaf" cx="40" cy="6" r="2.2"/><circle class="offer-mark__leaf" cx="36" cy="20" r="2.2"/><circle class="offer-mark__hub" cx="22" cy="12" r="4"/></svg>
             <h3 class="offer-half__name">Grow</h3>
             <p class="offer-half__line">The commercial side: pipeline and introductions, on retainer</p>
           </div>
@@ -1294,7 +1506,7 @@ figure.plate img { width: 100%; height: auto; }
       <div class="offer-split offer-split--1-1">
         <div class="offer-half offer-half--l offer-half--stack" data-group="regulate" style="--acc:#cbbcf7">
           <div class="offer-half__head offer-slide">
-            <span class="offer-half__disc" aria-hidden="true"></span>
+            <svg class="offer-mark" viewBox="0 0 48 28" width="40" height="24" aria-hidden="true"><path class="offer-mark__line" d="M12 8 L36 8 L36 20 L12 20 Z" pathLength="1"/><circle class="offer-mark__leaf" cx="36" cy="8" r="2.2"/><circle class="offer-mark__leaf" cx="36" cy="20" r="2.2"/><circle class="offer-mark__leaf" cx="12" cy="20" r="2.2"/><circle class="offer-mark__hub" cx="12" cy="8" r="4"/></svg>
             <h3 class="offer-half__name">Regulate</h3>
             <p class="offer-half__line">For CROs and Heads of Compliance under MAS. A named person signs</p>
           </div>
@@ -1312,14 +1524,14 @@ figure.plate img { width: 100%; height: auto; }
               <p class="offer-block__line">Your AI controls evidenced continuously, not once a year</p>
               <details class="pair__more">
                 <summary>Read</summary>
-                <p class="pair__blurb">Most firms review their AI controls once a year and assemble the evidence in a three-week scramble when the regulator asks. We map every AI system you run to the controls a regulator expects of it. Then we collect the proof that each control is working, and keep it in a pack that is current on any day it is asked for. It ships as code and scheduled checks in your own repository, not as a platform you rent, and it is refreshed under managed operations. The evidence exists on the day it is asked for. Sold to the CRO or Head of Model Risk.</p>
+                <p class="pair__blurb">Most firms review their AI controls once a year and assemble the evidence in a three-week scramble when the regulator asks. We map every AI system you run to the controls a regulator expects of it. Then we collect the proof that each control is working, and keep it in a pack that is current on any day it is asked for. It ships as code and scheduled checks in your own repository, not as a platform you rent, and it is refreshed under managed operations. Sold to the CRO or Head of Model Risk.</p>
               </details>
             </div>
           </div>
         </div>
         <div class="offer-half offer-half--r offer-half--stack" data-group="regulate" style="--acc:#cbbcf7">
           <div class="offer-half__head offer-slide">
-            <span class="offer-half__disc" aria-hidden="true"></span>
+            <svg class="offer-mark" viewBox="0 0 48 28" width="40" height="24" aria-hidden="true"><path class="offer-mark__line" d="M12 8 L36 8 L36 20 L12 20 Z" pathLength="1"/><circle class="offer-mark__leaf" cx="36" cy="8" r="2.2"/><circle class="offer-mark__leaf" cx="36" cy="20" r="2.2"/><circle class="offer-mark__leaf" cx="12" cy="20" r="2.2"/><circle class="offer-mark__hub" cx="12" cy="8" r="4"/></svg>
             <h3 class="offer-half__name">Regulate <span class="offer-tag">Pilot</span></h3>
             <p class="offer-half__line">Pilot. The first engagement funds the build.</p>
           </div>
@@ -1348,8 +1560,8 @@ figure.plate img { width: 100%; height: auto; }
   <section class="cut cut--demo g-graphite" id="demo">
     <div class="cut__in rise">
       <p class="label">See it work</p>
-      <h2 class="cut__h">The same 52 weeks. Three different forecasts.</h2>
-      <p class="cut__p cut__p--wide">This is real math, computed in your browser right now, not a picture. Drag the slider between three models fit to the same data. Watch what each one does to the next 12 weeks, which none of them ever saw.</p>
+      <h2 class="cut__h">Same 52 weeks. Three forecasts. You pick.</h2>
+      <p class="cut__p cut__p--wide">White is what really happened. Amber is the model's guess. Drag the slider to swap the model.</p>
       <div class="demo-widget">
         <div class="demo-chart-wrap">
           <svg class="demo-chart" viewBox="0 0 640 300" preserveAspectRatio="none" aria-hidden="true">
@@ -1357,14 +1569,16 @@ figure.plate img { width: 100%; height: auto; }
             <path class="demo-actual"></path>
             <path class="demo-fit"></path>
           </svg>
-          <p class="demo-split-label">Forecast →</p>
+          <p class="demo-split-label">Next 12 weeks</p>
         </div>
         <div class="demo-controls">
-          <label class="demo-slider-label" for="demo-slider">Model: <span class="demo-state-label"></span></label>
-          <input id="demo-slider" type="range" min="0" max="100" step="1" value="50">
+          <p class="demo-readout"><span class="demo-slider-label">The model</span><span class="demo-state-label"></span></p>
+          <label class="demo-groove"><span class="sr-only">The model</span><input id="demo-slider" type="range" min="0" max="100" step="1" value="50"></label>
+          <p class="demo-stops" aria-hidden="true"><span>Too simple</span><span>Just right</span><span>Too clever</span></p>
           <p class="demo-state-note"></p>
         </div>
-        <p class="demo-legend"><span data-series="actual">What actually happened</span><span data-series="fit">The model's forecast</span></p>
+        <p class="demo-legend"><span data-series="actual">What really happened</span><span data-series="fit">The model's guess</span></p>
+        <p class="demo-point">Same data, three answers. Picking the right one is the job.</p>
         <p class="cut__tag">Sample data, generated for this page. Illustrative, not a client's numbers.</p>
       </div>
     </div>
@@ -1373,138 +1587,127 @@ figure.plate img { width: 100%; height: auto; }
     <div class="cut__in rise">
       <p class="label">See it sort</p>
       <h2 class="cut__h">Fourteen leads. One formula you can read.</h2>
-      <p class="cut__p cut__p--wide">Every lead here has five numbers: last contact, replies, company size, where it came from, and a budget signal. The score is a weighted sum of those five, nothing else. Move the slider and the 14 re-sort. Click one to see its five products and their sum.</p>
+      <p class="cut__p cut__p--wide">Every lead here has five numbers: last contact, replies, company size, where it came from, and a budget signal. The score is a weighted sum of those five, nothing else. Move the slider and the ladder re-sorts. Click any lead and the receipt on the right shows its five products and their sum.</p>
       <div class="leads-widget">
-        <div class="leads-well">
+        <div class="leads-well" data-in="0">
           <p class="leads-well__head"><span>Ranked by score</span><span class="leads-well__counts"><span data-band="hot">4 Hot</span><span data-band="warm">8 Warm</span><span data-band="cold">2 Cold</span></span></p>
-          <ol class="leads-list" style="--n:14">
-          <li class="lead" data-id="11" data-band="hot" style="--i:0;--s:79">
-            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Serviced apartments, score 79, Hot">
+          <div class="leads-ladder" data-open="false">
+            <ol class="leads-list" id="leads-list">
+          <li class="lead" data-id="11" data-rank="0" data-band="hot" style="--r:0">
+            <button type="button" class="lead__btn" aria-pressed="true" aria-label="Prospect L, ranked 1 of 14, score 79, Hot">
               <span class="lead__rank">01</span>
-              <span class="lead__name">Serviced apartments</span>
-              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
-              <span class="lead__score">79</span>
+              <span class="lead__body"><span class="lead__name">Prospect L</span><span class="lead__story">Spoke today. Named a budget.</span></span>
+              <span class="lead__score" style="--score:79"><span class="leads-sr">79</span></span>
               <span class="lead__band">Hot</span>
             </button>
           </li>
-          <li class="lead" data-id="4" data-band="hot" style="--i:1;--s:77">
-            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Wealth advisor, score 77, Hot">
+          <li class="lead" data-id="4" data-rank="1" data-band="hot" style="--r:1">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Prospect E, ranked 2 of 14, score 77, Hot">
               <span class="lead__rank">02</span>
-              <span class="lead__name">Wealth advisor</span>
-              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
-              <span class="lead__score">77</span>
+              <span class="lead__body"><span class="lead__name">Prospect E</span><span class="lead__story">A referral. Spoke 5 days ago.</span></span>
+              <span class="lead__score" style="--score:77"><span class="leads-sr">77</span></span>
               <span class="lead__band">Hot</span>
             </button>
           </li>
-          <li class="lead" data-id="6" data-band="hot" style="--i:2;--s:73">
-            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Tuition chain, score 73, Hot">
+          <li class="lead" data-id="6" data-rank="2" data-band="hot" style="--r:2">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Prospect G, ranked 3 of 14, score 73, Hot">
               <span class="lead__rank">03</span>
-              <span class="lead__name">Tuition chain</span>
-              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
-              <span class="lead__score">73</span>
+              <span class="lead__body"><span class="lead__name">Prospect G</span><span class="lead__story">A referral. 1 of 8 replied.</span></span>
+              <span class="lead__score" style="--score:73"><span class="leads-sr">73</span></span>
               <span class="lead__band">Hot</span>
             </button>
           </li>
-          <li class="lead" data-id="8" data-band="hot" style="--i:3;--s:67">
-            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Logistics broker, score 67, Hot">
+          <li class="lead" data-id="8" data-rank="3" data-band="hot" style="--r:3">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Prospect I, ranked 4 of 14, score 67, Hot">
               <span class="lead__rank">04</span>
-              <span class="lead__name">Logistics broker</span>
-              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
-              <span class="lead__score">67</span>
+              <span class="lead__body"><span class="lead__name">Prospect I</span><span class="lead__story">50 to 199 people. 0 of 7 replied.</span></span>
+              <span class="lead__score" style="--score:67"><span class="leads-sr">67</span></span>
               <span class="lead__band">Hot</span>
             </button>
           </li>
-          <li class="lead" data-id="0" data-band="warm" style="--i:4;--s:57">
-            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Freight forwarder, score 57, Warm">
+          <li class="lead" data-id="0" data-rank="4" data-band="warm" style="--r:4">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Prospect A, ranked 5 of 14, score 57, Warm">
               <span class="lead__rank">05</span>
-              <span class="lead__name">Freight forwarder</span>
-              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
-              <span class="lead__score">57</span>
+              <span class="lead__body"><span class="lead__name">Prospect A</span><span class="lead__story">Spoke today. No budget yet.</span></span>
+              <span class="lead__score" style="--score:57"><span class="leads-sr">57</span></span>
               <span class="lead__band">Warm</span>
             </button>
           </li>
-          <li class="lead" data-id="10" data-band="warm" style="--i:5;--s:57">
-            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Interior fit-out, score 57, Warm">
+          <li class="lead" data-id="10" data-rank="5" data-band="warm" style="--r:5">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Prospect K, ranked 6 of 14, score 57, Warm">
               <span class="lead__rank">06</span>
-              <span class="lead__name">Interior fit-out</span>
-              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
-              <span class="lead__score">57</span>
+              <span class="lead__body"><span class="lead__name">Prospect K</span><span class="lead__story">5 of 8 replied. Quiet 72 days.</span></span>
+              <span class="lead__score" style="--score:57"><span class="leads-sr">57</span></span>
               <span class="lead__band">Warm</span>
             </button>
           </li>
-          <li class="lead" data-id="9" data-band="warm" style="--i:6;--s:56">
-            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Family office, score 56, Warm">
+          <li class="lead" data-id="9" data-rank="6" data-band="warm" style="--r:6">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Prospect J, ranked 7 of 14, score 56, Warm">
               <span class="lead__rank">07</span>
-              <span class="lead__name">Family office</span>
-              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
-              <span class="lead__score">56</span>
+              <span class="lead__body"><span class="lead__name">Prospect J</span><span class="lead__story">Named a budget. Quiet 61 days.</span></span>
+              <span class="lead__score" style="--score:56"><span class="leads-sr">56</span></span>
               <span class="lead__band">Warm</span>
             </button>
           </li>
-          <li class="lead" data-id="1" data-band="warm" style="--i:7;--s:51">
-            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Dental group, score 51, Warm">
+          <li class="lead" data-id="1" data-rank="7" data-band="warm" style="--r:7">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Prospect B, ranked 8 of 14, score 51, Warm">
               <span class="lead__rank">08</span>
-              <span class="lead__name">Dental group</span>
-              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
-              <span class="lead__score">51</span>
+              <span class="lead__body"><span class="lead__name">Prospect B</span><span class="lead__story">Came inbound. Under 20 people.</span></span>
+              <span class="lead__score" style="--score:51"><span class="leads-sr">51</span></span>
               <span class="lead__band">Warm</span>
             </button>
           </li>
-          <li class="lead" data-id="2" data-band="warm" style="--i:8;--s:49">
-            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Property manager, score 49, Warm">
+          <li class="lead" data-id="2" data-rank="8" data-band="warm" style="--r:8">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Prospect C, ranked 9 of 14, score 49, Warm">
               <span class="lead__rank">09</span>
-              <span class="lead__name">Property manager</span>
-              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
-              <span class="lead__score">49</span>
+              <span class="lead__body"><span class="lead__name">Prospect C</span><span class="lead__story">A referral. 0 of 5 replied.</span></span>
+              <span class="lead__score" style="--score:49"><span class="leads-sr">49</span></span>
               <span class="lead__band">Warm</span>
             </button>
           </li>
-          <li class="lead" data-id="12" data-band="warm" style="--i:9;--s:47">
-            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Insurance broker, score 47, Warm">
+          <li class="lead" data-id="12" data-rank="9" data-band="warm" style="--r:9">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Prospect M, ranked 10 of 14, score 47, Warm">
               <span class="lead__rank">10</span>
-              <span class="lead__name">Insurance broker</span>
-              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
-              <span class="lead__score">47</span>
+              <span class="lead__body"><span class="lead__name">Prospect M</span><span class="lead__story">Quiet 41 days. No budget yet.</span></span>
+              <span class="lead__score" style="--score:47"><span class="leads-sr">47</span></span>
               <span class="lead__band">Warm</span>
             </button>
           </li>
-          <li class="lead" data-id="13" data-band="warm" style="--i:10;--s:46">
-            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Food distributor, score 46, Warm">
+          <li class="lead" data-id="13" data-rank="10" data-band="warm" style="--r:10">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Prospect N, ranked 11 of 14, score 46, Warm">
               <span class="lead__rank">11</span>
-              <span class="lead__name">Food distributor</span>
-              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
-              <span class="lead__score">46</span>
+              <span class="lead__body"><span class="lead__name">Prospect N</span><span class="lead__story">200 to 500 people. 0 of 3 replied.</span></span>
+              <span class="lead__score" style="--score:46"><span class="leads-sr">46</span></span>
               <span class="lead__band">Warm</span>
             </button>
           </li>
-          <li class="lead" data-id="3" data-band="warm" style="--i:11;--s:42">
-            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Boutique hotel, score 42, Warm">
+          <li class="lead" data-id="3" data-rank="11" data-band="warm" style="--r:11">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Prospect D, ranked 12 of 14, score 42, Warm">
               <span class="lead__rank">12</span>
-              <span class="lead__name">Boutique hotel</span>
-              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
-              <span class="lead__score">42</span>
+              <span class="lead__body"><span class="lead__name">Prospect D</span><span class="lead__story">Quiet 65 days. Asked about price.</span></span>
+              <span class="lead__score" style="--score:42"><span class="leads-sr">42</span></span>
               <span class="lead__band">Warm</span>
             </button>
           </li>
-          <li class="lead" data-id="7" data-band="cold" style="--i:12;--s:28">
-            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Private clinic, score 28, Cold">
+          <li class="lead" data-id="7" data-rank="12" data-band="cold" style="--r:12">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Prospect H, ranked 13 of 14, score 28, Cold">
               <span class="lead__rank">13</span>
-              <span class="lead__name">Private clinic</span>
-              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
-              <span class="lead__score">28</span>
+              <span class="lead__body"><span class="lead__name">Prospect H</span><span class="lead__story">A referral. Quiet 51 days.</span></span>
+              <span class="lead__score" style="--score:28"><span class="leads-sr">28</span></span>
               <span class="lead__band">Cold</span>
             </button>
           </li>
-          <li class="lead" data-id="5" data-band="cold" style="--i:13;--s:18">
-            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Marine supplier, score 18, Cold">
+          <li class="lead" data-id="5" data-rank="13" data-band="cold" style="--r:13">
+            <button type="button" class="lead__btn" aria-pressed="false" aria-label="Prospect F, ranked 14 of 14, score 18, Cold">
               <span class="lead__rank">14</span>
-              <span class="lead__name">Marine supplier</span>
-              <span class="lead__meter" aria-hidden="true"><i class="lead__fill"></i></span>
-              <span class="lead__score">18</span>
+              <span class="lead__body"><span class="lead__name">Prospect F</span><span class="lead__story">Quiet 69 days. 0 of 8 replied.</span></span>
+              <span class="lead__score" style="--score:18"><span class="leads-sr">18</span></span>
               <span class="lead__band">Cold</span>
             </button>
           </li>
-          </ol>
+            </ol>
+            <button type="button" class="leads-fold" aria-expanded="false" aria-controls="leads-list"><span class="leads-fold__more">Show the other 7</span><span class="leads-fold__less">Just the top 7</span></button>
+          </div>
           <div class="leads-controls">
             <label class="leads-slider-label" for="leads-slider">What counts most: <span class="leads-state-label">Balanced</span></label>
             <input id="leads-slider" type="range" min="0" max="100" step="1" value="50">
@@ -1518,15 +1721,53 @@ figure.plate img { width: 100%; height: auto; }
             </p>
           </div>
         </div>
-        <aside class="leads-receipt" aria-live="polite">
-          <p class="leads-receipt__title">Why this score</p>
-          <p class="leads-receipt__name"></p>
-          <p class="leads-receipt__empty">Click a lead on the left to see its five products and their sum.</p>
-          <table class="leads-receipt__table" hidden>
-            <thead><tr><th>Signal</th><th>Value</th><th>As 0 to 1</th><th>Weight</th><th>Points</th></tr></thead>
-            <tbody><tr data-key="recency"><th scope="row">Last contact</th><td class="v"></td><td class="n"></td><td class="w"></td><td class="p"></td></tr><tr data-key="replies"><th scope="row">Replies</th><td class="v"></td><td class="n"></td><td class="w"></td><td class="p"></td></tr><tr data-key="size"><th scope="row">Company size</th><td class="v"></td><td class="n"></td><td class="w"></td><td class="p"></td></tr><tr data-key="origin"><th scope="row">Came from</th><td class="v"></td><td class="n"></td><td class="w"></td><td class="p"></td></tr><tr data-key="budget"><th scope="row">Budget</th><td class="v"></td><td class="n"></td><td class="w"></td><td class="p"></td></tr></tbody>
-            <tfoot><tr><th scope="row" colspan="4">Score</th><td class="t"></td></tr></tfoot>
-          </table>
+        <aside class="rcpt" data-band="hot" aria-live="polite">
+          <div class="rcpt__head">
+            <p class="rcpt__title">Why this score</p>
+            <p class="rcpt__name">Prospect L</p>
+            <p class="rcpt__story">Spoke today. Named a budget.</p>
+          </div>
+          <div class="rcpt__bar" role="img" aria-label="79 of 100 points. Last contact 20.0, Replies 3.3, Company size 20.0, Came from 16.0, Budget 20.0.">
+    <i class="rcpt__seg" data-key="recency" style="--pts:20.0;--k:0"></i>
+    <i class="rcpt__seg" data-key="replies" style="--pts:3.3;--k:1"></i>
+    <i class="rcpt__seg" data-key="size" style="--pts:20.0;--k:2"></i>
+    <i class="rcpt__seg" data-key="origin" style="--pts:16.0;--k:3"></i>
+    <i class="rcpt__seg" data-key="budget" style="--pts:20.0;--k:4"></i>
+          </div>
+          <p class="rcpt__total"><span class="rcpt__num" style="--total:79"><span class="leads-sr">79</span></span><span class="rcpt__of">of 100</span><span class="rcpt__band">Hot. Call this week.</span></p>
+          <ol class="rcpt__five">
+    <li class="rcpt__sig" data-key="recency" style="--k:0">
+      <span class="rcpt__sig-name">Last contact</span>
+      <span class="rcpt__sig-val">today</span>
+      <span class="rcpt__sig-eq"><b class="n">1.00</b> <span class="rcpt__x">×</span> <b class="w">20</b></span>
+      <span class="rcpt__sig-pts"><b class="p">20.0</b></span>
+    </li>
+    <li class="rcpt__sig" data-key="replies" style="--k:1">
+      <span class="rcpt__sig-name">Replies</span>
+      <span class="rcpt__sig-val">1 of 6</span>
+      <span class="rcpt__sig-eq"><b class="n">0.17</b> <span class="rcpt__x">×</span> <b class="w">20</b></span>
+      <span class="rcpt__sig-pts"><b class="p">3.3</b></span>
+    </li>
+    <li class="rcpt__sig" data-key="size" style="--k:2">
+      <span class="rcpt__sig-name">Company size</span>
+      <span class="rcpt__sig-val">50 to 199 people</span>
+      <span class="rcpt__sig-eq"><b class="n">1.00</b> <span class="rcpt__x">×</span> <b class="w">20</b></span>
+      <span class="rcpt__sig-pts"><b class="p">20.0</b></span>
+    </li>
+    <li class="rcpt__sig" data-key="origin" style="--k:3">
+      <span class="rcpt__sig-name">Came from</span>
+      <span class="rcpt__sig-val">inbound</span>
+      <span class="rcpt__sig-eq"><b class="n">0.80</b> <span class="rcpt__x">×</span> <b class="w">20</b></span>
+      <span class="rcpt__sig-pts"><b class="p">16.0</b></span>
+    </li>
+    <li class="rcpt__sig" data-key="budget" style="--k:4">
+      <span class="rcpt__sig-name">Budget</span>
+      <span class="rcpt__sig-val">named a number</span>
+      <span class="rcpt__sig-eq"><b class="n">1.00</b> <span class="rcpt__x">×</span> <b class="w">20</b></span>
+      <span class="rcpt__sig-pts"><b class="p">20.0</b></span>
+    </li>
+          </ol>
+          <p class="rcpt__sum">Add the five: <b class="s">79.3</b>. Rounded: <b class="t">79</b>.</p>
         </aside>
         <p class="leads-legend"><span data-band="hot"><b>Hot</b> Call this week.</span><span data-band="warm"><b>Warm</b> Keep the thread going.</span><span data-band="cold"><b>Cold</b> Park it. Look again in 30 days.</span></p>
         <p class="cut__tag">Sample leads, generated for this page. Illustrative, not anyone's pipeline.</p>
@@ -1590,7 +1831,7 @@ figure.plate img { width: 100%; height: auto; }
 <footer class="colophon">
   <div class="colophon-wrap">
     <div>
-      <span class="wordmark"><span class="wordmark-dot" aria-hidden="true"></span>JAW AI</span>
+      <span class="wordmark"><img class="wordmark-mark" src="./assets/jaw-logo.png" alt="JAW AI" width="123" height="45"></span>
       <p class="colophon-line">Seventeen names in the practice: fourteen offerings and three practices. No slide decks.</p>
     </div>
     <ul class="colophon-nav"><li><a href="#offer">The offer</a></li><li><a href="#profile">Our profile</a></li><li><a href="#contact">Contact</a></li><li><a href="mailto:hello@jaw.sg">hello@jaw.sg</a></li></ul>
