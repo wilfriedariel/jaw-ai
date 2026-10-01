@@ -857,6 +857,17 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
    native scroll-driven where the browser has it, the .reveal observer where it does not, and
    simply visible under prefers-reduced-motion and with JavaScript off. */
 .cut--offer { align-items: start; padding-block: clamp(2.5rem, 7vh, 6rem); }
+/* The offer blocks arrive by sliding in from +/-5vw (the `offer-in` keyframes further down).
+   Nothing was clipping that, so the start of the motion sat outside the viewport and the
+   document's own scrollWidth grew with it. Measured 2026-10-01: 5vw passes --margin (22px) at
+   440px, so EVERY width from 440 to 999 overflowed, worst at 899px by 72px; 768px by 16px was
+   simply the one the gate samples. `body { overflow-x: hidden }` kept a reader from ever panning,
+   so nothing was visibly scrolling sideways, but the slide was being cut by the screen edge
+   rather than by anything that owns it.
+   `clip`, not `hidden`: it creates no scroll container, so the sticky stage and scroll anchoring
+   inside are untouched, and it is the one value that leaves `overflow-y: visible` actually
+   visible instead of promoting it to `auto` and clipping the hover lift's shadow. */
+.offer-panel { overflow-x: clip; }
 .offer-panel__in { display: grid; gap: 28px; max-width: 1240px; width: 100%; margin-inline: auto; }
 /* the section head sits at the top of panel 1, full width, not sticky (same call as the old
    .index__head: CSF did not want a sticky sidebar eating space). actHead() reuses .act-head,
@@ -934,9 +945,19 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
    object-fit: cover shows almost no background inside the circle. */
 .team { display: grid; gap: 40px; max-width: 1240px; width: 100%; margin-inline: auto; }
 .team__people { display: grid; gap: 20px; }
+/* Three `1fr` tracks carry `min-width: auto`, so no track could shrink below its card's
+   min-content, and that floor was the 88px avatar at `flex: none` sitting beside a name of up to
+   40px. Three of those plus the gaps held this section at 948.5px whatever the viewport, which is
+   why 820, 899, 900 and 960 all overflowed (820 by 151px) while 768 and 1024 either side read
+   clean. The head wrapping is what removes the floor: see .team-card__head below.
+   `minmax(0, 1fr)` was written here first and then taken out, because it does not help. Measured
+   at 820px with a deliberately long name: 1fr and minmax(0, 1fr) both reach scrollWidth 1206.
+   The overflow comes from content passing the card, not from the track widening, so the minmax
+   was a line that looked like a fix and asserted nothing. */
 @media (min-width: 800px) { .team__people { grid-template-columns: repeat(3, 1fr); } }
 .team-card { background: var(--paper-2); border-radius: var(--r-md); padding: 28px 26px; display: grid; gap: 16px; align-content: start; }
-.team-card__head { display: flex; align-items: center; gap: 16px; }
+/* wraps so the name drops under the portrait instead of holding the track open */
+.team-card__head { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
 .team-card__avatar { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; flex: none; }
 /* the name reads at roughly the avatar's own height, so the two carry equal weight: a mark and
    a name, not a small caption under a picture. */
