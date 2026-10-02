@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>JAW AI. AI systems that keep running after we leave.</title>
 <meta name="description" content="JAW AI builds forecasting, automation, and internal assistants for Singapore companies that run on spreadsheets and email. Seventeen offerings, five ways to buy them, and the system keeps running after we leave.">
-<meta name="theme-color" content="#15120e">
+<meta name="theme-color" content="#0e2b24">
 <meta property="og:title" content="JAW AI. AI systems that keep running after we leave.">
 <meta property="og:description" content="JAW AI builds forecasting, automation, and internal assistants for Singapore companies that run on spreadsheets and email. Seventeen offerings, five ways to buy them, and the system keeps running after we leave.">
 <meta property="og:type" content="website">
@@ -49,6 +49,23 @@
      a literal the contrast gate reads :root and therefore never measured. Measured on the way
      out, the jade accent on that coral was 3.00:1, under AA. */
   --butter: #ffd84d;         /* the specimen at paper value */
+
+  /* --- THE FIVE GROUP GROUNDS, rebuilt 2026-10-02 with the numbers, not by eye.
+     What was wrong: five unrelated hues (166, 191, 47, 10, 255 degrees) at lightnesses from
+     L* 33.7 to 87.4. With no lightness system the ink rule needed a per-card exception, and the
+     exception landed on the wrong card: Regulate ran bone type on lilac at 1.57:1, against AA's
+     4.5. Nobody catches that reading code, and the contrast gate could not see it because both
+     tables were hex literals in .ts files rather than tokens here.
+     The system: two hue families only, the room and the specimen, alternating so no two
+     neighbours share a hue, and ALL FIVE inside one lightness band (L* 86.2 to 92.3, six points
+     wide). One band means ONE ink rule covers every card, so no exception exists to misapply.
+     Measured: graphite is 12.60:1 at worst, the jade accent 5.71:1 at worst. The binding
+     constraint is the jade accent, which needs L* >= 78, not the ink. */
+  --g-advise: #a4ebda;       /* room    166deg  L* 88.1  ink 13.27:1  jade 6.02:1 */
+  --g-build: #ffe28a;        /* keys     45deg  L* 90.5  ink 14.15:1  jade 6.42:1 */
+  --g-run: #97e6de;          /* room    174deg  L* 86.2  ink 12.60:1  jade 5.71:1 */
+  --g-grow: #ffd4a8;         /* keys     30deg  L* 87.6  ink 13.06:1  jade 5.92:1 */
+  --g-regulate: #c9f2e2;     /* room    156deg  L* 92.3  ink 14.82:1  jade 6.72:1 */
   --mist: #cfdcd4;           /* the room at paper value */
   --jade: #0c5a48;
 
@@ -896,14 +913,16 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
    The GROUP_ACCENT ink values are NOT used on the fills: coral's ink on coral is 2.35:1 and
    run's ink on mist is 4.09:1, both under AA. Colour lives in the fill, never in the type. */
 .offer-block {
-  --on-acc: var(--ink);
+  /* --graphite, not --ink. --ink flips to a light value inside a dark section, and the Regulate
+     half sits in one, so the card inherited near-white type onto a pale ground: 1.10:1. The five
+     card grounds are all light by construction now, so the ink is fixed rather than inherited. */
+  --on-acc: var(--graphite);
   position: relative; display: grid; gap: 8px; align-content: start; min-width: 0;
   background: var(--acc, var(--paper-2)); color: var(--on-acc);
   border-radius: 6px; padding: 22px 24px 18px;
   box-shadow: var(--lift-1);
   transition: box-shadow var(--micro) var(--ease), transform var(--micro) var(--ease);
 }
-.offer-block[data-group="advise"] { --on-acc: var(--coconut); }
 /* the hover lifts: a shadow step and 3px. Possible because the arrival's fill mode is
    `backwards` (below): past its scroll range the animation lets go and transform is free. */
 .offer-block:hover { box-shadow: var(--lift-2); transform: translateY(-3px); }
@@ -1405,6 +1424,14 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
 #demo-slider:active { cursor: grabbing; }
 #demo-slider::-webkit-slider-thumb { width: 34px; height: 34px; }
 #demo-slider::-moz-range-thumb { width: 34px; height: 34px; }
+
+/* The group accent comes from the tokens, set here rather than inline from a JavaScript table.
+   There used to be two tables, landing/render.mjs and landing/main.ts, and they could drift. */
+[data-group="advise"] { --acc: var(--g-advise); }
+[data-group="build"] { --acc: var(--g-build); }
+[data-group="run"] { --acc: var(--g-run); }
+[data-group="grow"] { --acc: var(--g-grow); }
+[data-group="regulate"] { --acc: var(--g-regulate); }
 </style>
 </head>
 <body data-act="hero" data-ground="chamber">
@@ -1454,7 +1481,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
         
       </div>
       <div class="offer-split offer-split--3-4">
-        <div class="offer-half offer-half--l offer-half--stack" data-group="advise" style="--acc:#0c5a48">
+        <div class="offer-half offer-half--l offer-half--stack" data-group="advise">
           <div class="offer-half__head offer-slide">
             <svg class="offer-mark" viewBox="0 0 48 28" width="40" height="24" aria-hidden="true"><path class="offer-mark__line" d="M12 14 L30 7 M12 14 L34 21" pathLength="1"/><circle class="offer-mark__leaf" cx="30" cy="7" r="2.2"/><circle class="offer-mark__leaf" cx="34" cy="21" r="2.2"/><circle class="offer-mark__hub" cx="12" cy="14" r="4"/></svg>
             <h3 class="offer-half__name">Advise</h3>
@@ -1487,7 +1514,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
             </div>
           </div>
         </div>
-        <div class="offer-half offer-half--r offer-half--grid" data-group="build" style="--acc:#8fd8e8">
+        <div class="offer-half offer-half--r offer-half--grid" data-group="build">
           <div class="offer-half__head offer-slide">
             <svg class="offer-mark" viewBox="0 0 48 28" width="40" height="24" aria-hidden="true"><path class="offer-mark__line" d="M24 14 L9 7 M24 14 L39 7 M24 14 L11 22 M24 14 L37 22" pathLength="1"/><circle class="offer-mark__leaf" cx="9" cy="7" r="2.2"/><circle class="offer-mark__leaf" cx="39" cy="7" r="2.2"/><circle class="offer-mark__leaf" cx="11" cy="22" r="2.2"/><circle class="offer-mark__leaf" cx="37" cy="22" r="2.2"/><circle class="offer-mark__hub" cx="24" cy="14" r="4"/></svg>
             <h3 class="offer-half__name">Build</h3>
@@ -1534,7 +1561,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
   <section class="cut cut--offer g-mist offer-panel" id="offer-2" data-panel="2">
     <div class="offer-panel__in">
       <div class="offer-split offer-split--1-1">
-        <div class="offer-half offer-half--l offer-half--stack" data-group="run" style="--acc:#ffd84d">
+        <div class="offer-half offer-half--l offer-half--stack" data-group="run">
           <div class="offer-half__head offer-slide">
             <svg class="offer-mark" viewBox="0 0 48 28" width="40" height="24" aria-hidden="true"><path class="offer-mark__line" d="M10 14 L38 14" pathLength="1"/><circle class="offer-mark__leaf" cx="24" cy="14" r="2.2"/><circle class="offer-mark__leaf" cx="38" cy="14" r="2.2"/><circle class="offer-mark__hub" cx="10" cy="14" r="4"/></svg>
             <h3 class="offer-half__name">Run</h3>
@@ -1559,7 +1586,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
             </div>
           </div>
         </div>
-        <div class="offer-half offer-half--r offer-half--stack" data-group="grow" style="--acc:#ff6a4d">
+        <div class="offer-half offer-half--r offer-half--stack" data-group="grow">
           <div class="offer-half__head offer-slide">
             <svg class="offer-mark" viewBox="0 0 48 28" width="40" height="24" aria-hidden="true"><path class="offer-mark__line" d="M8 21 L22 12 L40 6 M22 12 L36 20" pathLength="1"/><circle class="offer-mark__leaf" cx="8" cy="21" r="2.2"/><circle class="offer-mark__leaf" cx="40" cy="6" r="2.2"/><circle class="offer-mark__leaf" cx="36" cy="20" r="2.2"/><circle class="offer-mark__hub" cx="22" cy="12" r="4"/></svg>
             <h3 class="offer-half__name">Grow</h3>
@@ -1582,7 +1609,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
   <section class="cut cut--offer g-graphite offer-panel" id="offer-3" data-panel="3">
     <div class="offer-panel__in">
       <div class="offer-split offer-split--1-1">
-        <div class="offer-half offer-half--l offer-half--stack" data-group="regulate" style="--acc:#cbbcf7">
+        <div class="offer-half offer-half--l offer-half--stack" data-group="regulate">
           <div class="offer-half__head offer-slide">
             <svg class="offer-mark" viewBox="0 0 48 28" width="40" height="24" aria-hidden="true"><path class="offer-mark__line" d="M12 8 L36 8 L36 20 L12 20 Z" pathLength="1"/><circle class="offer-mark__leaf" cx="36" cy="8" r="2.2"/><circle class="offer-mark__leaf" cx="36" cy="20" r="2.2"/><circle class="offer-mark__leaf" cx="12" cy="20" r="2.2"/><circle class="offer-mark__hub" cx="12" cy="8" r="4"/></svg>
             <h3 class="offer-half__name">Regulate</h3>
@@ -1607,7 +1634,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
             </div>
           </div>
         </div>
-        <div class="offer-half offer-half--r offer-half--stack" data-group="regulate" style="--acc:#cbbcf7">
+        <div class="offer-half offer-half--r offer-half--stack" data-group="regulate">
           <div class="offer-half__head offer-slide">
             <svg class="offer-mark" viewBox="0 0 48 28" width="40" height="24" aria-hidden="true"><path class="offer-mark__line" d="M12 8 L36 8 L36 20 L12 20 Z" pathLength="1"/><circle class="offer-mark__leaf" cx="36" cy="8" r="2.2"/><circle class="offer-mark__leaf" cx="36" cy="20" r="2.2"/><circle class="offer-mark__leaf" cx="12" cy="20" r="2.2"/><circle class="offer-mark__hub" cx="12" cy="8" r="4"/></svg>
             <h3 class="offer-half__name">Regulate <span class="offer-tag">Pilot</span></h3>
@@ -1877,10 +1904,10 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
         </article>
         <article class="team-card">
           <div class="team-card__head">
-            <img class="team-card__avatar" src="./assets/team/michelle.png" alt="" width="96" height="96">
-            <h3 class="team-card__name">Michelle</h3>
+            <img class="team-card__avatar" src="./assets/team/joyce.png" alt="" width="96" height="96">
+            <h3 class="team-card__name">Joyce</h3>
           </div>
-          <p class="team-card__bio">Michelle has 20 years of experience in technology consulting, service delivery and market development across the private and public sectors, with senior roles at global consulting firms, a leading systems integrator and government agencies. She has led large, high-stakes programmes in enterprise platforms and IT operations, managing teams of more than 70 consultants. Her expertise spans go-to-market strategy, client development, solution design, programme delivery, quality assurance, and stakeholder engagement. She has consistently beaten growth targets and helped organisations adopt new technology, most recently in enterprise AI. She holds a BSc in Electronics Engineering from a UK university.</p>
+          <p class="team-card__bio">Joyce has 20 years of experience in technology consulting, service delivery and market development across the private and public sectors, with senior roles at global consulting firms, a leading systems integrator and government agencies. She has led large, high-stakes programmes in enterprise platforms and IT operations, managing teams of more than 70 consultants. Her expertise spans go-to-market strategy, client development, solution design, programme delivery, quality assurance, and stakeholder engagement. She has consistently beaten growth targets and helped organisations adopt new technology, most recently in enterprise AI. She holds a BSc in Electronics Engineering from a UK university.</p>
           <ul class="team-card__skills"><li>Technology and AI Adoption</li><li>Digital Transformation</li><li>Business Development</li><li>Programme and Delivery Management</li><li>Service Operations Management</li></ul>
         </article>
         <article class="team-card">
