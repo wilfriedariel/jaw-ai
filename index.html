@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>JAW AI. AI systems that keep running after we leave.</title>
-<meta name="description" content="JAW AI builds forecasting, automation, and internal assistants for Singapore companies that run on spreadsheets and email. Seventeen offerings, five ways to buy them, and the system keeps running after we leave.">
+<meta name="description" content="JAW AI builds forecasting, automation, and internal assistants for companies that run on spreadsheets and email. We build it, and it keeps running after we leave.">
 <meta name="theme-color" content="#0e2b24">
 <meta property="og:title" content="JAW AI. AI systems that keep running after we leave.">
-<meta property="og:description" content="JAW AI builds forecasting, automation, and internal assistants for Singapore companies that run on spreadsheets and email. Seventeen offerings, five ways to buy them, and the system keeps running after we leave.">
+<meta property="og:description" content="JAW AI builds forecasting, automation, and internal assistants for companies that run on spreadsheets and email. We build it, and it keeps running after we leave.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://jaw-ai.com/">
 <link rel="canonical" href="https://jaw-ai.com/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"JAW AI","url":"https://jaw-ai.com/","description":"JAW AI builds forecasting, automation, and internal assistants for Singapore companies that run on spreadsheets and email. Seventeen offerings, five ways to buy them, and the system keeps running after we leave.","email":"customer.jaw.ai@gmail.com","areaServed":{"@type":"Country","name":"Singapore"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"JAW AI","url":"https://jaw-ai.com/","description":"JAW AI builds forecasting, automation, and internal assistants for companies that run on spreadsheets and email. We build it, and it keeps running after we leave.","email":"customer.jaw.ai@gmail.com","areaServed":{"@type":"Country","name":"Singapore"}}</script>
 <link rel="icon" href="./favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,6 +28,10 @@
   --coconut: #f6f3ec;
   --graphite: #191614;
   --key: #f0b23f;            /* the specimen key. The brain draws with it, so it never changes */
+  --mark-blue: #3373c5;      /* the brain-constellation mark beside the wordmark, 2026-10-02.
+                                 Sampled from jaw-logo.png's own gradient so the two marks read as
+                                 one lockup. Fixed like the wordmark: a logo doesn't recolour per
+                                 ground, never overridden inside a .g-* ground class. */
   --key-ink: #17120a;
   /* the amber is a lit object, not a fill: a control painted with it is graded from this pair.
      Both stops are measured against --key-ink in qa/jaw/contrast_check.mjs. */
@@ -223,8 +227,9 @@ a { color: inherit; }
 .brain-layer[data-rung="poster"] canvas, .brain-layer[data-rung="poster"] .labels { display: none; }
 @media (min-width: 1000px) {
   .brain-layer { position: fixed; inset: 0; height: 100svh; }
-  /* the object sits right of centre: the headline is never read through it */
-  .brain-layer canvas, .brain-layer .poster, .brain-layer .labels { left: 22%; width: 78%; }
+  /* the object sits in the right-hand 58%: the headline is never read through it. Was 22%/78%, which
+     put the brain's left edge under the last word of the headline (CSF, 2026-10-02: "otaknya kanan"). */
+  .brain-layer canvas, .brain-layer .poster, .brain-layer .labels { left: 42%; width: 58%; }
 }
 
 .labels { position: absolute; inset: 0; pointer-events: none; }
@@ -301,9 +306,16 @@ body[data-ground="dark"] .topnav a { color: var(--on-chamber-2); }
 /* the mark: CSF's own file (2026-09-28), replacing the amber-dot-plus-text placeholder. A real
    logo doesn't recolour per ground the way the dot did; it's the same blue gradient on chamber
    and on paper, which is the point of a mark rather than a token-painted glyph. */
-.wordmark { display: inline-flex; align-items: center; text-decoration: none; }
+.wordmark { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; }
 .wordmark-mark { display: block; height: 24px; width: auto; }
 @media (min-width: 1000px) { .wordmark-mark { height: 28px; } }
+/* the brain-constellation mark, generated as nodes and lines rather than traced from the
+   supplied webp (2026-10-02 decision, see render.mjs brainMark()). Fixed --mark-blue, same
+   reasoning as the wordmark above it: a mark, not a token-painted glyph. */
+.brand-mark { display: block; flex: none; color: var(--mark-blue); height: 20px; width: auto; }
+@media (min-width: 1000px) { .brand-mark { height: 23px; } }
+.brand-mark__line { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+.brand-mark__node { fill: currentColor; }
 .topnav { margin-left: auto; }
 .topnav ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
 .topnav a { font-family: var(--sans); font-variation-settings: "wdth" 100; font-size: var(--fs-name); letter-spacing: -0.004em; color: var(--on-chamber-2); text-decoration: none; transition: color var(--micro) var(--ease); }
@@ -1390,6 +1402,8 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
   font-size: clamp(18px, 2vw, 23px); line-height: 1.2; letter-spacing: -0.018em;
 }
 .play__arrow { font-size: 1.15em; line-height: 1; color: var(--key); }
+/* the demo's arrow points at the centre of the slider, so it takes its own row and centres on it */
+.demo-controls .play__arrow { flex: 0 0 100%; text-align: center; }
 /* Ground first, container second, and the order matters: the leads well is a DARK panel sitting
    inside a COCONUT section, so a rule keyed on the section ground paints its cue in near-black ink
    on near-black and the invitation disappears. Both selectors weigh the same, so the container has
@@ -1445,27 +1459,27 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
   <aside class="card" hidden aria-live="polite"></aside>
 </div>
 <header class="topbar">
-  <a class="wordmark" href="#hero"><img class="wordmark-mark" src="./assets/jaw-logo.png" alt="JAW AI" width="123" height="45"></a>
-  <nav class="topnav" aria-label="Sections"><ul><li><a href="#offer">The offer</a></li><li><a href="#profile">Our profile</a></li><li><a href="#contact">Contact</a></li></ul></nav>
-  <a class="btn btn-primary btn-top" href="#contact">Book a 20-minute scope call</a>
+  <a class="wordmark" href="#hero"><svg class="brand-mark" viewBox="0 0 42 34" width="26" height="21" aria-hidden="true" data-mark="nav"><path class="brand-mark__line" d="M11,3 L26,2 L36,11 L39,22 L30,31 L19,21 L8,30 L2,18 Z"/><circle class="brand-mark__node" cx="11" cy="3" r="2"/><circle class="brand-mark__node" cx="26" cy="2" r="2"/><circle class="brand-mark__node" cx="36" cy="11" r="2"/><circle class="brand-mark__node" cx="39" cy="22" r="2"/><circle class="brand-mark__node" cx="30" cy="31" r="2"/><circle class="brand-mark__node" cx="19" cy="21" r="2.6"/><circle class="brand-mark__node" cx="8" cy="30" r="2"/><circle class="brand-mark__node" cx="2" cy="18" r="2"/></svg><img class="wordmark-mark" src="./assets/jaw-logo.png" alt="JAW AI" width="123" height="45"></a>
+  <nav class="topnav" aria-label="Sections"><ul><li><a href="#offer">Services</a></li><li><a href="#profile">Team</a></li><li><a href="#contact">Contact</a></li></ul></nav>
+  <a class="btn btn-primary btn-top" href="#contact">Book a 20-minute call</a>
 </header>
 <main id="main">
 
 <section class="hero" id="hero">
   <div class="hero-head">
     <h1 class="h1"><span class="h1-line"><span class="h1-inner" style="--i:0">AI systems</span></span><span class="h1-line"><span class="h1-inner" style="--i:1">that keep running</span></span><span class="h1-line"><span class="h1-inner" style="--i:2">after we leave.</span></span></h1>
-    <p class="hero-lede">Forecasts, reconciliations, and an assistant that answers from your own files. For Singapore companies whose numbers live in Excel and whose decisions live in an inbox.</p>
+    <p class="hero-lede">Forecasts, automation, and an assistant that answers from your own files. For companies whose numbers live in Excel and whose decisions live in an inbox.</p>
   </div>
   <div class="hero-foot">
     <div class="hero-ask">
-      <a class="btn btn-primary hero-cta" href="#contact">Book a 20-minute scope call</a>
+      <a class="btn btn-primary hero-cta" href="#contact">Book a 20-minute call</a>
       <form class="ask" id="ask" autocomplete="off">
         <label class="ask-label" for="ask-input">Jump to a service</label>
         <div class="ask-field">
           <input id="ask-input" type="text" name="service" list="ask-list" placeholder="Type a service name…">
           <button type="submit" class="ask-go">Open</button>
         </div>
-        <datalist id="ask-list"><option value="AI Consultancy"><option value="Forecasting"><option value="Top AI Talent"><option value="Model Validation"><option value="Automation"><option value="Business Development"><option value="Company Brain"><option value="Compliance Operations"><option value="IT Transformation"><option value="AI Governance"><option value="Managed Operations"><option value="Custom Software"><option value="Suitability Screening"><option value="AI Optimisation"></datalist>
+        <datalist id="ask-list"><option value="AI Consultancy"><option value="Forecasting"><option value="AI Talent"><option value="Model Validation"><option value="Automation"><option value="Business Development"><option value="Company Brain"><option value="Compliance Operations"><option value="IT Transformation"><option value="AI Governance"><option value="Managed Operations"><option value="Custom Software"><option value="Suitability Screening"><option value="AI Optimisation"></datalist>
         <p class="ask-result" aria-live="polite"></p>
       </form>
     </div>
@@ -1476,8 +1490,8 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
   <section class="cut cut--offer g-coconut offer-panel" id="offer" data-panel="1">
     <div class="offer-panel__in">
       <div class="act-head offer__head">
-        <p class="label">The offer</p>
-        <h2 class="h2 rise">Fourteen things we do. Five ways to buy them.</h2>
+        <p class="label">Services</p>
+        <h2 class="h2 rise">Fourteen services, in five groups.</h2>
         
       </div>
       <div class="offer-split offer-split--3-4">
@@ -1485,7 +1499,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
           <div class="offer-half__head offer-slide">
             <svg class="offer-mark" viewBox="0 0 48 28" width="40" height="24" aria-hidden="true"><path class="offer-mark__line" d="M12 14 L30 7 M12 14 L34 21" pathLength="1"/><circle class="offer-mark__leaf" cx="30" cy="7" r="2.2"/><circle class="offer-mark__leaf" cx="34" cy="21" r="2.2"/><circle class="offer-mark__hub" cx="12" cy="14" r="4"/></svg>
             <h3 class="offer-half__name">Advise</h3>
-            <p class="offer-half__line">Where AI and IT spend pays off, and what's worth keeping</p>
+            <p class="offer-half__line">Find out where AI and IT will pay off for you</p>
           </div>
           <div class="offer-half__blocks">
             <div class="offer-block index-row offer-slide" data-slug="ai-consultancy" data-group="advise">
@@ -1493,15 +1507,15 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
               <p class="offer-block__line">A two-week plan for where AI pays off first</p>
               <details class="pair__more">
                 <summary>Read</summary>
-                <p class="pair__blurb">Two weeks that end with a ranked list of where AI pays off in your business, and what each item costs to build and to run. We interview the people who do the work, read the data you already have, and write one page per candidate: the workflow it changes, the data it needs, the price. Where an off-the-shelf tool is good enough, the list says so and names it. You keep the document whether or not you build anything with us.</p>
+                <p class="pair__blurb">Two weeks that end with a ranked list of where AI pays off in your business, and what each item costs to build and to run. We interview the people who do the work, read the data you already have, and write one page per idea: the workflow it changes, the data it needs, the price. Where an off-the-shelf tool is good enough, the list says so and names it. You keep the document whether or not you build anything with us.</p>
               </details>
             </div>
             <div class="offer-block index-row offer-slide" data-slug="it-transformation" data-group="advise">
               <h4 class="offer-block__name">IT Transformation</h4>
-              <p class="offer-block__line">From legacy and spreadsheets to a stack your team can run</p>
+              <p class="offer-block__line">From old systems and spreadsheets to software your team can run</p>
               <details class="pair__more">
                 <summary>Read</summary>
-                <p class="pair__blurb">Most mid-market companies run on a legacy system nobody dares touch, a dozen spreadsheets, and three SaaS tools that do not talk to each other. IT transformation is the plan and the migration: which systems stay, which go, what replaces them, and in what order, so the business keeps running while it changes. We map the data first, move one process at a time, and leave every system documented, integrated, and owned by your own people rather than by us.</p>
+                <p class="pair__blurb">Most mid-market companies run on an old system nobody dares touch, a dozen spreadsheets, and three software subscriptions that do not talk to each other. IT transformation is the plan and the migration: which systems stay, which go, what replaces them, and in what order, so the business keeps running while it changes. We map the data first, move one process at a time, and leave every system documented, integrated, and owned by your own people rather than by us.</p>
               </details>
             </div>
             <div class="offer-block index-row offer-slide" data-slug="ai-optimisation" data-group="advise">
@@ -1509,7 +1523,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
               <p class="offer-block__line">Your existing AI pilot, faster and cheaper to run</p>
               <details class="pair__more">
                 <summary>Read</summary>
-                <p class="pair__blurb">A pilot that works in a demo and is slow, expensive, or flaky in daily use is the most common thing we are asked to fix. We measure the system you already run on real traffic first: latency, cost per request, failure rate. Then we change a copy, measure again, and keep only what helps: smaller models where accuracy allows, caching, batching, prompt and retrieval fixes. You get the numbers before and after, and an evaluation set your team can rerun without us.</p>
+                <p class="pair__blurb">A pilot that works in a demo but is slow, expensive, or unreliable in daily use is the most common thing we are asked to fix. We measure the system you already run on real use first: how slow it is, what each request costs, how often it fails. Then we change one thing at a time, measure again, and keep only what helps: smaller models where accuracy allows, and smarter ways to reuse and group the work. You get the numbers before and after, and a test set your team can rerun without us.</p>
               </details>
             </div>
           </div>
@@ -1518,7 +1532,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
           <div class="offer-half__head offer-slide">
             <svg class="offer-mark" viewBox="0 0 48 28" width="40" height="24" aria-hidden="true"><path class="offer-mark__line" d="M24 14 L9 7 M24 14 L39 7 M24 14 L11 22 M24 14 L37 22" pathLength="1"/><circle class="offer-mark__leaf" cx="9" cy="7" r="2.2"/><circle class="offer-mark__leaf" cx="39" cy="7" r="2.2"/><circle class="offer-mark__leaf" cx="11" cy="22" r="2.2"/><circle class="offer-mark__leaf" cx="37" cy="22" r="2.2"/><circle class="offer-mark__hub" cx="24" cy="14" r="4"/></svg>
             <h3 class="offer-half__name">Build</h3>
-            <p class="offer-half__line">Systems that run on a schedule inside your own accounts</p>
+            <p class="offer-half__line">Software built and running inside your own systems</p>
           </div>
           <div class="offer-half__blocks">
             <div class="offer-block index-row offer-slide" data-slug="forecasting" data-group="build">
@@ -1526,7 +1540,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
               <p class="offer-block__line">Demand, occupancy, and cash forecasts you can act on</p>
               <details class="pair__more">
                 <summary>Read</summary>
-                <p class="pair__blurb">Occupancy, covers, demand, cash: most teams forecast these in a spreadsheet by feel, and the spreadsheet is usually not wrong, just late. We build a model on your own history, backtest it walk-forward against what your team actually forecast on the same dates, and run it in parallel before anyone relies on it. It lands every morning where the team already looks, with an interval on every number. The 13-week cash forecast from a Xero ledger, every figure drilling to its source rows, is the first of these we productised.</p>
+                <p class="pair__blurb">Demand, occupancy, cash: most teams forecast these in a spreadsheet by feel, and the spreadsheet is usually not wrong, just late. We build a model on your own history, test it against what your team actually forecast on those same dates, and run it alongside your current process before anyone relies on it. It lands every morning where the team already looks, with a range on every number, not just a single guess. Our first ready-made product is a 13-week cash forecast from your Xero accounts, where every figure links back to the entries behind it.</p>
               </details>
             </div>
             <div class="offer-block index-row offer-slide" data-slug="automation" data-group="build">
@@ -1539,10 +1553,10 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
             </div>
             <div class="offer-block index-row offer-slide" data-slug="company-brain" data-group="build">
               <h4 class="offer-block__name">Company Brain</h4>
-              <p class="offer-block__line">Your documents, answered by one internal assistant</p>
+              <p class="offer-block__line">One assistant that answers from your own documents</p>
               <details class="pair__more">
                 <summary>Read</summary>
-                <p class="pair__blurb">The answer to most internal questions exists in a document someone wrote years ago, and the person who knows where it is has left or is on leave. A company brain is one assistant inside your own systems that answers from your documents, respects who may see what, and shows its source every time. Accuracy is measured on a question set your team writes, before rollout and every month after. It reads your wiki; it does not replace it.</p>
+                <p class="pair__blurb">The answer to most internal questions exists in a document someone wrote years ago, and the person who knows where it is has left or is on leave. A company brain is one assistant inside your own systems that answers from your documents, respects who may see what, and shows its source every time. Accuracy is measured on a question set your team writes, before rollout and every month after. It reads your documents; it does not replace them.</p>
               </details>
             </div>
             <div class="offer-block index-row offer-slide" data-slug="custom-software" data-group="build">
@@ -1550,7 +1564,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
               <p class="offer-block__line">The dashboard, integration, or internal tool nobody sells</p>
               <details class="pair__more">
                 <summary>Read</summary>
-                <p class="pair__blurb">Not every problem needs a model. Sometimes the job is a dashboard that reads three systems at once. Or an integration between the PMS and the accounting software. Or an internal tool for the one process your SaaS cannot do. We build that plain software with the same squad and the same rules as everything else: in your accounts, with a runbook, with the source in your repository. Where a model is the cheapest way through one messy step, it goes in; where it is not, it stays out.</p>
+                <p class="pair__blurb">Not every problem needs a model. Sometimes the job is a dashboard that reads three systems at once. Or a link between two systems that do not talk to each other. Or an internal tool for the one process your off-the-shelf software cannot do. We build that plain software by the same rules as everything else: in your own accounts, with a how-to guide, and with the source code handed over to you. Where AI is the cheapest way through one messy step, we use it; where it is not, we leave it out.</p>
               </details>
             </div>
           </div>
@@ -1565,15 +1579,15 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
           <div class="offer-half__head offer-slide">
             <svg class="offer-mark" viewBox="0 0 48 28" width="40" height="24" aria-hidden="true"><path class="offer-mark__line" d="M10 14 L38 14" pathLength="1"/><circle class="offer-mark__leaf" cx="24" cy="14" r="2.2"/><circle class="offer-mark__leaf" cx="38" cy="14" r="2.2"/><circle class="offer-mark__hub" cx="10" cy="14" r="4"/></svg>
             <h3 class="offer-half__name">Run</h3>
-            <p class="offer-half__line">Our people in your tools, our pager on your systems. Monthly.</p>
+            <p class="offer-half__line">Our people work in your tools and keep your systems running. Monthly.</p>
           </div>
           <div class="offer-half__blocks">
             <div class="offer-block index-row offer-slide" data-slug="ai-talent" data-group="run">
-              <h4 class="offer-block__name">Top AI Talent</h4>
+              <h4 class="offer-block__name">AI Talent</h4>
               <p class="offer-block__line">Senior engineers and analysts, managed from Singapore</p>
               <details class="pair__more">
                 <summary>Read</summary>
-                <p class="pair__blurb">When the plan needs more hands than a project gives you, we supply them. Senior AI engineers, software engineers, data analysts, and back-office operators, hired and managed by us, working inside your tools and your hours, at a price a mid-market budget can carry. You get named people, not a bench: a Singapore lead who is accountable, a two-week trial on real work before any commitment, and the same runbook discipline as our builds. Scale from one person to a team, monthly, and stop when the work stops.</p>
+                <p class="pair__blurb">When the plan needs more hands than a project gives you, we supply them. Senior AI engineers, software engineers, data analysts, and back-office operators, hired and managed by us, working inside your tools and your hours, at a price a mid-market budget can carry. You get named people, not anonymous staff: a Singapore lead who is accountable, a two-week trial on real work before any commitment, and the same standards as our builds. Scale from one person to a team, monthly, and stop when the work stops.</p>
               </details>
             </div>
             <div class="offer-block index-row offer-slide" data-slug="managed-operations" data-group="run">
@@ -1581,7 +1595,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
               <p class="offer-block__line">We keep running what we built. Stop any month.</p>
               <details class="pair__more">
                 <summary>Read</summary>
-                <p class="pair__blurb">Every system we hand over is designed to run without us. Some teams would rather it ran with us anyway. Managed operations is a monthly line. We watch the forecasts and retrain the models on schedule. We refresh the governance evidence. We answer the pager when an automation stops at two in the morning, and send a one-page report of what ran and what broke. The runbook stays yours, the source stays yours, and the arrangement ends the month you say so.</p>
+                <p class="pair__blurb">Every system we hand over is designed to run without us. Some teams would rather it ran with us anyway. Managed operations is a monthly service. We watch the forecasts and keep them accurate as your data changes. We keep your AI compliance records up to date. We pick up the phone when an automation stops at two in the morning, and send a one-page report of what ran and what broke. The how-to guide stays yours, the source code stays yours, and the arrangement ends the month you say so.</p>
               </details>
             </div>
           </div>
@@ -1590,7 +1604,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
           <div class="offer-half__head offer-slide">
             <svg class="offer-mark" viewBox="0 0 48 28" width="40" height="24" aria-hidden="true"><path class="offer-mark__line" d="M8 21 L22 12 L40 6 M22 12 L36 20" pathLength="1"/><circle class="offer-mark__leaf" cx="8" cy="21" r="2.2"/><circle class="offer-mark__leaf" cx="40" cy="6" r="2.2"/><circle class="offer-mark__leaf" cx="36" cy="20" r="2.2"/><circle class="offer-mark__hub" cx="22" cy="12" r="4"/></svg>
             <h3 class="offer-half__name">Grow</h3>
-            <p class="offer-half__line">The commercial side: pipeline and introductions, on retainer</p>
+            <p class="offer-half__line">More customers: sales follow-up and introductions, for a monthly fee</p>
           </div>
           <div class="offer-half__blocks">
             <div class="offer-block index-row offer-slide" data-slug="business-development" data-group="grow">
@@ -1598,7 +1612,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
               <p class="offer-block__line">Pipeline, partnerships, and the systems that keep them moving</p>
               <details class="pair__more">
                 <summary>Read</summary>
-                <p class="pair__blurb">Growth usually stalls for a boring reason: leads sit in an inbox, follow-ups depend on one person's memory, and nobody can say which channel actually pays. Business development is the commercial side of what we build. A pipeline your team can see. Outreach and follow-up on a schedule, with a named person approving every send. Partner and channel introductions from our own network in Singapore and the region. And a monthly number that says what each channel returned. We work on retainer, and the pipeline is yours.</p>
+                <p class="pair__blurb">Growth usually stalls for a boring reason: leads sit in an inbox, follow-ups depend on one person's memory, and nobody can say which channel actually pays. Business development is the commercial side of what we build. A pipeline your team can see. Outreach and follow-up on a schedule, with a named person approving every send. Partner and channel introductions from our own network in Singapore and the region. And a monthly number that says what each channel returned. We work for a monthly fee, and the pipeline is yours.</p>
               </details>
             </div>
           </div>
@@ -1613,23 +1627,23 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
           <div class="offer-half__head offer-slide">
             <svg class="offer-mark" viewBox="0 0 48 28" width="40" height="24" aria-hidden="true"><path class="offer-mark__line" d="M12 8 L36 8 L36 20 L12 20 Z" pathLength="1"/><circle class="offer-mark__leaf" cx="36" cy="8" r="2.2"/><circle class="offer-mark__leaf" cx="36" cy="20" r="2.2"/><circle class="offer-mark__leaf" cx="12" cy="20" r="2.2"/><circle class="offer-mark__hub" cx="12" cy="8" r="4"/></svg>
             <h3 class="offer-half__name">Regulate</h3>
-            <p class="offer-half__line">For CROs and Heads of Compliance under MAS. A named person signs</p>
+            <p class="offer-half__line">For banks, insurers and licensed fintechs under MAS. A named person signs off.</p>
           </div>
           <div class="offer-half__blocks">
             <div class="offer-block index-row offer-slide" data-slug="model-validation" data-group="regulate">
               <h4 class="offer-block__name">Model Validation</h4>
-              <p class="offer-block__line">Rebuilt, diffed, and signed by a named validator</p>
+              <p class="offer-block__line">Rebuilt, compared, and signed off by a named expert</p>
               <details class="pair__more">
                 <summary>Read</summary>
-                <p class="pair__blurb">Independent checking of the models a financial institution already runs: credit, pricing, capital, forecasting, and the AI ones. We rebuild the model ourselves and compare our outputs against yours, review the documentation against a standard test battery, and issue a signed validation report with a remediation plan. Every finding points at evidence, a test result or a document line, so a reviewer can check it without trusting us. A named validator signs, with the credentials the regulator will ask about. Sold per model, to the Head of Model Risk or the CRO.</p>
+                <p class="pair__blurb">Independent checking of the models a financial institution already runs: credit, pricing, capital, forecasting, and the AI ones. We rebuild the model ourselves and compare our outputs against yours, review the documentation against a standard set of tests, and issue a signed validation report with a remediation plan. Every finding points at evidence, a test result or a document line, so a reviewer can check it without trusting us. A named validator signs, with the credentials the regulator will ask about. Sold per model, to the Head of Model Risk or the CRO.</p>
               </details>
             </div>
             <div class="offer-block index-row offer-slide" data-slug="ai-governance" data-group="regulate">
               <h4 class="offer-block__name">AI Governance</h4>
-              <p class="offer-block__line">Your AI controls evidenced continuously, not once a year</p>
+              <p class="offer-block__line">Proof that your AI is under control, kept current all year</p>
               <details class="pair__more">
                 <summary>Read</summary>
-                <p class="pair__blurb">Most firms review their AI controls once a year and assemble the evidence in a three-week scramble when the regulator asks. We map every AI system you run to the controls a regulator expects of it. Then we collect the proof that each control is working, and keep it in a pack that is current on any day it is asked for. It ships as code and scheduled checks in your own repository, not as a platform you rent, and it is refreshed under managed operations. Sold to the CRO or Head of Model Risk.</p>
+                <p class="pair__blurb">Most firms review their AI controls once a year and assemble the evidence in a three-week scramble when the regulator asks. We map every AI system you run to the controls a regulator expects of it. Then we collect the proof that each control is working, and keep it in a pack that is current on any day it is asked for. It runs as automatic checks inside your own systems, not as a platform you rent, and we keep it current as part of Managed Operations. Sold to the CRO or Head of Model Risk.</p>
               </details>
             </div>
           </div>
@@ -1638,7 +1652,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
           <div class="offer-half__head offer-slide">
             <svg class="offer-mark" viewBox="0 0 48 28" width="40" height="24" aria-hidden="true"><path class="offer-mark__line" d="M12 8 L36 8 L36 20 L12 20 Z" pathLength="1"/><circle class="offer-mark__leaf" cx="36" cy="8" r="2.2"/><circle class="offer-mark__leaf" cx="36" cy="20" r="2.2"/><circle class="offer-mark__leaf" cx="12" cy="20" r="2.2"/><circle class="offer-mark__hub" cx="12" cy="8" r="4"/></svg>
             <h3 class="offer-half__name">Regulate <span class="offer-tag">Pilot</span></h3>
-            <p class="offer-half__line">Pilot. The first engagement funds the build.</p>
+            <p class="offer-half__line">Pilot services, built together with our first clients.</p>
           </div>
           <div class="offer-half__blocks">
             <div class="offer-block index-row offer-slide" data-slug="compliance-ops" data-group="regulate">
@@ -1646,7 +1660,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
               <p class="offer-block__line">Calendar, filings, and evidence for MAS-licensed firms</p>
               <details class="pair__more">
                 <summary>Read</summary>
-                <p class="pair__blurb">An outsourced compliance function for payment institutions and digital-asset firms that hold a MAS licence. We hold the compliance calendar and file on time. We write and maintain the manuals, and keep the evidence behind every obligation. When MAS publishes, we tell you what it means for your licence specifically. We read each publication once and know which of our clients it binds; everyone else reads it again, by hand, for every client. Your own MLRO stays the accountable officer; a named compliance lead of ours signs the work. Sold by introduction while the practice is small.</p>
+                <p class="pair__blurb">An outsourced compliance function for payment institutions and digital-asset firms that hold a MAS licence. We hold the compliance calendar and file on time. We write and maintain the manuals, and keep the evidence behind every obligation. When MAS publishes, we tell you what it means for your licence specifically. We read each new MAS notice once and know which of our clients it applies to. Your own MLRO stays the accountable officer; a named compliance lead of ours signs the work. Available by introduction for now.</p>
               </details>
             </div>
             <div class="offer-block index-row offer-slide" data-slug="suitability-surveillance" data-group="regulate">
@@ -1654,7 +1668,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
               <p class="offer-block__line">Every advisor conversation screened against your suitability rules</p>
               <details class="pair__more">
                 <summary>Read</summary>
-                <p class="pair__blurb">Today a firm hand-checks a small random sample of advisor conversations and never listens to the rest. We screen every recorded conversation against the firm's own suitability rules. The conduct team gets a short queue of flagged cases, each cued to the moment that triggered the flag. People spend their time only on what was flagged, and the sample becomes the whole population. Priced per advisor, sold to the Head of Compliance or Head of Conduct at an insurer, bank, or advisory firm. A pilot: the first engagement funds the speech pipeline and the PDPA handling.</p>
+                <p class="pair__blurb">Today a firm hand-checks a small random sample of advisor conversations and never listens to the rest. We screen every recorded conversation against the firm's own suitability rules. The conduct team gets a short queue of flagged cases, each pointing to the moment that triggered the flag. People spend their time only on what was flagged, and instead of a sample, every conversation gets checked. Priced per advisor, sold to the Head of Compliance or Head of Conduct at an insurer, bank, or advisory firm. A pilot: the first client's engagement pays for building the speech and data-protection handling.</p>
               </details>
             </div>
           </div>
@@ -1665,8 +1679,8 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
   <section class="cut cut--demo g-graphite" id="demo">
     <div class="cut__in rise">
       <p class="label">See it work</p>
-      <h2 class="cut__h">Same 52 weeks. Three forecasts. You pick.</h2>
-      <p class="cut__p cut__p--wide">White is what really happened. Amber is the model's guess. Drag the slider to swap the model.</p>
+      <h2 class="cut__h">Same training data. Three forecasts. You pick.</h2>
+      <p class="cut__p cut__p--wide">Say you're forecasting logistics. White is the training data. Amber is the model's guess. Drag the slider to swap the model.</p>
       <div class="demo-widget">
         <div class="demo-chart-wrap">
           <svg class="demo-chart" viewBox="0 0 640 300" preserveAspectRatio="none" aria-hidden="true">
@@ -1683,7 +1697,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
           <p class="demo-stops" aria-hidden="true"><span>Too simple</span><span>Just right</span><span>Too clever</span></p>
           <p class="demo-state-note"></p>
         </div>
-        <p class="demo-legend"><span data-series="actual">What really happened</span><span data-series="fit">The model's guess</span></p>
+        <p class="demo-legend"><span data-series="actual">Training data</span><span data-series="fit">The model's guess</span></p>
         <p class="demo-point">Same data, three answers. Picking the right one is the job.</p>
         <p class="cut__tag">Sample data, generated for this page. Illustrative, not a client's numbers.</p>
       </div>
@@ -1693,7 +1707,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
     <div class="cut__in rise">
       <p class="label">See it sort</p>
       <h2 class="cut__h">Fourteen leads. One formula you can read.</h2>
-      <p class="cut__p cut__p--wide">Every lead here has five numbers: last contact, replies, company size, where it came from, and a budget signal. The score is a weighted sum of those five, nothing else. Press a button below and the ladder re-sorts. Click any lead and the receipt on the right shows its five products and their sum.</p>
+      <p class="cut__p cut__p--wide">Every lead gets five scores: how recently we spoke, how often they reply, company size, where they came from, and whether they have a budget. Add them up for one score out of 100. Press a button to change what matters most and watch the list re-sort. Click any lead to see exactly how its score was built.</p>
       <div class="leads-widget">
         <div class="leads-well" data-in="0">
           <p class="leads-well__head"><span>Ranked by score</span><span class="leads-well__counts"><span data-band="hot">4 Hot</span><span data-band="warm">8 Warm</span><span data-band="cold">2 Cold</span></span></p>
@@ -1758,7 +1772,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
           <li class="lead" data-id="1" data-rank="7" data-band="warm" style="--r:7">
             <button type="button" class="lead__btn" aria-pressed="false" aria-label="Prospect B, ranked 8 of 14, score 51, Warm">
               <span class="lead__rank">08</span>
-              <span class="lead__body"><span class="lead__name">Prospect B</span><span class="lead__story">Came inbound. Under 20 people.</span></span>
+              <span class="lead__body"><span class="lead__name">Prospect B</span><span class="lead__story">They contacted us. Under 20 people.</span></span>
               <span class="lead__score" style="--score:51"><span class="leads-sr">51</span></span>
               <span class="lead__band">Warm</span>
             </button>
@@ -1868,7 +1882,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
     </li>
     <li class="rcpt__sig" data-key="origin" style="--k:3">
       <span class="rcpt__sig-name">Came from</span>
-      <span class="rcpt__sig-val">inbound</span>
+      <span class="rcpt__sig-val">they contacted us</span>
       <span class="rcpt__sig-eq"><b class="n">0.80</b> <span class="rcpt__x">×</span> <b class="w">20</b></span>
       <span class="rcpt__sig-pts"><b class="p">16.0</b></span>
     </li>
@@ -1889,7 +1903,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
   <section class="cut cut--team g-mist" id="profile">
     <div class="team">
       <div class="act-head team__head">
-        <p class="label">Our profile</p>
+        <p class="label">Team</p>
         <h2 class="h2 rise">The people building JAW AI.</h2>
         
       </div>
@@ -1925,8 +1939,8 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
 
 <section class="close" id="contact">
   <div class="close-wrap">
-    <h2 class="h2">Tell us the problem. We'll tell you which of the fourteen it is.</h2>
-    <p class="close-sub">Twenty minutes, and it ends in one of three things: a yes, a no, or the name of someone better suited than us.</p>
+    <h2 class="h2">Tell us the problem. We'll tell you the solution.</h2>
+    <p class="close-sub">A 20-minute call. We tell you whether we can fix it and, if we are not the right people, who is.</p>
     <form class="brief" id="brief" data-to="customer.jaw.ai@gmail.com">
       <div class="brief-plate">
         <label class="brief-well">
@@ -1939,12 +1953,12 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
         <label class="brief-line"><span class="brief-line-name">Work email</span><input name="email" type="email" required></label>
         </div>
         <div class="brief-foot">
-          <button type="submit" class="btn btn-primary">Send the brief</button>
-          <a class="brief-alt" href="mailto:customer.jaw.ai@gmail.com">Send a brief by email</a>
+          <button type="submit" class="btn btn-primary">Send message</button>
+          <a class="brief-alt" href="mailto:customer.jaw.ai@gmail.com">Email us instead</a>
         </div>
       </div>
-      <noscript><p class="brief-note">JavaScript is off, so the form cannot fill the mail for you. Use the email link above and tell us the problem in one sentence.</p></noscript>
-      <p class="brief-note">This opens your own mail app with the brief filled in. Nothing leaves this page.</p>
+      <noscript><p class="brief-note">This form needs JavaScript. Email us instead and describe the problem in one sentence.</p></noscript>
+      <p class="brief-note">This opens your email app with your message ready to send. You press send.</p>
     </form>
   </div>
 </section>
@@ -1953,10 +1967,10 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
 <footer class="colophon">
   <div class="colophon-wrap">
     <div>
-      <span class="wordmark"><img class="wordmark-mark" src="./assets/jaw-logo.png" alt="JAW AI" width="123" height="45"></span>
+      <span class="wordmark"><svg class="brand-mark" viewBox="0 0 42 34" width="26" height="21" aria-hidden="true" data-mark="foot"><path class="brand-mark__line" d="M11,3 L26,2 L36,11 L39,22 L30,31 L19,21 L8,30 L2,18 Z"/><circle class="brand-mark__node" cx="11" cy="3" r="2"/><circle class="brand-mark__node" cx="26" cy="2" r="2"/><circle class="brand-mark__node" cx="36" cy="11" r="2"/><circle class="brand-mark__node" cx="39" cy="22" r="2"/><circle class="brand-mark__node" cx="30" cy="31" r="2"/><circle class="brand-mark__node" cx="19" cy="21" r="2.6"/><circle class="brand-mark__node" cx="8" cy="30" r="2"/><circle class="brand-mark__node" cx="2" cy="18" r="2"/></svg><img class="wordmark-mark" src="./assets/jaw-logo.png" alt="JAW AI" width="123" height="45"></span>
     </div>
-    <ul class="colophon-nav"><li><a href="#offer">The offer</a></li><li><a href="#profile">Our profile</a></li><li><a href="#contact">Contact</a></li><li><a href="mailto:customer.jaw.ai@gmail.com">customer.jaw.ai@gmail.com</a></li></ul>
-    <p class="mono">The brain on this page is a real human cortex: crest nodes sampled from the FreeSurfer fsaverage pial surface.</p>
+    <ul class="colophon-nav"><li><a href="#offer">Services</a></li><li><a href="#profile">Team</a></li><li><a href="#contact">Contact</a></li><li><a href="mailto:customer.jaw.ai@gmail.com">customer.jaw.ai@gmail.com</a></li></ul>
+    <p class="mono">The brain on this page is a real human cortex, not a stock image or an illustration.</p>
     <p class="mono">Anything you send through this site is used only to reply to your enquiry, under Singapore's Personal Data Protection Act.</p>
     <p class="mono colophon-copy">JAW AI. Singapore.</p>
   </div>
