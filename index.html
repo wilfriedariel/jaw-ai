@@ -231,13 +231,7 @@ body[data-act="contact"] .hub:not([data-active="1"]) { opacity: 0; pointer-event
 .dot { width: 7px; height: 7px; margin-top: 5px; border-radius: 50%; border: 1px solid var(--acc, var(--on-chamber)); background: var(--acc, transparent); opacity: 0.85; transform: translateX(-4px); flex: none; }
 .hub[data-active="1"] .dot { border-color: var(--key); background: var(--key); opacity: 1; }
 
-.hud { position: absolute; display: flex; flex-direction: column; gap: 3px; pointer-events: none; color: var(--on-chamber); opacity: 0.82; line-height: 1.6; font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em; }
-.hud-top { top: calc(var(--bar) + 12px); right: var(--margin); text-align: right; }
-.hud-corner { top: calc(var(--bar) + 12px + 5.2em); right: var(--margin); text-align: right; }
 @media (max-width: 999px) {
-  .hud-corner { display: none; }
-  .hud-top { top: auto; bottom: 10px; left: var(--margin); right: auto; text-align: left; }
-  .hud-top span:nth-child(n+2) { display: none; }
   .hub { opacity: 0; pointer-events: none; }
   .hub[data-active="1"] { opacity: 1; pointer-events: auto; }
 }
@@ -1357,6 +1351,54 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
   .rise, .reveal, .offer-slide, .offer-block__name, .offer-block__line, .offer-mark__line, .offer-mark__hub, .offer-mark__leaf { opacity: 1; transform: none; clip-path: none; animation: none; stroke-dashoffset: 0; }
   .card { animation: none; }
 }
+
+/* ---------------------------------------------------------------- the toys announce themselves
+   2026-10-02. CSF: "orang bisa gatau ada slider disitu ... semua mainan harus ditulis gede pake
+   arrow, suruh orang mainan dan jelas dipahami, jangan cuman gw yang desain yang paham."
+   A control that only the person who built it knows is interactive is a control nobody uses. The
+   cue is set at reading size, not at label size, because the problem was never the wording, it
+   was that the invitation was printed smaller than everything around it. Sentence case: the taste
+   contract bans tracked capitals, and capitals are not what makes a line loud. Size is. */
+.play {
+  margin: 14px 0 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  font-family: var(--display); font-variation-settings: "wdth" 108; font-weight: 600;
+  font-size: clamp(18px, 2vw, 23px); line-height: 1.2; letter-spacing: -0.018em;
+}
+.play__arrow { font-size: 1.15em; line-height: 1; color: var(--key); }
+/* Ground first, container second, and the order matters: the leads well is a DARK panel sitting
+   inside a COCONUT section, so a rule keyed on the section ground paints its cue in near-black ink
+   on near-black and the invitation disappears. Both selectors weigh the same, so the container has
+   to come last to win. Caught in the first screenshot: the line was there and unreadable. */
+.g-coconut .play, .g-mist .play, .g-butter .play { color: var(--ink); }
+.demo-controls .play { color: var(--on-chamber); }
+.leads-controls .play { color: var(--coconut); }
+/* the arrow nudges toward the control it points at, which is the whole job of an arrow */
+@media (prefers-reduced-motion: no-preference) {
+  .play__arrow { animation: play-nudge 1900ms var(--ease) infinite; }
+  @keyframes play-nudge { 0%, 68%, 100% { transform: translateY(0); } 82% { transform: translateY(4px); } }
+}
+
+/* three buttons, not a second slider. A different verb from the forecast toy, pressable on a
+   touch screen where a 6px groove is not, and the state is readable without moving anything. */
+.pick { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+.pick__btn {
+  flex: 1 1 auto; min-height: 46px; padding: 11px 16px; cursor: pointer;
+  font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 600;
+  font-size: var(--fs-name); letter-spacing: -0.004em;
+  color: var(--coconut); background: rgba(246, 243, 236, 0.07);
+  border: 1px solid rgba(246, 243, 236, 0.22); border-radius: 4px;
+  transition: background var(--micro) var(--ease), color var(--micro) var(--ease), border-color var(--micro) var(--ease);
+}
+.pick__btn:hover { background: rgba(246, 243, 236, 0.14); border-color: rgba(246, 243, 236, 0.4); }
+.pick__btn:focus-visible { outline: 2px solid var(--key); outline-offset: 3px; }
+.pick__btn[aria-pressed="true"] { background: var(--key); color: var(--key-ink); border-color: var(--key-deep); }
+
+/* the forecast dot was a 24px disc on a 6px groove and read as decoration. Bigger, with a grip,
+   and a track that looks like something a dot slides along. */
+#demo-slider { height: 44px; cursor: grab; }
+#demo-slider:active { cursor: grabbing; }
+#demo-slider::-webkit-slider-thumb { width: 34px; height: 34px; }
+#demo-slider::-moz-range-thumb { width: 34px; height: 34px; }
 </style>
 </head>
 <body data-act="hero" data-ground="chamber">
@@ -1367,8 +1409,6 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
   <img class="poster" src="./brain/poster-800.webp" srcset="./brain/poster-640.webp 640w, ./brain/poster-800.webp 800w, ./brain/poster-1600.webp 1600w" sizes="(max-width: 999px) 100vw, 78vw" alt="A human cortex drawn as points and lines, with 14 JAW AI services named on it" width="1600" height="1000" fetchpriority="high">
   <canvas aria-hidden="true"></canvas>
   <div class="labels"></div>
-  <div class="hud hud-top"></div>
-  <div class="hud hud-corner"></div>
   <aside class="card" hidden aria-live="polite"></aside>
 </div>
 <header class="topbar">
@@ -1605,6 +1645,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
         </div>
         <div class="demo-controls">
           <p class="demo-readout"><span class="demo-slider-label">The model</span><span class="demo-state-label"></span></p>
+          <p class="play">Drag the white dot. The amber line follows.<span class="play__arrow" aria-hidden="true">&#8595;</span></p>
           <label class="demo-groove"><span class="sr-only">The model</span><input id="demo-slider" type="range" min="0" max="100" step="1" value="50"></label>
           <p class="demo-stops" aria-hidden="true"><span>Too simple</span><span>Just right</span><span>Too clever</span></p>
           <p class="demo-state-note"></p>
@@ -1741,8 +1782,14 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
             <button type="button" class="leads-fold" aria-expanded="false" aria-controls="leads-list"><span class="leads-fold__more">Show the other 7</span><span class="leads-fold__less">Just the top 7</span></button>
           </div>
           <div class="leads-controls">
-            <label class="leads-slider-label" for="leads-slider">What counts most: <span class="leads-state-label">Balanced</span></label>
-            <input id="leads-slider" type="range" min="0" max="100" step="1" value="50">
+            <p class="leads-slider-label">What counts most: <span class="leads-state-label">Balanced</span></p>
+            <p class="play play--pick"><span class="play__arrow" aria-hidden="true">&#8595;</span>Press one. The ladder re-sorts itself.</p>
+            <div class="pick" role="group" aria-label="What counts most">
+              <button type="button" class="pick__btn" data-pct="0" aria-pressed="false">Who's talking</button>
+              <button type="button" class="pick__btn" data-pct="50" aria-pressed="true">Balanced</button>
+              <button type="button" class="pick__btn" data-pct="100" aria-pressed="false">Who fits</button>
+            </div>
+            <input id="leads-slider" type="hidden" value="50">
             <p class="leads-state-note">All five signals weigh 20 points each. Our starting point, before we tune it with you.</p>
             <p class="leads-weights" aria-label="Weights now">
             <span class="leads-weight" data-key="recency"><span class="leads-weight__name">Last contact</span><span class="leads-weight__num">20</span><i class="leads-weight__bar" style="--w:20"></i></span>
