@@ -28,10 +28,6 @@
   --coconut: #f6f3ec;
   --graphite: #191614;
   --key: #f0b23f;            /* the specimen key. The brain draws with it, so it never changes */
-  --mark-blue: #3373c5;      /* the brain-constellation mark beside the wordmark, 2026-10-02.
-                                 Sampled from jaw-logo.png's own gradient so the two marks read as
-                                 one lockup. Fixed like the wordmark: a logo doesn't recolour per
-                                 ground, never overridden inside a .g-* ground class. */
   --key-ink: #17120a;
   /* the amber is a lit object, not a fill: a control painted with it is graded from this pair.
      Both stops are measured against --key-ink in qa/jaw/contrast_check.mjs. */
@@ -306,16 +302,9 @@ body[data-ground="dark"] .topnav a { color: var(--on-chamber-2); }
 /* the mark: CSF's own file (2026-09-28), replacing the amber-dot-plus-text placeholder. A real
    logo doesn't recolour per ground the way the dot did; it's the same blue gradient on chamber
    and on paper, which is the point of a mark rather than a token-painted glyph. */
-.wordmark { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; }
+.wordmark { display: inline-flex; align-items: center; text-decoration: none; }
 .wordmark-mark { display: block; height: 24px; width: auto; }
 @media (min-width: 1000px) { .wordmark-mark { height: 28px; } }
-/* the brain-constellation mark, generated as nodes and lines rather than traced from the
-   supplied webp (2026-10-02 decision, see render.mjs brainMark()). Fixed --mark-blue, same
-   reasoning as the wordmark above it: a mark, not a token-painted glyph. */
-.brand-mark { display: block; flex: none; color: var(--mark-blue); height: 20px; width: auto; }
-@media (min-width: 1000px) { .brand-mark { height: 23px; } }
-.brand-mark__line { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
-.brand-mark__node { fill: currentColor; }
 .topnav { margin-left: auto; }
 .topnav ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
 .topnav a { font-family: var(--sans); font-variation-settings: "wdth" 100; font-size: var(--fs-name); letter-spacing: -0.004em; color: var(--on-chamber-2); text-decoration: none; transition: color var(--micro) var(--ease); }
@@ -1459,7 +1448,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
   <aside class="card" hidden aria-live="polite"></aside>
 </div>
 <header class="topbar">
-  <a class="wordmark" href="#hero"><svg class="brand-mark" viewBox="0 0 42 34" width="26" height="21" aria-hidden="true" data-mark="nav"><path class="brand-mark__line" d="M11,3 L26,2 L36,11 L39,22 L30,31 L19,21 L8,30 L2,18 Z"/><circle class="brand-mark__node" cx="11" cy="3" r="2"/><circle class="brand-mark__node" cx="26" cy="2" r="2"/><circle class="brand-mark__node" cx="36" cy="11" r="2"/><circle class="brand-mark__node" cx="39" cy="22" r="2"/><circle class="brand-mark__node" cx="30" cy="31" r="2"/><circle class="brand-mark__node" cx="19" cy="21" r="2.6"/><circle class="brand-mark__node" cx="8" cy="30" r="2"/><circle class="brand-mark__node" cx="2" cy="18" r="2"/></svg><img class="wordmark-mark" src="./assets/jaw-logo.png" alt="JAW AI" width="123" height="45"></a>
+  <a class="wordmark" href="#hero"><img class="wordmark-mark" src="./assets/jaw-logo.png" alt="JAW AI" width="123" height="45"></a>
   <nav class="topnav" aria-label="Sections"><ul><li><a href="#offer">Services</a></li><li><a href="#profile">Team</a></li><li><a href="#contact">Contact</a></li></ul></nav>
   <a class="btn btn-primary btn-top" href="#contact">Book a 20-minute call</a>
 </header>
@@ -1688,7 +1677,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
             <path class="demo-actual"></path>
             <path class="demo-fit"></path>
           </svg>
-          <p class="demo-split-label">Next 12 weeks</p>
+          <p class="demo-split-label">The forecast</p>
         </div>
         <div class="demo-controls">
           <p class="demo-readout"><span class="demo-slider-label">The model</span><span class="demo-state-label"></span></p>
@@ -1698,7 +1687,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
           <p class="demo-state-note"></p>
         </div>
         <p class="demo-legend"><span data-series="actual">Training data</span><span data-series="fit">The model's guess</span></p>
-        <p class="demo-point">Same data, three answers. Picking the right one is the job.</p>
+        <p class="demo-point">Same data, three answers. Picking the right one is the job. Our forecasting works for any problem you have.</p>
         <p class="cut__tag">Sample data, generated for this page. Illustrative, not a client's numbers.</p>
       </div>
     </div>
@@ -1967,7 +1956,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
 <footer class="colophon">
   <div class="colophon-wrap">
     <div>
-      <span class="wordmark"><svg class="brand-mark" viewBox="0 0 42 34" width="26" height="21" aria-hidden="true" data-mark="foot"><path class="brand-mark__line" d="M11,3 L26,2 L36,11 L39,22 L30,31 L19,21 L8,30 L2,18 Z"/><circle class="brand-mark__node" cx="11" cy="3" r="2"/><circle class="brand-mark__node" cx="26" cy="2" r="2"/><circle class="brand-mark__node" cx="36" cy="11" r="2"/><circle class="brand-mark__node" cx="39" cy="22" r="2"/><circle class="brand-mark__node" cx="30" cy="31" r="2"/><circle class="brand-mark__node" cx="19" cy="21" r="2.6"/><circle class="brand-mark__node" cx="8" cy="30" r="2"/><circle class="brand-mark__node" cx="2" cy="18" r="2"/></svg><img class="wordmark-mark" src="./assets/jaw-logo.png" alt="JAW AI" width="123" height="45"></span>
+      <span class="wordmark"><img class="wordmark-mark" src="./assets/jaw-logo.png" alt="JAW AI" width="123" height="45"></span>
     </div>
     <ul class="colophon-nav"><li><a href="#offer">Services</a></li><li><a href="#profile">Team</a></li><li><a href="#contact">Contact</a></li><li><a href="mailto:customer.jaw.ai@gmail.com">customer.jaw.ai@gmail.com</a></li></ul>
     <p class="mono">The brain on this page is a real human cortex, not a stock image or an illustration.</p>
