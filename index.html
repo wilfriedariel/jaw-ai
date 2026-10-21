@@ -5,13 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>JAW AI. AI systems that keep running after we leave.</title>
 <meta name="description" content="JAW AI builds forecasting, automation, and internal assistants for companies that run on spreadsheets and email. We build it, and it keeps running after we leave.">
-<meta name="theme-color" content="#0e2b24">
+<meta name="theme-color" content="#0a1030">
 <meta property="og:title" content="JAW AI. AI systems that keep running after we leave.">
 <meta property="og:description" content="JAW AI builds forecasting, automation, and internal assistants for companies that run on spreadsheets and email. We build it, and it keeps running after we leave.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://jaw-ai.com/">
+<meta property="og:image" content="https://jaw-ai.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://jaw-ai.com/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"JAW AI","url":"https://jaw-ai.com/","description":"JAW AI builds forecasting, automation, and internal assistants for companies that run on spreadsheets and email. We build it, and it keeps running after we leave.","email":"customer.jaw.ai@gmail.com","areaServed":{"@type":"Country","name":"Singapore"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"JAW AI","url":"https://jaw-ai.com/","logo":"https://jaw-ai.com/assets/jaw-mark.png","description":"JAW AI builds forecasting, automation, and internal assistants for companies that run on spreadsheets and email. We build it, and it keeps running after we leave.","email":"customer.jaw.ai@gmail.com","areaServed":{"@type":"Country","name":"Singapore"}}</script>
 <link rel="icon" href="./favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,36 +23,38 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&family=Newsreader:opsz,wght@6..72,400..600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&family=Newsreader:opsz,wght@6..72,400..600&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
 <style>/* JAW AI. The contract is DESIGN_JAW.md; every value here traces to a line in it.
-   Two grounds: a warm chamber for the object, plaster paper for the document. One hue, the
-   specimen key, at two values. A literal colour used in a component instead of a token is a bug. */
+   Two grounds: a deep-navy chamber for the object, cool paper for the document. One hue, the
+   specimen key (the cyan of the JAW mark), at two values. Re-themed 2026-10-21 from the new logo:
+   blue, cyan, violet and magenta on navy. Token names kept (jade, butter) so the gates still read them;
+   the values are the logo's. A literal colour used in a component instead of a token is a bug. */
 
 :root {
   /* --- CORE. Three values carry the whole system, the way Dropbox's Blue, Coconut and
      Graphite do: one warm off-white to read on, one warm near-black, and the specimen's room. */
-  --coconut: #f6f3ec;
-  --graphite: #191614;
-  --key: #f0b23f;            /* the specimen key. The brain draws with it, so it never changes */
-  --key-ink: #17120a;
+  --coconut: #f5f7ff;
+  --graphite: #0b1230;
+  --key: #37d4e6;            /* the specimen key: the cyan of the mark. The brain draws with it */
+  --key-ink: #04132b;
   /* the amber is a lit object, not a fill: a control painted with it is graded from this pair.
      Both stops are measured against --key-ink in qa/jaw/contrast_check.mjs. */
-  --key-lit: #ffc862;
-  --key-deep: #d99a2c;
+  --key-lit: #7cecf4;
+  --key-deep: #1dafc7;
 
   /* the receipt's five segments: five values of the one hue, deep to paper value, in signal
      order. Shapes on a card, keyed to five printed numbers, not five accents. Three of the five
      are existing tokens; the two intermediates are the only new literals. */
-  --key-step-1: var(--key-deep);
-  --key-step-2: #e6a636;
+  --key-step-1: #2d6cf6;
+  --key-step-2: #2f9de8;
   --key-step-3: var(--key);
-  --key-step-4: #f5c546;
-  --key-step-5: var(--butter);
+  --key-step-4: #8d6cf2;
+  --key-step-5: #d24bd0;
 
   /* --- GROUNDS. Every ground on the page is the paper, the ink, the room, or the specimen;
      nothing is imported (DESIGN_TASTE_2026-09-08.md). Sky and lilac were deleted 2026-09-08
      as hues that belonged to nobody, and with them a `#ff6a4d` typed straight into .g-coral:
      a literal the contrast gate reads :root and therefore never measured. Measured on the way
      out, the jade accent on that coral was 3.00:1, under AA. */
-  --butter: #ffd84d;         /* the specimen at paper value */
+  --butter: #c4f1f6;         /* (name kept) the specimen at paper value: icy cyan */
 
   /* --- THE FIVE GROUP GROUNDS, rebuilt 2026-10-02 with the numbers, not by eye.
      What was wrong: five unrelated hues (166, 191, 47, 10, 255 degrees) at lightnesses from
@@ -61,49 +67,49 @@
      wide). One band means ONE ink rule covers every card, so no exception exists to misapply.
      Measured: graphite is 12.60:1 at worst, the jade accent 5.71:1 at worst. The binding
      constraint is the jade accent, which needs L* >= 78, not the ink. */
-  --g-advise: #a4ebda;       /* room    166deg  L* 88.1  ink 13.27:1  jade 6.02:1 */
-  --g-build: #ffe28a;        /* keys     45deg  L* 90.5  ink 14.15:1  jade 6.42:1 */
-  --g-run: #97e6de;          /* room    174deg  L* 86.2  ink 12.60:1  jade 5.71:1 */
-  --g-grow: #ffd4a8;         /* keys     30deg  L* 87.6  ink 13.06:1  jade 5.92:1 */
-  --g-regulate: #c9f2e2;     /* room    156deg  L* 92.3  ink 14.82:1  jade 6.72:1 */
-  --mist: #cfdcd4;           /* the room at paper value */
-  --jade: #0c5a48;
+  --g-advise: #b7ecf3;       /* room    L* 90.1  ink 14.26:1  jade 8.47:1 */
+  --g-build: #dccdfc;        /* keys    L* 84.9  ink 12.40:1  jade 7.37:1 */
+  --g-run: #bcd3fb;          /* room    L* 84.1  ink 12.11:1  jade 7.20:1 */
+  --g-grow: #f6caf0;         /* keys    L* 86.1  ink 12.79:1  jade 7.60:1 */
+  --g-regulate: #d3f1fb;     /* room    L* 93.3  ink 15.52:1  jade 9.22:1 */
+  --mist: #d5dcf2;           /* the room at paper value */
+  --jade: #17348f;
 
   /* --- the chamber: deep jade, not black. The specimen is warm bone against it. */
-  --chamber: #0e2b24;          /* the edge of the room, and the token the contrast gate reads */
-  --chamber-bright: #1f8a68;   /* the lamp behind the specimen; CSF: "ijo nya juga cerah" */
-  --chamber-2: #143b31;
-  --chamber-3: #1d5044;
-  --on-chamber: #f6f3ec;
-  --on-chamber-2: #b3c7bd;
-  --on-chamber-3: #9db4a8;
-  --scrim: rgba(14, 43, 36, 0.74);
+  --chamber: #0a1030;          /* the edge of the room, and the token the contrast gate reads */
+  --chamber-bright: #2b45d9;   /* the lamp behind the specimen: the mark's blue */
+  --chamber-2: #111a48;
+  --chamber-3: #1a2766;
+  --on-chamber: #f3f6ff;
+  --on-chamber-2: #b4bde6;
+  --on-chamber-3: #99a4d8;
+  --scrim: rgba(10, 16, 48, 0.74);
   /* the brief plate: ONE flat surface inside the room, raised by a rim light rather than by a
      drop shadow, because a black shadow on a near-black ground is invisible and only makes mud
      at the edge. The 206deg three-stop ramp it used to carry spanned twelve points of L* at 52%
      saturation, which at panel scale reads as plastic, not as light. */
-  --plate-face: #14322b;                     /* the surface; 12.5:1 under --on-chamber */
-  --plate-rim: rgba(246, 243, 236, 0.16);    /* the edge the lamp is on */
+  --plate-face: #101a46;                     /* the surface; 12.5:1 under --on-chamber */
+  --plate-rim: rgba(243, 246, 255, 0.16);    /* the edge the lamp is on */
   --plate-seam: rgba(0, 0, 0, 0.55);         /* the edge it is not */
-  --brief-rule: rgba(246, 243, 236, 0.20);
-  --brief-well: #08201a;
+  --brief-rule: rgba(243, 246, 255, 0.20);
+  --brief-well: #070c24;
 
   /* --- the reading ground and its ink */
   --paper: var(--coconut);
-  --paper-2: #efece3;
-  --card: #fffdf8;
+  --paper-2: #ebeffc;
+  --card: #fcfdff;
   --ink: var(--graphite);
-  --ink-2: #56504a;
-  --ink-3: #6d665e;
-  --rule: #d8d3c8;
-  --rule-soft: #e7e3d9;
-  --wash: rgba(25, 22, 20, 0.05);
+  --ink-2: #475077;
+  --ink-3: #5a6388;
+  --rule: #d3d9ee;
+  --rule-soft: #e3e7f5;
+  --wash: rgba(11, 18, 48, 0.05);
   --key-paper: var(--jade);  /* 7.37:1 on coconut, 5.90 on butter, 5.12 on sky, 4.70 on lilac */
 
   /* the brain reads these three; they are chamber values because it only ever draws on chamber */
   --ground: var(--chamber);
-  --tissue-node: #fbf6ea;
-  --tissue-line: #c2b9a2;
+  --tissue-node: #e6f6ff;
+  --tissue-line: #bcd0ff;
 
   /* --- type. Archivo carries a width axis: display is set expanded, at 112. */
   --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
@@ -117,8 +123,8 @@
   --r-lg: 34px;
   --r-pill: 999px;
 
-  --lift-1: 0 1px 2px rgba(22, 21, 15, 0.05), 0 10px 26px -10px rgba(22, 21, 15, 0.18);
-  --lift-2: 0 2px 6px rgba(22, 21, 15, 0.06), 0 26px 54px -20px rgba(22, 21, 15, 0.34);
+  --lift-1: 0 1px 2px rgba(11, 18, 48, 0.05), 0 10px 26px -10px rgba(11, 18, 48, 0.18);
+  --lift-2: 0 2px 6px rgba(11, 18, 48, 0.06), 0 26px 54px -20px rgba(11, 18, 48, 0.34);
   --lift-chamber: 0 -26px 70px -26px rgba(0, 0, 0, 0.78);
   --lift-card: 0 30px 70px -30px rgba(0, 0, 0, 0.92);
 
@@ -211,13 +217,15 @@ a { color: inherit; }
   /* graded, not flat: bright jade where the lamp falls on the specimen, deep jade at the edges.
      The canvas clears to transparent, so this is the ground the tissue is lit against. */
   background:
-    radial-gradient(ellipse 58% 62% at 63% 46%, var(--chamber-bright) 0%, #166a50 30%, #10483a 62%, transparent 100%),
-    linear-gradient(160deg, #123a2f 0%, var(--chamber) 55%, #08221b 100%);
+    radial-gradient(ellipse 58% 62% at 63% 46%, var(--chamber-bright) 0%, #2438a8 30%, #162a7c 62%, transparent 100%),
+    linear-gradient(160deg, #121f5c 0%, var(--chamber) 55%, #070c2a 100%);
 }
 .brain-layer canvas, .brain-layer .poster { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .brain-layer canvas { cursor: grab; touch-action: pan-y; }
 .brain-layer canvas:active { cursor: grabbing; }
-.poster { object-fit: cover; opacity: 1; transition: opacity 900ms var(--ease); }
+.poster { object-fit: cover; opacity: 1; transition: opacity 900ms var(--ease);
+  /* the still carries its own ground; the feather lets that ground dissolve into the hero lamp instead of ending in an edge */
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 74%, transparent 100%); mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 74%, transparent 100%); }
 .brain-layer[data-rung="full"] .poster, .brain-layer[data-rung="reduced"] .poster { opacity: 0; }
 .brain-layer[data-rung="probing"] canvas { visibility: hidden; }
 .brain-layer[data-rung="poster"] canvas, .brain-layer[data-rung="poster"] .labels { display: none; }
@@ -290,21 +298,29 @@ body[data-act="contact"] .hub:not([data-active="1"]) { opacity: 0; pointer-event
 body[data-ground="paper"] .topbar {
   color: var(--graphite); background: transparent;
   backdrop-filter: blur(20px) saturate(1.5); -webkit-backdrop-filter: blur(20px) saturate(1.5);
-  box-shadow: 0 1px 0 rgba(25, 22, 20, 0.09);
+  box-shadow: 0 1px 0 rgba(11, 18, 48, 0.09);
 }
 body[data-ground="dark"] .topbar {
   color: var(--coconut); background: transparent;
   backdrop-filter: blur(20px) saturate(1.5); -webkit-backdrop-filter: blur(20px) saturate(1.5);
-  box-shadow: 0 1px 0 rgba(246, 243, 236, 0.12);
+  box-shadow: 0 1px 0 rgba(243, 246, 255, 0.12);
 }
 body[data-ground="paper"] .topnav a { color: var(--ink-2); }
 body[data-ground="dark"] .topnav a { color: var(--on-chamber-2); }
 /* the mark: CSF's own file (2026-09-28), replacing the amber-dot-plus-text placeholder. A real
    logo doesn't recolour per ground the way the dot did; it's the same blue gradient on chamber
    and on paper, which is the point of a mark rather than a token-painted glyph. */
-.wordmark { display: inline-flex; align-items: center; text-decoration: none; }
-.wordmark-mark { display: block; height: 24px; width: auto; }
-@media (min-width: 1000px) { .wordmark-mark { height: 28px; } }
+.wordmark { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+.wordmark-mark { display: block; height: 34px; width: auto; }
+@media (min-width: 1000px) { .wordmark-mark { height: 40px; } }
+/* two values of the same mark: the paper one is native on light, the lifted one glows on the chamber.
+   The footer and the default topbar sit on the chamber, so dark is the default and paper opts out. */
+.wm-light { display: none; }
+body[data-ground="paper"] .topbar .wm-light { display: block; }
+body[data-ground="paper"] .topbar .wm-dark { display: none; }
+.wordmark-text { font-family: var(--display); font-weight: 700; font-variation-settings: "wdth" 125; font-size: 19px; letter-spacing: 0.04em; color: var(--on-chamber); }
+@media (min-width: 1000px) { .wordmark-text { font-size: 22px; } }
+body[data-ground="paper"] .topbar .wordmark-text { color: var(--ink); }
 .topnav { margin-left: auto; }
 .topnav ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
 .topnav a { font-family: var(--sans); font-variation-settings: "wdth" 100; font-size: var(--fs-name); letter-spacing: -0.004em; color: var(--on-chamber-2); text-decoration: none; transition: color var(--micro) var(--ease); }
@@ -387,8 +403,8 @@ body[data-ground="paper"] .btn-top:hover { background: none; color: var(--key-pa
   .hero::before {
     content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
     background:
-      linear-gradient(96deg, var(--chamber) 0%, rgba(21,18,14,0.9) 22%, rgba(21,18,14,0.24) 40%, rgba(21,18,14,0) 55%),
-      linear-gradient(0deg, var(--chamber) 0%, rgba(21,18,14,0.52) 12%, rgba(21,18,14,0) 28%);
+      linear-gradient(96deg, var(--chamber) 0%, rgba(8,12,34,0.9) 22%, rgba(8,12,34,0.24) 40%, rgba(8,12,34,0) 55%),
+      linear-gradient(0deg, var(--chamber) 0%, rgba(8,12,34,0.52) 12%, rgba(8,12,34,0) 28%);
   }
   .hero-head { grid-row: 1; max-width: min(58vw, 780px); }
   .hero-foot { grid-row: 3; grid-template-columns: minmax(0, 470px) 1fr; align-items: end; gap: 40px; }
@@ -415,9 +431,9 @@ body[data-ground="paper"] .btn-top:hover { background: none; color: var(--key-pa
 .g-coconut { background: var(--coconut); }
 /* 2026-09-28: .act-graphite already redefines --ink-2/--ink-3 for graphite (798..808 below);
    .g-graphite never did, so components on a graphite cut (the forecast demo, the leads toy) typed
-   #b8b1a7 / #8a8478 as literals instead. Named once as --on-graphite-2/3 (:root), read here, so
+   #aab3d6 / #8590b8 as literals instead. Named once as --on-graphite-2/3 (:root), read here, so
    every graphite component can read a token instead of retyping the bytes. */
-.g-graphite { background: var(--graphite); color: var(--coconut); --ink: var(--coconut); --ink-2: var(--on-graphite-2); --ink-3: var(--on-graphite-3); --key-paper: var(--key); --rule: rgba(246, 243, 236, 0.24); --rule-soft: rgba(246, 243, 236, 0.13); }
+.g-graphite { background: var(--graphite); color: var(--coconut); --ink: var(--coconut); --ink-2: var(--on-graphite-2); --ink-3: var(--on-graphite-3); --key-paper: var(--key); --rule: rgba(243, 246, 255, 0.24); --rule-soft: rgba(243, 246, 255, 0.13); }
 .cut__h { margin: 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: var(--fs-h2); line-height: 1.0; letter-spacing: -0.03em; text-wrap: balance; max-width: 22ch; }
 .cut__p { margin: 0; font-family: var(--text); font-size: var(--fs-lede); line-height: 1.4; max-width: 40ch; color: var(--ink-2); }
 .cut__p--wide { max-width: 44ch; }
@@ -441,7 +457,7 @@ body[data-ground="paper"] .btn-top:hover { background: none; color: var(--key-pa
 .cut--plate { min-height: 68svh; }
 .cut--plate .cut__in { gap: 32px; align-items: center; }
 @media (min-width: 900px) { .cut--plate .cut__in { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); } .cut--plate:nth-of-type(even) .plate { order: 2; } }
-.plate { margin: 0; border-radius: 3px; overflow: clip; background: var(--chamber); box-shadow: -10px 16px 34px -18px rgba(22, 21, 15, 0.42); transform: rotate(var(--tilt, -0.8deg)); }
+.plate { margin: 0; border-radius: 3px; overflow: clip; background: var(--chamber); box-shadow: -10px 16px 34px -18px rgba(11, 18, 48, 0.42); transform: rotate(var(--tilt, -0.8deg)); }
 .cut--plate:nth-of-type(even) .plate { --tilt: 0.7deg; }
 .plate img { width: 100%; height: auto; display: block; }
 /* The landing page's tipped-in print and the service page's two-column plate section are both
@@ -479,22 +495,22 @@ figure.plate img { width: 100%; height: auto; }
   position: relative;
   border-radius: 6px;
   overflow: hidden;
-  background: linear-gradient(180deg, #131110 0%, #0f0d0c 100%);
+  background: linear-gradient(180deg, #0c1230 0%, #090e28 100%);
   box-shadow:
-    inset 0 0 0 1px rgba(246, 243, 236, 0.07),
-    inset 0 1px 0 rgba(246, 243, 236, 0.05),
+    inset 0 0 0 1px rgba(243, 246, 255, 0.07),
+    inset 0 1px 0 rgba(243, 246, 255, 0.05),
     inset 0 12px 28px rgba(0, 0, 0, 0.38);
 }
 .demo-chart {
   display: block; width: 100%; height: auto; aspect-ratio: 640 / 300; box-sizing: border-box;
   padding: 16px 18px 14px; overflow: visible;
   /* the forecast window (the last 12 of 64 weeks) as its own zone: 52/64 = 81.25% */
-  background: linear-gradient(90deg, transparent 0 81.25%, rgba(240, 178, 63, 0.06) 81.25% 100%);
+  background: linear-gradient(90deg, transparent 0 81.25%, rgba(55, 212, 230, 0.06) 81.25% 100%);
   background-origin: content-box; background-clip: content-box; background-repeat: no-repeat;
 }
 .demo-actual { fill: none; stroke: var(--coconut); stroke-width: 1.5; stroke-linejoin: miter; stroke-linecap: butt; opacity: 0.78; }
-.demo-fit { fill: none; stroke: var(--key); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; filter: drop-shadow(0 0 5px rgba(240, 178, 63, 0.32)); }
-.demo-split { stroke: rgba(240, 178, 63, 0.55); stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 0 5; }
+.demo-fit { fill: none; stroke: var(--key); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; filter: drop-shadow(0 0 5px rgba(55, 212, 230, 0.32)); }
+.demo-split { stroke: rgba(55, 212, 230, 0.55); stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 0 5; }
 /* the window's name, in sentence case: T1 gives capitals to the hub pills and the HUD only */
 .demo-split-label {
   position: absolute; top: 12px; right: 16px; margin: 0;
@@ -511,8 +527,8 @@ figure.plate img { width: 100%; height: auto; }
 .demo-groove { display: block; }
 #demo-slider {
   -webkit-appearance: none; appearance: none; width: 100%; height: 6px; margin: 10px 0 4px;
-  border-radius: var(--r-pill); background: linear-gradient(180deg, #0e0c0b, #1b1815);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.65), 0 1px 0 rgba(246, 243, 236, 0.06);
+  border-radius: var(--r-pill); background: linear-gradient(180deg, #0a1030, #111a42);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.65), 0 1px 0 rgba(243, 246, 255, 0.06);
   cursor: pointer;
 }
 #demo-slider:focus-visible { outline: 2px solid var(--key); outline-offset: 4px; }
@@ -522,7 +538,7 @@ figure.plate img { width: 100%; height: auto; }
   transition: transform 120ms ease, box-shadow 120ms ease;
 }
 #demo-slider:active::-webkit-slider-thumb { transform: scale(1.08); box-shadow: 0 2px 3px rgba(0, 0, 0, 0.55), 0 8px 18px rgba(0, 0, 0, 0.4), inset 0 -1px 0 rgba(0, 0, 0, 0.14); }
-#demo-slider::-moz-range-track { height: 6px; border-radius: var(--r-pill); background: linear-gradient(180deg, #0e0c0b, #1b1815); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.65); }
+#demo-slider::-moz-range-track { height: 6px; border-radius: var(--r-pill); background: linear-gradient(180deg, #0a1030, #111a42); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.65); }
 #demo-slider::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: var(--coconut); border: none; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 4px 10px rgba(0, 0, 0, 0.35); }
 
 /* the three stops: the groove is a dial, and these are its positions. The word under the
@@ -541,7 +557,7 @@ figure.plate img { width: 100%; height: auto; }
 .demo-legend [data-series] { display: inline-flex; align-items: center; gap: 8px; }
 .demo-legend [data-series]::before { content: ""; display: inline-block; width: 22px; height: 2px; border-radius: 1px; }
 .demo-legend [data-series="actual"]::before { background: var(--coconut); opacity: 0.78; height: 1.5px; }
-.demo-legend [data-series="fit"]::before { background: var(--key); box-shadow: 0 0 6px rgba(240, 178, 63, 0.32); }
+.demo-legend [data-series="fit"]::before { background: var(--key); box-shadow: 0 0 6px rgba(55, 212, 230, 0.32); }
 /* the point: why this toy is on a consultancy's page, at lede size, in the display face */
 .demo-point { margin: 4px 0 0; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600; font-size: var(--fs-lede); line-height: 1.2; letter-spacing: -0.024em; max-width: 24ch; text-wrap: balance; }
 .cut--demo .cut__tag { color: var(--ink-3); border-top-color: var(--rule-soft); }
@@ -594,23 +610,23 @@ figure.plate img { width: 100%; height: auto; }
   grid-area: well;
   position: relative; border-radius: 6px; overflow: hidden;
   padding: 18px 18px 22px;
-  background: linear-gradient(180deg, #131110 0%, #0f0d0c 100%);
+  background: linear-gradient(180deg, #0c1230 0%, #090e28 100%);
   color: var(--coconut);
   box-shadow:
-    inset 0 0 0 1px rgba(246, 243, 236, 0.07),
-    inset 0 1px 0 rgba(246, 243, 236, 0.05),
+    inset 0 0 0 1px rgba(243, 246, 255, 0.07),
+    inset 0 1px 0 rgba(243, 246, 255, 0.05),
     inset 0 12px 28px rgba(0, 0, 0, 0.38);
   display: grid; gap: 16px;
 }
 .leads-well__head {
   margin: 0; display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
   font-family: var(--sans); font-weight: 500; font-size: 13px; letter-spacing: 0.01em;
-  color: #a49d90;
+  color: #9aa5cf;
 }
 .leads-well__counts { display: inline-flex; gap: 14px; font-variant-numeric: tabular-nums; }
 .leads-well__counts [data-band="hot"] { color: var(--key); }
-.leads-well__counts [data-band="warm"] { color: rgba(240, 178, 63, 0.7); }
-.leads-well__counts [data-band="cold"] { color: #8a8478; }
+.leads-well__counts [data-band="warm"] { color: rgba(55, 212, 230, 0.7); }
+.leads-well__counts [data-band="cold"] { color: #8590b8; }
 
 /* the ladder: three tiers and a fold. Every slot is a custom property so one edit retunes it.
    --r is the zero-based rank main.ts sets; the y formulas below read it. */
@@ -669,22 +685,22 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
   align-items: center; gap: 12px; text-align: left;
   font: inherit; color: inherit; cursor: pointer;
   border: 0; border-radius: var(--r-xs);
-  background: linear-gradient(90deg, var(--band-wash), transparent 60%), rgba(246, 243, 236, 0.035);
-  box-shadow: inset 3px 0 0 var(--band-rule), inset 0 0 0 1px rgba(246, 243, 236, 0.05);
+  background: linear-gradient(90deg, var(--band-wash), transparent 60%), rgba(243, 246, 255, 0.035);
+  box-shadow: inset 3px 0 0 var(--band-rule), inset 0 0 0 1px rgba(243, 246, 255, 0.05);
   transition: background 360ms var(--ease), box-shadow 360ms var(--ease);
 }
-.lead__btn:hover { background: linear-gradient(90deg, var(--band-wash), transparent 60%), rgba(246, 243, 236, 0.065); }
+.lead__btn:hover { background: linear-gradient(90deg, var(--band-wash), transparent 60%), rgba(243, 246, 255, 0.065); }
 .lead__btn:focus-visible { outline: 2px solid var(--key); outline-offset: 2px; }
 /* the picked row: an amber rim, lifted a step, the same accent the receipt is reading from */
 .lead__btn[aria-pressed="true"] {
-  background: linear-gradient(90deg, var(--band-wash), transparent 60%), rgba(240, 178, 63, 0.09);
-  box-shadow: inset 3px 0 0 var(--band-rule), inset 0 0 0 2px rgba(240, 178, 63, 0.75);
+  background: linear-gradient(90deg, var(--band-wash), transparent 60%), rgba(55, 212, 230, 0.09);
+  box-shadow: inset 3px 0 0 var(--band-rule), inset 0 0 0 2px rgba(55, 212, 230, 0.75);
   transition-duration: var(--micro);
 }
-.lead__rank { font-family: var(--sans); font-weight: 500; font-size: var(--rank-fs); letter-spacing: 0.08em; font-variant-numeric: tabular-nums; color: #8a8478; transition: font-size 520ms var(--ease); }
+.lead__rank { font-family: var(--sans); font-weight: 500; font-size: var(--rank-fs); letter-spacing: 0.08em; font-variant-numeric: tabular-nums; color: #8590b8; transition: font-size 520ms var(--ease); }
 .lead__body { display: grid; grid-template-rows: auto var(--story-row); min-width: 0; transition: grid-template-rows 520ms var(--ease); }
 .lead__name { font-family: var(--sans); font-variation-settings: "wdth" 108; font-weight: 600; font-size: var(--name-fs); line-height: 1.15; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--coconut); transition: font-size 520ms var(--ease); }
-.lead__story { overflow: hidden; min-height: 0; opacity: var(--story-o); font-family: var(--text); font-size: 15px; line-height: 1.35; color: #b8b1a7; padding-top: 3px; transition: opacity 320ms var(--ease); }
+.lead__story { overflow: hidden; min-height: 0; opacity: var(--story-o); font-family: var(--text); font-size: 15px; line-height: 1.35; color: #aab3d6; padding-top: 3px; transition: opacity 320ms var(--ease); }
 /* the score: a counter on --score, so it counts. The .leads-sr child holds the real number. */
 .lead__score {
   position: relative; font-family: var(--display); font-variation-settings: "wdth" 112; font-weight: 600;
@@ -697,21 +713,21 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
 .lead[data-rank="0"] .lead__band { padding: 6px 11px; border-radius: var(--r-pill); box-shadow: inset 0 0 0 1px currentColor; }
 
 /* the three bands: one hue, three values. Hot is the only thing in the well that glows. */
-.lead[data-band="hot"]  { --band-rule: var(--key); --band-wash: rgba(240, 178, 63, 0.09); --band-ink: var(--key); }
-.lead[data-band="warm"] { --band-rule: rgba(217, 154, 44, 0.55); --band-wash: rgba(240, 178, 63, 0.03); --band-ink: rgba(240, 178, 63, 0.72); }
-.lead[data-band="cold"] { --band-rule: rgba(246, 243, 236, 0.14); --band-wash: transparent; --band-ink: #8a8478; }
-.lead[data-band="hot"] .lead__score { text-shadow: 0 0 18px rgba(240, 178, 63, 0.38); }
-.lead[data-band="cold"] .lead__name { color: #d6d0c6; }
+.lead[data-band="hot"]  { --band-rule: var(--key); --band-wash: rgba(55, 212, 230, 0.09); --band-ink: var(--key); }
+.lead[data-band="warm"] { --band-rule: rgba(217, 154, 44, 0.55); --band-wash: rgba(55, 212, 230, 0.03); --band-ink: rgba(55, 212, 230, 0.72); }
+.lead[data-band="cold"] { --band-rule: rgba(243, 246, 255, 0.14); --band-wash: transparent; --band-ink: #8590b8; }
+.lead[data-band="hot"] .lead__score { text-shadow: 0 0 18px rgba(55, 212, 230, 0.38); }
+.lead[data-band="cold"] .lead__name { color: #d0d7ee; }
 
 /* the fold: a dashed row of the ladder. Two labels in the markup; data-open shows one. */
 .leads-fold {
   position: absolute; inset-inline: 0; top: var(--fold-y); height: var(--fold-h);
   appearance: none; margin: 0; padding: 0; cursor: pointer;
-  border: 1px dashed rgba(246, 243, 236, 0.2); border-radius: var(--r-xs); background: transparent;
-  font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: 13px; letter-spacing: 0.01em; color: #b8b1a7;
+  border: 1px dashed rgba(243, 246, 255, 0.2); border-radius: var(--r-xs); background: transparent;
+  font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: 13px; letter-spacing: 0.01em; color: #aab3d6;
   transition: top 520ms var(--ease), background var(--micro) var(--ease), color var(--micro) var(--ease);
 }
-.leads-fold:hover { background: rgba(246, 243, 236, 0.05); color: var(--coconut); }
+.leads-fold:hover { background: rgba(243, 246, 255, 0.05); color: var(--coconut); }
 .leads-fold:focus-visible { outline: 2px solid var(--key); outline-offset: 2px; }
 .leads-ladder[data-open="true"] .leads-fold { top: var(--open-y); }
 .leads-fold__less { display: none; }
@@ -738,15 +754,15 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
 }
 
 /* the controls, inside the well: same groove and disc as #demo-slider */
-.leads-controls { display: grid; gap: 12px; padding-top: 6px; border-top: 1px solid rgba(246, 243, 236, 0.08); }
-.leads-slider-label { font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: 14px; letter-spacing: -0.004em; color: #b8b1a7; }
+.leads-controls { display: grid; gap: 12px; padding-top: 6px; border-top: 1px solid rgba(243, 246, 255, 0.08); }
+.leads-slider-label { font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 500; font-size: 14px; letter-spacing: -0.004em; color: #aab3d6; }
 .leads-slider-label .leads-state-label { display: inline-block; font-variation-settings: "wdth" 112; font-weight: 600; font-size: 17px; color: var(--key); }
 .leads-state-label[data-flip="1"] { animation: label-flip 320ms var(--ease) both; }
 @keyframes label-flip { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 #leads-slider {
   -webkit-appearance: none; appearance: none; width: 100%; height: 6px; margin: 6px 0;
-  border-radius: var(--r-pill); background: linear-gradient(180deg, #0e0c0b, #1b1815);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.65), 0 1px 0 rgba(246, 243, 236, 0.06);
+  border-radius: var(--r-pill); background: linear-gradient(180deg, #0a1030, #111a42);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.65), 0 1px 0 rgba(243, 246, 255, 0.06);
   cursor: pointer;
 }
 #leads-slider:focus-visible { outline: 2px solid var(--key); outline-offset: 4px; }
@@ -756,16 +772,16 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
   transition: transform 120ms ease, box-shadow 120ms ease;
 }
 #leads-slider:active::-webkit-slider-thumb { transform: scale(1.08); box-shadow: 0 2px 3px rgba(0, 0, 0, 0.55), 0 8px 18px rgba(0, 0, 0, 0.4), inset 0 -1px 0 rgba(0, 0, 0, 0.14); }
-#leads-slider::-moz-range-track { height: 6px; border-radius: var(--r-pill); background: linear-gradient(180deg, #0e0c0b, #1b1815); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.65); }
+#leads-slider::-moz-range-track { height: 6px; border-radius: var(--r-pill); background: linear-gradient(180deg, #0a1030, #111a42); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.65); }
 #leads-slider::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--coconut); border: none; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 4px 10px rgba(0, 0, 0, 0.35); }
-.leads-state-note { margin: 0; font-family: var(--text); font-size: 15px; line-height: 1.5; color: #b8b1a7; max-width: 52ch; min-height: 2lh; }
+.leads-state-note { margin: 0; font-family: var(--text); font-size: 15px; line-height: 1.5; color: #aab3d6; max-width: 52ch; min-height: 2lh; }
 
 /* the weight readout: five short bars. The number is the truth; the bar is the glance. */
 .leads-weights { margin: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-.leads-weight { display: grid; grid-template-columns: 1fr auto; gap: 3px 6px; align-items: baseline; font-family: var(--sans); font-size: 12px; letter-spacing: 0.01em; color: #8a8478; }
+.leads-weight { display: grid; grid-template-columns: 1fr auto; gap: 3px 6px; align-items: baseline; font-family: var(--sans); font-size: 12px; letter-spacing: 0.01em; color: #8590b8; }
 .leads-weight__name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.leads-weight__num { font-weight: 600; font-size: 13px; font-variant-numeric: tabular-nums; color: #b8b1a7; }
-.leads-weight__bar { grid-column: 1 / -1; display: block; height: 5px; border-radius: var(--r-pill); background: rgba(246, 243, 236, 0.08); position: relative; overflow: hidden; }
+.leads-weight__num { font-weight: 600; font-size: 13px; font-variant-numeric: tabular-nums; color: #aab3d6; }
+.leads-weight__bar { grid-column: 1 / -1; display: block; height: 5px; border-radius: var(--r-pill); background: rgba(243, 246, 255, 0.08); position: relative; overflow: hidden; }
 .leads-weight__bar::after { content: ""; position: absolute; inset: 0 auto 0 0; width: calc(var(--w) * 2%); background: var(--key-deep); border-radius: inherit; transition: width 240ms var(--ease); }
 @media (max-width: 519px) { .leads-weights { grid-template-columns: repeat(3, 1fr); } }
 
@@ -797,7 +813,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
 .rcpt__bar {
   display: flex; gap: 2px; height: 28px; padding: 3px;
   border-radius: var(--r-pill); background: var(--wash);
-  box-shadow: inset 0 1px 2px rgba(22, 21, 15, 0.12), inset 0 0 0 1px rgba(22, 21, 15, 0.05);
+  box-shadow: inset 0 1px 2px rgba(11, 18, 48, 0.12), inset 0 0 0 1px rgba(11, 18, 48, 0.05);
   overflow: hidden;
 }
 .rcpt__seg {
@@ -1037,7 +1053,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
 }
 .sheet > .act:first-child { padding-top: calc(var(--act-y) + 20px); border-radius: var(--r-lg) var(--r-lg) 0 0; }
 .sheet > .act:last-child { padding-bottom: calc(var(--act-y) + 20px); border-radius: 0 0 var(--r-lg) var(--r-lg); }
-/* the tooth of the paper. Flat #e2e3dc reads as a swatch; a little grain reads as stock. One
+/* the tooth of the paper. Flat #e0e5f5 reads as a swatch; a little grain reads as stock. One
    tiled SVG, no image request, and it sits under nothing that has to stay crisp. */
 .sheet::after {
   content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: 0.055;
@@ -1057,21 +1073,21 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
 .act-graphite { background: var(--graphite); }
 .act-colour {
   --ink-3: var(--ink-2);          /* the lightest ink does not clear 4.5:1 on a saturated ground */
-  --rule: rgba(25, 22, 20, 0.24);
-  --rule-soft: rgba(25, 22, 20, 0.14);
-  --wash: rgba(25, 22, 20, 0.07);
-  --card: rgba(255, 253, 248, 0.72);
+  --rule: rgba(11, 18, 48, 0.24);
+  --rule-soft: rgba(11, 18, 48, 0.14);
+  --wash: rgba(11, 18, 48, 0.07);
+  --card: rgba(252, 253, 255, 0.72);
 }
 .act-graphite {
   color: var(--coconut);
   --ink: var(--coconut);
-  --ink-2: #b8b1a7;
-  --ink-3: #b8b1a7;
+  --ink-2: #aab3d6;
+  --ink-3: #aab3d6;
   --key-paper: var(--key);
-  --rule: rgba(246, 243, 236, 0.24);
-  --rule-soft: rgba(246, 243, 236, 0.13);
-  --wash: rgba(246, 243, 236, 0.07);
-  --card: #241f1c;
+  --rule: rgba(243, 246, 255, 0.24);
+  --rule-soft: rgba(243, 246, 255, 0.13);
+  --wash: rgba(243, 246, 255, 0.07);
+  --card: #18214a;
 }
 .act-deep { background: var(--paper-2); }
 .grid { max-width: 1320px; margin-inline: auto; padding-inline: var(--margin); }
@@ -1229,8 +1245,8 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
   .close::before {
     content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
     background:
-      linear-gradient(var(--chamber) 0%, rgba(9,28,23,0.6) 15%, rgba(9,28,23,0) 32%),
-      linear-gradient(90deg, rgba(9,28,23,0.93) 0%, rgba(9,28,23,0.88) 42%, rgba(11,33,27,0.56) 70%, rgba(11,33,27,0.40) 100%);
+      linear-gradient(var(--chamber) 0%, rgba(7,12,40,0.6) 15%, rgba(7,12,40,0) 32%),
+      linear-gradient(90deg, rgba(7,12,40,0.93) 0%, rgba(7,12,40,0.88) 42%, rgba(11,33,27,0.56) 70%, rgba(11,33,27,0.40) 100%);
   }
 }
 .close-wrap { max-width: 1320px; margin-inline: auto; padding-inline: var(--margin); }
@@ -1254,7 +1270,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
    specimen, not a decorative glow invented for the form */
 .brief-plate::before {
   content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
-  background: radial-gradient(120% 150% at 108% -22%, rgba(31, 138, 104, 0.13) 0%, rgba(31, 138, 104, 0.05) 38%, rgba(31, 138, 104, 0) 68%);
+  background: radial-gradient(120% 150% at 108% -22%, rgba(43, 69, 217, 0.13) 0%, rgba(43, 69, 217, 0.05) 38%, rgba(43, 69, 217, 0) 68%);
 }
 
 /* the three short answers: 2026-09-27, boxed. Ruled lines with no fill read right in the
@@ -1265,13 +1281,13 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
 .brief-line {
   display: grid; grid-template-columns: minmax(0, 8.4rem) 1fr; align-items: center; gap: 10px;
   padding: 18px 2px 8px; border-radius: 0; background: none; border-bottom: 1px solid var(--brief-rule);
-  box-shadow: inset 0 0 0 1px rgba(246, 243, 236, 0.09);
+  box-shadow: inset 0 0 0 1px rgba(243, 246, 255, 0.09);
   transition: box-shadow var(--micro) var(--ease);
 }
 .brief-line:focus-within { box-shadow: inset 0 0 0 2px var(--key); }
 /* 2026-09-27: a divider between label and field, so the row reads as two parts, not one loose
    line — CSF's ask, after the boxed version alone still read as slop to him. */
-.brief-line-name { padding-right: 10px; border-right: 1px solid rgba(246, 243, 236, 0.14); font-family: var(--sans); font-variation-settings: "wdth" 100; font-weight: 500; font-size: var(--fs-name); letter-spacing: -0.004em; color: var(--on-chamber-2); }
+.brief-line-name { padding-right: 10px; border-right: 1px solid rgba(243, 246, 255, 0.14); font-family: var(--sans); font-variation-settings: "wdth" 100; font-weight: 500; font-size: var(--fs-name); letter-spacing: -0.004em; color: var(--on-chamber-2); }
 .brief-line input { width: 100%; min-width: 0; font: 400 var(--fs-text)/1.5 var(--text); color: var(--on-chamber); background: none; border: 0; padding: 0; caret-color: var(--key); }
 .brief-line input:focus { outline: none; }
 
@@ -1280,7 +1296,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
 .brief-well {
   display: block; margin-top: 0;
   border-radius: 4px; padding: 15px 18px 16px; background: var(--brief-well);
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.42), inset 0 0 0 1px rgba(246, 243, 236, 0.07);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.42), inset 0 0 0 1px rgba(243, 246, 255, 0.07);
   transition: box-shadow var(--micro) var(--ease);
 }
 .brief-well:focus-within { box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.42), inset 0 0 0 2px var(--key); }
@@ -1297,7 +1313,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
 @media (max-width: 460px) {
   .brief-line { grid-template-columns: 1fr; gap: 6px; padding: 12px 14px; }
   .brief-line input { font-size: 18px; }
-  .brief-line-name { padding-right: 0; padding-bottom: 6px; border-right: 0; border-bottom: 1px solid rgba(246, 243, 236, 0.14); }
+  .brief-line-name { padding-right: 0; padding-bottom: 6px; border-right: 0; border-bottom: 1px solid rgba(243, 246, 255, 0.14); }
 }
 
 /* ---------------------------------------------------------------- the colophon */
@@ -1413,11 +1429,11 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
   flex: 1 1 auto; min-height: 46px; padding: 11px 16px; cursor: pointer;
   font-family: var(--sans); font-variation-settings: "wdth" 104; font-weight: 600;
   font-size: var(--fs-name); letter-spacing: -0.004em;
-  color: var(--coconut); background: rgba(246, 243, 236, 0.07);
-  border: 1px solid rgba(246, 243, 236, 0.22); border-radius: 4px;
+  color: var(--coconut); background: rgba(243, 246, 255, 0.07);
+  border: 1px solid rgba(243, 246, 255, 0.22); border-radius: 4px;
   transition: background var(--micro) var(--ease), color var(--micro) var(--ease), border-color var(--micro) var(--ease);
 }
-.pick__btn:hover { background: rgba(246, 243, 236, 0.14); border-color: rgba(246, 243, 236, 0.4); }
+.pick__btn:hover { background: rgba(243, 246, 255, 0.14); border-color: rgba(243, 246, 255, 0.4); }
 .pick__btn:focus-visible { outline: 2px solid var(--key); outline-offset: 3px; }
 .pick__btn[aria-pressed="true"] { background: var(--key); color: var(--key-ink); border-color: var(--key-deep); }
 
@@ -1448,7 +1464,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
   <aside class="card" hidden aria-live="polite"></aside>
 </div>
 <header class="topbar">
-  <a class="wordmark" href="#hero"><img class="wordmark-mark" src="./assets/jaw-logo.png" alt="JAW AI" width="123" height="45"></a>
+  <a class="wordmark" href="#hero"><img class="wordmark-mark wm-light" src="./assets/jaw-mark.png" alt="" width="34" height="40"><img class="wordmark-mark wm-dark" src="./assets/jaw-mark-dark.png" alt="" width="34" height="40"><span class="wordmark-text">JAW AI</span></a>
   <nav class="topnav" aria-label="Sections"><ul><li><a href="#offer">Services</a></li><li><a href="#profile">Team</a></li><li><a href="#contact">Contact</a></li></ul></nav>
   <a class="btn btn-primary btn-top" href="#contact">Book a 20-minute call</a>
 </header>
@@ -1669,7 +1685,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
     <div class="cut__in rise">
       <p class="label">See it work</p>
       <h2 class="cut__h">Same training data. Three forecasts. You pick.</h2>
-      <p class="cut__p cut__p--wide">Say you're forecasting logistics. White is the training data. Amber is the model's guess. Drag the slider to swap the model.</p>
+      <p class="cut__p cut__p--wide">Say you're forecasting logistics. White is the training data. Cyan is the model's guess. Drag the slider to swap the model.</p>
       <div class="demo-widget">
         <div class="demo-chart-wrap">
           <svg class="demo-chart" viewBox="0 0 640 300" preserveAspectRatio="none" aria-hidden="true">
@@ -1681,7 +1697,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
         </div>
         <div class="demo-controls">
           <p class="demo-readout"><span class="demo-slider-label">The model</span><span class="demo-state-label"></span></p>
-          <p class="play">Drag the white dot. The amber line follows.<span class="play__arrow" aria-hidden="true">&#8595;</span></p>
+          <p class="play">Drag the white dot. The cyan line follows.<span class="play__arrow" aria-hidden="true">&#8595;</span></p>
           <label class="demo-groove"><span class="sr-only">The model</span><input id="demo-slider" type="range" min="0" max="100" step="1" value="50"></label>
           <p class="demo-stops" aria-hidden="true"><span>Too simple</span><span>Just right</span><span>Too clever</span></p>
           <p class="demo-state-note"></p>
@@ -1956,7 +1972,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
 <footer class="colophon">
   <div class="colophon-wrap">
     <div>
-      <span class="wordmark"><img class="wordmark-mark" src="./assets/jaw-logo.png" alt="JAW AI" width="123" height="45"></span>
+      <span class="wordmark"><img class="wordmark-mark wm-light" src="./assets/jaw-mark.png" alt="" width="34" height="40"><img class="wordmark-mark wm-dark" src="./assets/jaw-mark-dark.png" alt="" width="34" height="40"><span class="wordmark-text">JAW AI</span></span>
     </div>
     <ul class="colophon-nav"><li><a href="#offer">Services</a></li><li><a href="#profile">Team</a></li><li><a href="#contact">Contact</a></li><li><a href="mailto:customer.jaw.ai@gmail.com">customer.jaw.ai@gmail.com</a></li></ul>
     <p class="mono">The brain on this page is a real human cortex, not a stock image or an illustration.</p>
