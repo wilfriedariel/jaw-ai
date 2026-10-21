@@ -295,6 +295,11 @@ body[data-act="contact"] .hub:not([data-active="1"]) { opacity: 0; pointer-event
   background: linear-gradient(var(--chamber) 38%, rgba(21, 18, 14, 0));
   transition: background var(--micro) linear, color var(--micro) linear, box-shadow var(--micro) linear;
 }
+body:not([data-act="hero"]) .topbar {
+  background: rgba(10, 16, 48, 0.82);
+  backdrop-filter: blur(18px) saturate(1.4); -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  box-shadow: 0 1px 0 rgba(243, 246, 255, 0.1);
+}
 body[data-ground="paper"] .topbar {
   color: var(--graphite); background: transparent;
   backdrop-filter: blur(20px) saturate(1.5); -webkit-backdrop-filter: blur(20px) saturate(1.5);
@@ -1277,17 +1282,17 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
    design doc's own screenshots and wrong live on a real screen — CSF's read, after seeing it,
    was that bare underlines look unfinished ("AI slop"), not restrained. Each is its own shaped,
    coloured field now, matching the well below rather than standing apart from it. */
-.brief-lines { display: grid; gap: 12px; margin-top: clamp(18px, 3.4vw, 26px); }
+.brief-lines { display: grid; gap: 14px; margin-top: clamp(18px, 3.4vw, 26px); }
 .brief-line {
-  display: grid; grid-template-columns: minmax(0, 8.4rem) 1fr; align-items: center; gap: 10px;
-  padding: 18px 2px 8px; border-radius: 0; background: none; border-bottom: 1px solid var(--brief-rule);
+  display: grid; grid-template-columns: minmax(0, 8.4rem) 1fr; align-items: center; gap: 16px;
+  padding: 18px 18px 14px; border-radius: 0; background: none; border-bottom: 1px solid var(--brief-rule);
   box-shadow: inset 0 0 0 1px rgba(243, 246, 255, 0.09);
   transition: box-shadow var(--micro) var(--ease);
 }
 .brief-line:focus-within { box-shadow: inset 0 0 0 2px var(--key); }
 /* 2026-09-27: a divider between label and field, so the row reads as two parts, not one loose
    line — CSF's ask, after the boxed version alone still read as slop to him. */
-.brief-line-name { padding-right: 10px; border-right: 1px solid rgba(243, 246, 255, 0.14); font-family: var(--sans); font-variation-settings: "wdth" 100; font-weight: 500; font-size: var(--fs-name); letter-spacing: -0.004em; color: var(--on-chamber-2); }
+.brief-line-name { padding-right: 16px; border-right: 1px solid rgba(243, 246, 255, 0.14); font-family: var(--sans); font-variation-settings: "wdth" 100; font-weight: 500; font-size: var(--fs-name); letter-spacing: -0.004em; color: var(--on-chamber-2); }
 .brief-line input { width: 100%; min-width: 0; font: 400 var(--fs-text)/1.5 var(--text); color: var(--on-chamber); background: none; border: 0; padding: 0; caret-color: var(--key); }
 .brief-line input:focus { outline: none; }
 
@@ -1308,10 +1313,10 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
 .brief-foot { margin-top: clamp(24px, 4.4vw, 32px); display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; }
 .brief-alt { font-family: var(--sans); font-variation-settings: "wdth" 100; font-size: var(--fs-name); letter-spacing: -0.004em; color: var(--on-chamber-2); text-decoration: none; border-bottom: 1px solid var(--brief-rule); padding-bottom: 2px; transition: color var(--micro) var(--ease), border-color var(--micro) var(--ease); }
 .brief-alt:hover { color: var(--on-chamber); border-bottom-color: var(--key); }
-.brief-note { margin: 20px 0 0; color: var(--on-chamber-3); font-size: var(--fs-small); line-height: 1.6; max-width: 50ch; }
+.brief-note { margin: 28px 0 0; color: var(--on-chamber-3); font-size: var(--fs-small); line-height: 1.6; max-width: 50ch; }
 
 @media (max-width: 460px) {
-  .brief-line { grid-template-columns: 1fr; gap: 6px; padding: 12px 14px; }
+  .brief-line { grid-template-columns: 1fr; gap: 8px; padding: 14px 16px; }
   .brief-line input { font-size: 18px; }
   .brief-line-name { padding-right: 0; padding-bottom: 6px; border-right: 0; border-bottom: 1px solid rgba(243, 246, 255, 0.14); }
 }
@@ -1934,7 +1939,7 @@ html.js .leads-well[data-in="1"] .lead { transition-delay: calc(var(--r) * 45ms)
             <img class="team-card__avatar" src="./assets/team/wilfried.png" alt="" width="96" height="96">
             <h3 class="team-card__name">Wilfried</h3>
           </div>
-          <p class="team-card__bio">Wilfried leads the technology side at JAW AI, spanning engineering and AI. He previously worked as a quant and Head of Mathematics at a Y Combinator-backed company, building its pricing models and trading strategy, and as an AI engineer at Singapore Management University. He has also run systematic trading books across crypto, forex, and equities markets for over five years. He studied at leading technical universities in Indonesia, Taiwan, and Singapore, and is now a PhD candidate at Nanyang Technological University's College of Computing and Data Science, researching AI for finance and economics.</p>
+          <p class="team-card__bio">Wilfried leads the technology side at JAW AI, spanning engineering and AI. He previously worked as a quant and Head of Mathematics at a Y Combinator-backed company, where he built the pricing models, the backtesting framework, and the trading strategy for market making on crypto derivatives exchanges. He has also worked as an AI engineer at Singapore Management University. Since 2021 he has designed and tested systematic trading strategies across crypto, forex, and equities, and he has traded live on Polymarket. He studied at leading technical universities in Indonesia, Taiwan, and Singapore, and is now a PhD candidate at Nanyang Technological University's College of Computing and Data Science, researching AI for finance and economics.</p>
           <ul class="team-card__skills"><li>Quantitative Trading &amp; Market Making</li><li>AI Research &amp; Model Development</li><li>Systems &amp; Automation Engineering</li><li>Data Infrastructure &amp; Backtesting</li><li>Technical Product Strategy</li></ul>
         </article>
       </div>
